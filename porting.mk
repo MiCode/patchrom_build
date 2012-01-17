@@ -109,6 +109,8 @@ clean-$(1):
 endif
 endef
 
+zipone: zipfile $(ACT_AFTER_ZIP)
+
 #> TARGETS EXPANSION START
 $(foreach jar, $(JARS), \
 	$(eval $(call JAR_template,$(jar),$(TMP_DIR)/$(jar))))
@@ -157,8 +159,6 @@ zipfile: $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) $(ACT_PRE_ZIP)
 	$(SIGN) sign.zip $(ZIP_DIR)
 	cd $(ZIP_DIR); zip -r ../../$(OUT_ZIP) ./
 	@echo The output zip file is: $(OUT_ZIP)
-
-zipone: zipfile $(ACT_AFTER_ZIP)
 
 #< TARGET FOR ZIPFILE END
 

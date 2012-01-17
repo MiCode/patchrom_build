@@ -7,7 +7,7 @@ usage:
 	@echo "	make clean      - clear everything for output of this makefile"
 	@echo "	make reallyclean- clear everything of related."
 	@echo "Other helper targets:"
-	@echo "	make verify                - to check if any error in the makefile
+	@echo "	make verify                - to check if any error in the makefile"
 	@echo "	make .build/xxxx.jar-phone - to make out a single jar file and push to phone"
 	@echo "	make xxxx.apk.sign         - to generate a xxxx.apk and sign/push to phone"
 	@echo "	make clean-xxxx/make xxxx  - just as make under android-build-top"
@@ -51,14 +51,14 @@ verify: $(ERR_REPORT)
 	@echo "SYSOUT_DIR = $(SYSOUT_DIR)"
 	@echo "----------------------"
 	@echo ">>>>> LOCAL VARIABLE:"
-	@echo local-use-android-out = $(local-use-android-out)
-	@echo local-zip-file        = $(local-zip-file)
-	@echo local-out-zip-file    = $(local-out-zip-file)
-	@echo local-modified-apps   = $(local-modified-apps)
-	@echo local-miui-apps       = $(local-miui-apps)
-	@echo local-remove-apps     = $(local-remove-apps)
-	@echo local-pre-zip         = $(local-pre-zip)
-	@echo local-after-zip       = $(local-after-zip)
+	@echo "local-use-android-out = $(local-use-android-out)"
+	@echo "local-zip-file        = $(local-zip-file)"
+	@echo "local-out-zip-file    = $(local-out-zip-file)"
+	@echo "local-modified-apps   = $(local-modified-apps)"
+	@echo "local-miui-apps       = $(local-miui-apps)"
+	@echo "local-remove-apps     = $(local-remove-apps)"
+	@echo "local-pre-zip         = $(local-pre-zip)"
+	@echo "local-after-zip       = $(local-after-zip)"
 	@echo "----------------------"
 	@echo ">>>>> INTERNAL VARIABLE:"
 	@echo "ERR_REPORT= $(ERR_REPORT)"
