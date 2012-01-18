@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # usage:
 #       under the porting workspace, run:
@@ -8,8 +9,40 @@
 #       android_build_top and android_product_out specified here would not be used.
 #       If android_build_top or android_product_out is empty, then ?
 
+set -- `getopt "a:l:h" "$@"`
+android_top=
+android_lunch=
+help=
+while :
+do
+case "$1" in
+    -a) shift; android_top="$1" ;;
+    -l) shift; android_lunch="$1";;
+    -h) help=1;;
+    --) break ;;
+esac
+shift
+done
+shift
 
-USE_ANDROID_OUT=${RELEASE_PORTING:=false}
+if [ -n "$help" ]; then
+    echo "Usage: . /path/to/envsetup [-a android-top [-l lunch-option]]"
+    return
+fi
+
+if [ -n "$android_top" ]; then
+    if [ ! -d "$android_top" ]; then
+         echo "Failed: $android_top does not exist"
+         return
+    fi
+    PORT_ROOT=$PWD
+    cd $android_top
+    . build/envsetup.sh
+    lunch $android_lunch
+    USE_ANDROID_OUT=true
+    export USE_ANDROID_OUT
+    cd $PORT_ROOT
+fi
 
 TOPFILE=build/porting.mk
 if [ -f $TOPFILE ] ; then
@@ -22,6 +55,7 @@ else
        PORT_ROOT=$PWD
    else
        echo "Failed! run me under you porting workspace"
+       return
    fi
 fi
 
@@ -31,16 +65,9 @@ if [ -n "$PORT_ROOT" ]; then
     ANDROID_TOP=${ANDROID_BUILD_TOP:=$1}
     ANDROID_OUT=${ANDROID_PRODUCT_OUT:=$2}
     export PORT_ROOT PORT_BUILD ANDROID_TOP ANDROID_OUT
-    echo "PORT_ROOT   = $PORT_ROOT"
-    echo "ANDROID_TOP = $ANDROID_TOP"
-    echo "ANDROID_OUT = $ANDROID_OUT"
+    echo "PORT_ROOT       = $PORT_ROOT"
+    echo "ANDROID_TOP     = $ANDROID_TOP"
+    echo "ANDROID_OUT     = $ANDROID_OUT"
+    echo "USE_ANDROID_OUT = $USE_ANDROID_OUT"
 fi
 
-
-if [ "$USE_ANDROID_OUT" = "true" ]; then
-    if [ -z "$ANDROID_TOP" ]; then
-        echo "Need to lunch first if USE_ANDROID_OUT=true or RELEASE_PORT is exported"
-    else
-        export USE_ANDROID_OUT
-    fi
-fi
