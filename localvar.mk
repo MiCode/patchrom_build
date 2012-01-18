@@ -5,6 +5,7 @@
 # 	local-out-zip-file
 # 	local-modified-apps
 # 	local-miui-apps
+# 	local-miui-modified-apps
 # 	local-remove-apps
 # 	local-pre-zip
 # 	local-after-zip
@@ -25,6 +26,7 @@ endif
 
 APPS         := $(strip $(local-modified-apps))
 MIUIAPPS     := $(strip $(local-miui-apps))
+MIUIAPPS_MOD := $(strip $(local-miui-modified-apps))
 
 ACT_PRE_ZIP  := pre-zip-misc
 ACT_PRE_ZIP  += $(strip $(local-pre-zip))
@@ -35,9 +37,6 @@ ifneq ($(RUNDAPKS),)
 endif
 
 ACT_AFTER_ZIP := $(strip $(local-after-zip))
-
-#
-#USE_ANDROID_OUT := $(strip $(local-use-android-out))
 
 ifeq ($(strip $(USE_ANDROID_OUT)),true)
     ifeq ($(ANDROID_OUT),)

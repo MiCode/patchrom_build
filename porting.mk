@@ -77,8 +77,13 @@ $(TMP_DIR)/$(1).apk: $(3) $(TMP_DIR)
 	cp -r $(2) $(TMP_DIR)
 	$(APKTOOL) b  $(TMP_DIR)/$(2) $$@
 
+ifeq ($(1),framework-miui-res)
+$(3): $(OUT_JAR_PATH)/$(1).apk
+	$(APKTOOL) d -f $(OUT_JAR_PATH)/$(1).apk $(3)
+else
 $(3): $(OUT_APK_PATH)/$(1).apk
 	$(APKTOOL) d -f $(OUT_APK_PATH)/$(1).apk $(3)
+endif
 
 endef
 
@@ -130,17 +135,21 @@ $(foreach jar, $(JARS), \
 
 $(foreach app, $(APPS) framework-res, \
 	$(eval $(call APP_template,$(app),$(app))))
+$(foreach app, $(MIUIAPPS_MOD), \
+	$(eval $(call APP_template,$(app),$(app),$(TMP_DIR)/$(app))))
 $(eval $(call APP_template,MIUISystemUI,SystemUI,$(TMP_DIR)/SystemUI))
 
-$(foreach app, $(APPS), \
+$(foreach app, $(APPS) $(MIUIAPPS_MOD), \
 	$(eval $(call SIGN_template,$(TMP_DIR)/$(app).apk,/system/app/$(app).apk)))
 $(foreach app, $(MIUIAPPS), \
 	$(eval $(call SIGN_template,$(OUT_APK_PATH)/$(app).apk,/system/app/$(app).apk)))
+ifeq ($(findstring framework-miui-res,$(MIUIAPPS_MOD)),)
 $(eval $(call SIGN_template,$(OUT_JAR_PATH)/framework-miui-res.apk,/system/framework/framework-miui-res.apk))
+endif
 $(eval $(call SIGN_template,$(TMP_DIR)/framework-res.apk,/system/framework/framework-res.apk))
 $(eval $(call SIGN_template,$(TMP_DIR)/MIUISystemUI.apk,/system/app/SystemUI.apk))
 
-$(foreach app, $(MIUIAPPS) MIUISystemUI, $(eval $(call BUILD_CLEAN_APP_template,$(app))))
+$(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD) MIUISystemUI, $(eval $(call BUILD_CLEAN_APP_template,$(app))))
 
 
 # for release
