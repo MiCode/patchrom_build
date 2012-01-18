@@ -8,6 +8,9 @@
 #       android_build_top and android_product_out specified here would not be used.
 #       If android_build_top or android_product_out is empty, then ?
 
+
+USE_ANDROID_OUT=${RELEASE_PORTING:=false}
+
 TOPFILE=build/porting.mk
 if [ -f $TOPFILE ] ; then
    PORT_ROOT=$PWD
@@ -22,6 +25,7 @@ else
    fi
 fi
 
+
 if [ -n "$PORT_ROOT" ]; then
     PORT_BUILD=$PORT_ROOT/build
     ANDROID_TOP=${ANDROID_BUILD_TOP:=$1}
@@ -30,4 +34,13 @@ if [ -n "$PORT_ROOT" ]; then
     echo "PORT_ROOT   = $PORT_ROOT"
     echo "ANDROID_TOP = $ANDROID_TOP"
     echo "ANDROID_OUT = $ANDROID_OUT"
+fi
+
+
+if [ "$USE_ANDROID_OUT" = "true" ]; then
+    if [ -z "$ANDROID_TOP" ]; then
+        echo "Need to lunch first if USE_ANDROID_OUT=true or RELEASE_PORT is exported"
+    else
+        export USE_ANDROID_OUT
+    fi
 fi

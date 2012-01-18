@@ -23,6 +23,8 @@ SIGNAPKS    :=
 TOZIP_APKS  :=
 CLEANJAR    :=
 CLEANMIUIAPP:=
+RELEASE_MIUI:=
+RELEASE_PATH:=$(PORT_ROOT)/miui
 MAKE_ATTOP  := make -C $(ANDROID_TOP)
 
 #
@@ -54,6 +56,11 @@ $(OUT_JAR_PATH)/$(1).jar: $(ERR_REPORT)
 CLEANJAR += clean-$(1)
 clean-$(1):
 	$(MAKE_ATTOP) clean-$(1)
+
+RELEASE_MIUI += $(RELEASE_PATH)/system/framework/$(1).jar
+$(RELEASE_PATH)/system/framework/$(1).jar: $(OUT_JAR_PATH)/$(1).jar
+	mkdir -p $(RELEASE_PATH)/system/framework
+	cp $$< $$@
 endif
 
 endef
@@ -98,6 +105,7 @@ endef
 #
 # Used to build and clean the miui apk, e.g: make clean-Launcher2
 # $1: the apk name
+# $2: the dir name
 define BUILD_CLEAN_APP_template
 ifeq ($(USE_ANDROID_OUT),true)
 $(OUT_APK_PATH)/$(1).apk:
@@ -106,6 +114,11 @@ $(OUT_APK_PATH)/$(1).apk:
 CLEANMIUIAPP += clean-$(1)
 clean-$(1):
 	$(MAKE_ATTOP) $$@
+
+RELEASE_MIUI += $(RELEASE_PATH)/system/app/$(1).apk
+$(RELEASE_PATH)/system/app/$(1).apk: $(OUT_APK_PATH)/$(1).apk
+	mkdir -p $(RELEASE_PATH)/system/app
+	cp $$< $$@
 endif
 endef
 
@@ -129,6 +142,14 @@ $(eval $(call SIGN_template,$(TMP_DIR)/MIUISystemUI.apk,/system/app/SystemUI.apk
 
 $(foreach app, $(MIUIAPPS) MIUISystemUI, $(eval $(call BUILD_CLEAN_APP_template,$(app))))
 
+
+# for release
+ifeq ($(USE_ANDROID_OUT),true)
+RELEASE_MIUI += $(RELEASE_PATH)/system/framework/framework-miui-res.apk
+$(RELEASE_PATH)/system/framework/framework-miui-res.apk:
+	cp $(OUT_JAR_PATH)/framework-miui-res.apk $@
+endif
+
 #< TARGET EXPANSION END
 
 #> TARGET FOR ZIPFILE START
@@ -145,7 +166,7 @@ remove-rund-apks:
 pre-zip-misc:
 	@echo Add other tools: invoke-as, busybox
 	cp $(SYSOUT_DIR)/xbin/invoke-as $(ZIP_DIR)/system/xbin/
-	cp other/busybox $(ZIP_DIR)/system/xbin/
+	cp $(SYSOUT_DIR)/xbin/busybox $(ZIP_DIR)/system/xbin/
 	@echo Add Launcher gadget files
 	cp -r $(SYSOUT_DIR)/media/gadget $(ZIP_DIR)/system/media/
 	@echo Add default theme
@@ -154,6 +175,21 @@ pre-zip-misc:
 	cp -r $(SYSOUT_DIR)/media/wallpaper $(ZIP_DIR)/system/media/
 	@echo Add lockscreen wallpapers
 	cp -r $(SYSOUT_DIR)/media/lockscreen $(ZIP_DIR)/system/media/
+
+ifeq ($(USE_ANDROID_OUT),true)
+RELEASE_MIUI += $(RELEASE_PATH)/system/xbin $(RELEASE_PATH)/system/media
+$(RELEASE_PATH)/system/xbin:
+	mkdir -p $(RELEASE_PATH)/system/xbin
+	cp $(SYSOUT_DIR)/xbin/invoke-as $(RELEASE_PATH)/system/xbin/
+	cp $(SYSOUT_DIR)/xbin/busybox $(RELEASE_PATH)/system/xbin/
+
+$(RELEASE_PATH)/system/media:
+	mkdir -p $(RELEASE_PATH)/system/media
+	cp -r $(SYSOUT_DIR)/media/gadget $(RELEASE_PATH)/system/media/
+	cp -r $(SYSOUT_DIR)/media/theme  $(RELEASE_PATH)/system/media/
+	cp -r $(SYSOUT_DIR)/media/wallpaper $(RELEASE_PATH)/system/media/
+	cp -r $(SYSOUT_DIR)/media/lockscreen $(RELEASE_PATH)/system/media/
+endif
 	
 zipfile: $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) $(ACT_PRE_ZIP)
 	$(SIGN) sign.zip $(ZIP_DIR)

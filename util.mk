@@ -3,10 +3,10 @@ usage:
 	@echo "	make zipfile    - to create the full ZIP file"
 	@echo "	make zipone     - zipfile, plus the customized actions, such as zip2sd"
 	@echo "	make zip2sd     - to push the ZIP file to phone in recovery mode"
-	@echo "	make apktool-if - install the framework for apktool"
 	@echo "	make clean      - clear everything for output of this makefile"
 	@echo "	make reallyclean- clear everything of related."
 	@echo "Other helper targets:"
+	@echo "	make apktool-if            - install the framework for apktool"
 	@echo "	make verify                - to check if any error in the makefile"
 	@echo "	make .build/xxxx.jar-phone - to make out a single jar file and push to phone"
 	@echo "	make xxxx.apk.sign         - to generate a xxxx.apk and sign/push to phone"
@@ -14,12 +14,16 @@ usage:
 	@echo "	make sign                  - Sign all generated apks by this makefile and push to phone"
 
 # Target to install apktool framework 
+# todo two files for
 apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(TMP_DIR)/framework-res.apk
 	@echo install framework resources...
 	$(APKTOOL) if $(TMP_DIR)/framework-res.apk
 	$(APKTOOL) if $(SYSOUT_DIR)/framework/framework-miui-res.apk
 	unzip $(ZIP_FILE) system/framework/twframework-res.apk -d $(TMP_DIR)
 	$(APKTOOL) if $(TMP_DIR)/system/framework/twframework-res.apk
+
+# Target to release MIUI jar and apks
+release: $(RELEASE_MIUI)
 
 # Target to sign apks in the connected phone
 sign: $(SIGNAPKS)
@@ -68,6 +72,7 @@ verify: $(ERR_REPORT)
 	@echo "ACT_PRE_ZIP     = $(ACT_PRE_ZIP)"
 	@echo "ACT_PRE_ZIP     = $(ACT_AFTER_ZIP)"
 	@echo "USE_ANDROID_OUT = $(USE_ANDROID_OUT)"
+	@echo "RELEASE_MIUI    = $(RELEASE_MIUI)"
 	@echo "----------------------"
 	@echo ">>>>> MORE VARIABLE:"
 	@echo "SIGNAPKS     = $(SIGNAPKS)"

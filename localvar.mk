@@ -1,7 +1,6 @@
 #
 # Currenly the following local variables are used for
 # each product to define the behavior for porting
-# 	local-use-android-out
 # 	local-zip-file 		MUST be defined
 # 	local-out-zip-file
 # 	local-modified-apps
@@ -37,8 +36,10 @@ endif
 
 ACT_AFTER_ZIP := $(strip $(local-after-zip))
 
-USE_ANDROID_OUT := $(strip $(local-use-android-out))
-ifeq ($(USE_ANDROID_OUT),true)
+#
+#USE_ANDROID_OUT := $(strip $(local-use-android-out))
+
+ifeq ($(strip $(USE_ANDROID_OUT)),true)
     ifeq ($(ANDROID_OUT),)
          ERR_REPORT += error-android-env
     else
