@@ -139,17 +139,21 @@ $(foreach app, $(MIUIAPPS_MOD), \
 	$(eval $(call APP_template,$(app),$(app),$(TMP_DIR)/$(app))))
 $(eval $(call APP_template,MIUISystemUI,SystemUI,$(TMP_DIR)/SystemUI))
 
-$(foreach app, $(APPS) $(MIUIAPPS_MOD), \
+MIUIAPPS_MOD_NO_RESAPK = $(filter-out framework-miui-res,$(MIUIAPPS_MOD))
+$(foreach app, $(APPS) $(MIUIAPPS_MOD_NO_RESAPK), \
 	$(eval $(call SIGN_template,$(TMP_DIR)/$(app).apk,/system/app/$(app).apk)))
 $(foreach app, $(MIUIAPPS), \
 	$(eval $(call SIGN_template,$(OUT_APK_PATH)/$(app).apk,/system/app/$(app).apk)))
 ifeq ($(findstring framework-miui-res,$(MIUIAPPS_MOD)),)
 $(eval $(call SIGN_template,$(OUT_JAR_PATH)/framework-miui-res.apk,/system/framework/framework-miui-res.apk))
+else
+$(eval $(call SIGN_template,$(TMP_DIR)/framework-miui-res.apk,/system/framework/framework-miui-res.apk))
 endif
+
 $(eval $(call SIGN_template,$(TMP_DIR)/framework-res.apk,/system/framework/framework-res.apk))
 $(eval $(call SIGN_template,$(TMP_DIR)/MIUISystemUI.apk,/system/app/SystemUI.apk))
 
-$(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD) MIUISystemUI, $(eval $(call BUILD_CLEAN_APP_template,$(app))))
+$(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD_NO_RESAPK) MIUISystemUI, $(eval $(call BUILD_CLEAN_APP_template,$(app))))
 
 
 # for release

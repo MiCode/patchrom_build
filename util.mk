@@ -85,6 +85,8 @@ verify: $(ERR_REPORT)
 	@echo "ACT_PRE_ZIP     = $(ACT_AFTER_ZIP)"
 	@echo "USE_ANDROID_OUT = $(USE_ANDROID_OUT)"
 	@echo "RELEASE_MIUI    = $(RELEASE_MIUI)"
+	@echo "MIUIAPPS_MOD    = $(MIUIAPPS_MOD)"
+	@echo "MIUIAPPS_MOD_NO_RESAPK = $(MIUIAPPS_MOD_NO_RESAPK)"
 	@echo "----------------------"
 	@echo ">>>>> MORE VARIABLE:"
 	@echo "SIGNAPKS     = $(SIGNAPKS)"
