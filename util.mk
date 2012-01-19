@@ -23,7 +23,19 @@ apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(TMP_DIR)/framework-res.apk
 	$(APKTOOL) if $(TMP_DIR)/system/framework/twframework-res.apk
 
 # Target to release MIUI jar and apks
-release: $(RELEASE_MIUI)
+release: $(RELEASE_MIUI) release-framework-base-src
+
+ifeq ($(strip $(ANDROID_BRANCH)),)
+release-framework-base-src:
+	$(error To release source code for framework base, run envsetup -b to specify branch)
+else
+release-framework-base-src:
+	@echo "To release source code for framework base..."
+	$(TOOL_DIR)/release_source.sh $(PORT_ROOT)/android/$(ANDROID_BRANCH) $(ANDROID_TOP) $(RELEASE_PATH)
+	mkdir -p $(RELEASE_PATH)/frameworks/miui
+	cp -r $(ANDROID_TOP)/frameworks/miui/overlay $(RELEASE_PATH)/frameworks/miui
+endif
+
 
 # Target to sign apks in the connected phone
 sign: $(SIGNAPKS)

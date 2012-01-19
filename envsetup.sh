@@ -9,15 +9,17 @@
 #       android_build_top and android_product_out specified here would not be used.
 #       If android_build_top or android_product_out is empty, then ?
 
-set -- `getopt "a:l:h" "$@"`
+set -- `getopt "a:l:b:h" "$@"`
 android_top=
 android_lunch=
+ANDROID_BRANCH=
 help=
 while :
 do
 case "$1" in
     -a) shift; android_top="$1" ;;
     -l) shift; android_lunch="$1";;
+    -b) shift; ANDROID_BRANCH="$1";;
     -h) help=1;;
     --) break ;;
 esac
@@ -26,7 +28,7 @@ done
 shift
 
 if [ -n "$help" ]; then
-    echo "Usage: . /path/to/envsetup [-a android-top [-l lunch-option]]"
+    echo "Usage: . /path/to/envsetup [-a android-top [-l lunch-option] [-b android-branch]]"
     return
 fi
 
@@ -42,6 +44,8 @@ if [ -n "$android_top" ]; then
     USE_ANDROID_OUT=true
     export USE_ANDROID_OUT
     cd $PORT_ROOT
+else
+    ANDROID_BRANCH=
 fi
 
 TOPFILE=build/porting.mk
@@ -64,10 +68,11 @@ if [ -n "$PORT_ROOT" ]; then
     PORT_BUILD=$PORT_ROOT/build
     ANDROID_TOP=${ANDROID_BUILD_TOP:=$1}
     ANDROID_OUT=${ANDROID_PRODUCT_OUT:=$2}
-    export PORT_ROOT PORT_BUILD ANDROID_TOP ANDROID_OUT
+    export PORT_ROOT PORT_BUILD ANDROID_TOP ANDROID_OUT ANDROID_BRANCH
     echo "PORT_ROOT       = $PORT_ROOT"
     echo "ANDROID_TOP     = $ANDROID_TOP"
     echo "ANDROID_OUT     = $ANDROID_OUT"
     echo "USE_ANDROID_OUT = $USE_ANDROID_OUT"
+    echo "ANDROID_BRANCH  = $ANDROID_BRANCH"
 fi
 
