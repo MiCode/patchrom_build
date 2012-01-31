@@ -177,9 +177,11 @@ remove-rund-apks:
 	rm -f $(addprefix $(ZIP_DIR)/system/app/, $(addsuffix .apk, $(RUNDAPKS)))
 
 pre-zip-misc:
-	@echo Add other tools: invoke-as, busybox
+	@echo Add other tools: invoke-as, busybox, screencap, mv2sd
 	cp $(SYSOUT_DIR)/xbin/invoke-as $(ZIP_DIR)/system/xbin/
 	cp $(SYSOUT_DIR)/xbin/busybox $(ZIP_DIR)/system/xbin/
+	cp $(SYSOUT_DIR)/xbin/mv2sd $(ZIP_DIR)/system/xbin/
+	cp $(SYSOUT_DIR)/bin/screencap $(ZIP_DIR)/system/bin/
 	@echo Add Launcher gadget files
 	cp -r $(SYSOUT_DIR)/media/gadget $(ZIP_DIR)/system/media/
 	@echo Add default theme
