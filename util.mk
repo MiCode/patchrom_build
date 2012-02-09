@@ -16,11 +16,14 @@ usage:
 # Target to install apktool framework 
 # todo two files for
 apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(TMP_DIR)/framework-res.apk
-	@echo install framework resources...
-	$(APKTOOL) if $(TMP_DIR)/framework-res.apk
+	@echo install framework-miui-res resources...
 	$(APKTOOL) if $(SYSOUT_DIR)/framework/framework-miui-res.apk
-	unzip $(ZIP_FILE) system/framework/twframework-res.apk -d $(TMP_DIR)
-	$(APKTOOL) if $(TMP_DIR)/system/framework/twframework-res.apk
+	@unzip $(ZIP_FILE) "system/framework/*.apk" -d $(TMP_DIR)
+	@for res_file in `find $(TMP_DIR)/system/framework/ -name "*.apk"`; do\
+		echo install $$res_file ; \
+		$(APKTOOL) if $$res_file; \
+	done;\
+	#$(APKTOOL) if $(TMP_DIR)/framework-res.apk
 
 # Target to release MIUI jar and apks
 release: $(RELEASE_MIUI) release-framework-base-src
