@@ -5,6 +5,7 @@ usage:
 	@echo "	make zip2sd     - to push the ZIP file to phone in recovery mode"
 	@echo "	make clean      - clear everything for output of this makefile"
 	@echo "	make reallyclean- clear everything of related."
+	@echo " make prepare-ws - prepare the initial workspace for porting
 	@echo "Other helper targets:"
 	@echo "	make apktool-if            - install the framework for apktool"
 	@echo "	make verify                - to check if any error in the makefile"
@@ -13,17 +14,20 @@ usage:
 	@echo "	make clean-xxxx/make xxxx  - just as make under android-build-top"
 	@echo "	make sign                  - Sign all generated apks by this makefile and push to phone"
 
+# Target to prepare porting workspace
+prepare-ws: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR)
+
 # Target to install apktool framework 
-# todo two files for
-apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(TMP_DIR)/framework-res.apk
+apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
 	@echo install framework-miui-res resources...
 	$(APKTOOL) if $(SYSOUT_DIR)/framework/framework-miui-res.apk
 	@unzip $(ZIP_FILE) "system/framework/*.apk" -d $(TMP_DIR)
 	@for res_file in `find $(TMP_DIR)/system/framework/ -name "*.apk"`; do\
 		echo install $$res_file ; \
 		$(APKTOOL) if $$res_file; \
-	done;\
-	#$(APKTOOL) if $(TMP_DIR)/framework-res.apk
+	done;
+	@rm -r $(TMP_DIR)/system/framework/*.apk
+	@echo install framework resources completed!
 
 # Target to release MIUI jar and apks
 release: $(RELEASE_MIUI) release-framework-base-src
