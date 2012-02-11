@@ -15,6 +15,8 @@ SYSOUT_DIR  := $(OUT_SYS_PATH)
 
 JARS        := services android.policy framework
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
+JARS_OUTDIR := $(addsuffix .jar.out,$(JARS))
+APPS_OUTDIR := $(APPS) framework-res
 BLDJARS     := $(addprefix $(TMP_DIR)/,$(addsuffix .jar,$(JARS)))
 PHN_BLDJARS := $(addsuffix -phone,$(BLDJARS))
 ZIP_BLDJARS := $(addsuffix -tozip,$(BLDJARS))
@@ -63,6 +65,12 @@ $(RELEASE_PATH)/system/framework/$(1).jar: $(OUT_JAR_PATH)/$(1).jar
 	cp $$< $$@
 endif
 
+# targets for initial workspace
+$(1).jar.out:  $(ZIP_FILE)
+	@unzip $(ZIP_FILE) system/framework/$(1).jar -d $(TMP_DIR)
+	@$(APKTOOL) d -f $(TMP_DIR)/system/framework/$(1).jar $$@
+	@rm $(TMP_DIR)/system/framework/$(1).jar
+
 endef
 
 #
@@ -84,6 +92,18 @@ else
 $(3): $(OUT_APK_PATH)/$(1).apk
 	$(APKTOOL) d -f $(OUT_APK_PATH)/$(1).apk $(3)
 endif
+
+endef
+
+#
+# To prepare the workspace to modify the APKs from zip file
+# $1 the apk name, also the dir name to save the smali files
+# $2 the apk location under system, such as app or framework
+define APP_WS_template
+$(1): $(ZIPFILE)
+	@unzip $(ZIP_FILE) system/$(2)/$(1).apk -d $(TMP_DIR)
+	@$(APKTOOL) d -f $(TMP_DIR)/system/$(2)/$(1).apk $$@
+	@rm $(TMP_DIR)/system/$(2)/$(1).apk
 
 endef
 
@@ -155,6 +175,9 @@ $(eval $(call SIGN_template,$(TMP_DIR)/MIUISystemUI.apk,/system/app/SystemUI.apk
 
 $(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD_NO_RESAPK) MIUISystemUI, $(eval $(call BUILD_CLEAN_APP_template,$(app))))
 
+$(foreach app, $(APPS), \
+	$(eval $(call APP_WS_template,$(app),app)))
+$(eval $(call APP_WS_template,framework-res,framework))
 
 # for release
 ifeq ($(USE_ANDROID_OUT),true)
