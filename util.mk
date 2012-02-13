@@ -38,9 +38,9 @@ release-framework-base-src:
 else
 release-framework-base-src:
 	@echo "To release source code for framework base..."
-	$(TOOL_DIR)/release_source.sh $(PORT_ROOT)/android/$(ANDROID_BRANCH) $(ANDROID_TOP) $(RELEASE_PATH)
-	mkdir -p $(RELEASE_PATH)/frameworks/miui
-	cp -r $(ANDROID_TOP)/frameworks/miui/overlay $(RELEASE_PATH)/frameworks/miui
+	$(TOOL_DIR)/release_source.sh $(ANDROID_BRANCH) $(ANDROID_TOP) $(RELEASE_PATH)
+	mkdir -p $(RELEASE_PATH)/src/frameworks/miui
+	cp -r $(ANDROID_TOP)/frameworks/miui/overlay $(RELEASE_PATH)/src/frameworks/miui
 endif
 
 
