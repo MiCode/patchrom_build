@@ -5,7 +5,7 @@ usage:
 	@echo "	make zip2sd     - to push the ZIP file to phone in recovery mode"
 	@echo "	make clean      - clear everything for output of this makefile"
 	@echo "	make reallyclean- clear everything of related."
-	@echo " make prepare-ws - prepare the initial workspace for porting"
+	@echo " make workspace - prepare the initial workspace for porting"
 	@echo " make patchmiui  - add the miui hook into target framework smali code"
 	@echo "Other helper targets:"
 	@echo "	make apktool-if            - install the framework for apktool"
@@ -24,13 +24,14 @@ endif
 MIUI_OVERLAY_RES_DIR:=$(SRC_DIR)/frameworks/miui/overlay/frameworks/base/core/res/res
 
 # Target to prepare porting workspace
-prepare-ws: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR)
+workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR)
 	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
 		cp -r $$dir framework-res/res; \
 	done
 	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
 		$(MERGY_RES) $$dir framework-res/res/`basename $$dir`; \
 	done
+	$(TOOL_DIR)/fix_plurals.sh framework-res
 
 # Target to install apktool framework 
 apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
@@ -45,8 +46,10 @@ apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
 	@echo install framework resources completed!
 
 framework-miui-res:
-	mkdir -p framework-miui-res
+	$(APKTOOL) d -f $(SYSOUT_DIR)/framework/framework-miui-res.apk
+	rm -rf framework-miui-res/res
 	cp -r $(SRC_DIR)/frameworks/miui/core/res/res framework-miui-res
+	echo "  - 2" >> framework-miui-res/apktool.yml
 
 # Target to add miui hook into target framework
 patchmiui: prepare-ws
