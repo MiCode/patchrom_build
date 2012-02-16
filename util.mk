@@ -25,11 +25,11 @@ MIUI_OVERLAY_RES_DIR:=$(SRC_DIR)/frameworks/miui/overlay/frameworks/base/core/re
 
 # Target to prepare porting workspace
 prepare-ws: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR)
-	@for dir in `find $(MIUI_OVERLAY_RES_DIR) -type d -name "[^v.]*" -exec basename {} \;`; do\
-		cp -r $(MIUI_OVERLAY_RES_DIR)/$$dir framework-res/res; \
+	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
+		cp -r $$dir framework-res/res; \
 	done
-	@for dir in `find $(MIUI_OVERLAY_RES_DIR) -type d -name "values*" -exec basename {} \;`; do\
-		$(MERGY_RES) $(MIUI_OVERLAY_RES_DIR)/$$dir framework-res/res/$$dir
+	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
+		$(MERGY_RES) $$dir framework-res/res/`basename $$dir`; \
 	done
 
 # Target to install apktool framework 
