@@ -15,8 +15,22 @@ usage:
 	@echo "	make clean-xxxx/make xxxx  - just as make under android-build-top"
 	@echo "	make sign                  - Sign all generated apks by this makefile and push to phone"
 
+# Target to copy the miui resources
+ifeq ($(USE_ANDROID_OUT),true)
+    SRC_DIR:=$(ANDROID_TOP)
+else
+    SRC_DIR:=$(PORT_ROOT)/miui/src
+endif
+MIUI_OVERLAY_RES_DIR:=$(SRC_DIR)/frameworks/miui/overlay/frameworks/base/core/res/res
+
 # Target to prepare porting workspace
-prepare-ws: apktool-if copy-miui-resources $(JARS_OUTDIR) $(APPS_OUTDIR)
+prepare-ws: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR)
+	@for dir in `find $(MIUI_OVERLAY_RES_DIR) -type d -name "[^v.]*" -exec basename {} \;`; do\
+		cp -r $(MIUI_OVERLAY_RES_DIR)/$$dir framework-res/res; \
+	done
+	@for dir in `find $(MIUI_OVERLAY_RES_DIR) -type d -name "values*" -exec basename {} \;`; do\
+		$(MERGY_RES) $(MIUI_OVERLAY_RES_DIR)/$$dir framework-res/res/$$dir
+	done
 
 # Target to install apktool framework 
 apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
@@ -30,17 +44,9 @@ apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
 	@rm -r $(TMP_DIR)/system/framework/*.apk
 	@echo install framework resources completed!
 
-# Target to copy the miu resources
-ifeq ($(USE_ANDROID_OUT),true)
-    SRC_DIR:=$(ANDROID_TOP)
-else
-    SRC_DIR:=$(PORT_ROOT)/miui/src
-endif
-copy-miui-resources:
-	$(APKTOOL) d -f $(SYSOUT_DIR)/framework/framework-miui-res.apk
-	rm -rf framework-miui-res/res
+framework-miui-res:
+	mkdir -p framework-miui-res
 	cp -r $(SRC_DIR)/frameworks/miui/core/res/res framework-miui-res
-	echo "  - 2" >> framework-miui-res/apktool.yml
 
 # Target to add miui hook into target framework
 patchmiui: prepare-ws
@@ -108,7 +114,6 @@ verify: $(ERR_REPORT)
 	@echo "USE_ANDROID_OUT = $(USE_ANDROID_OUT)"
 	@echo "RELEASE_MIUI    = $(RELEASE_MIUI)"
 	@echo "MIUIAPPS_MOD    = $(MIUIAPPS_MOD)"
-	@echo "MIUIAPPS_MOD_NO_RESAPK = $(MIUIAPPS_MOD_NO_RESAPK)"
 	@echo "----------------------"
 	@echo ">>>>> MORE VARIABLE:"
 	@echo "SIGNAPKS     = $(SIGNAPKS)"

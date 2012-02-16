@@ -12,12 +12,13 @@ APKTOOL     := $(TOOL_DIR)/apktool
 SIGN        := $(TOOL_DIR)/sign.sh
 ADDMIUI     := $(TOOL_DIR)/add_miui_smail.sh
 SYSOUT_DIR  := $(OUT_SYS_PATH)
+MERGY_RES   := $(TOOL_DIR)/ResValuesModify/jar/ResValuesModify
 #< End of global variable
 
 JARS        := services android.policy framework
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
 JARS_OUTDIR := $(addsuffix .jar.out,$(JARS))
-APPS_OUTDIR := $(APPS) framework-res
+APPS_OUTDIR := $(APPS) framework-res framework-miui-res
 BLDJARS     := $(addprefix $(TMP_DIR)/,$(addsuffix .jar,$(JARS)))
 PHN_BLDJARS := $(addsuffix -phone,$(BLDJARS))
 ZIP_BLDJARS := $(addsuffix -tozip,$(BLDJARS))
