@@ -1,4 +1,5 @@
 include $(PORT_BUILD)/localvar.mk
+include $(PORT_BUILD)/prebuilt.mk
 
 #> Start of global variable
 # The global variable could be used in local makefile, and the name
@@ -157,7 +158,6 @@ $(foreach app, $(APPS) framework-res, \
 	$(eval $(call APP_template,$(app),$(app))))
 $(foreach app, $(MIUIAPPS_MOD), \
 	$(eval $(call APP_template,$(app),$(app),$(TMP_DIR)/$(app))))
-$(eval $(call APP_template,MIUISystemUI,SystemUI,$(TMP_DIR)/SystemUI))
 
 MIUIAPPS_MOD_NO_RESAPK = $(filter-out framework-miui-res,$(MIUIAPPS_MOD))
 $(foreach app, $(APPS) $(MIUIAPPS_MOD_NO_RESAPK), \
@@ -171,9 +171,8 @@ $(eval $(call SIGN_template,$(TMP_DIR)/framework-miui-res.apk,/system/framework/
 endif
 
 $(eval $(call SIGN_template,$(TMP_DIR)/framework-res.apk,/system/framework/framework-res.apk))
-$(eval $(call SIGN_template,$(TMP_DIR)/MIUISystemUI.apk,/system/app/SystemUI.apk))
 
-$(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD_NO_RESAPK) MIUISystemUI, $(eval $(call BUILD_CLEAN_APP_template,$(app))))
+$(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD_NO_RESAPK), $(eval $(call BUILD_CLEAN_APP_template,$(app))))
 
 $(foreach app, $(APPS), \
 	$(eval $(call APP_WS_template,$(app),app)))
@@ -199,32 +198,10 @@ remove-rund-apks:
 	@echo To remove all unnecessary apks:
 	rm -f $(addprefix $(ZIP_DIR)/system/app/, $(addsuffix .apk, $(RUNDAPKS)))
 
-pre-zip-misc:
-	@echo Add other tools: invoke-as, busybox
-	cp $(SYSOUT_DIR)/xbin/invoke-as $(ZIP_DIR)/system/xbin/
-	cp $(SYSOUT_DIR)/xbin/busybox $(ZIP_DIR)/system/xbin/
-	@echo Add Launcher gadget files
-	cp -r $(SYSOUT_DIR)/media/gadget $(ZIP_DIR)/system/media/
-	@echo Add default theme
-	cp -r $(SYSOUT_DIR)/media/theme  $(ZIP_DIR)/system/media/
-	@echo Add wallpapers
-	cp -r $(SYSOUT_DIR)/media/wallpaper $(ZIP_DIR)/system/media/
-	@echo Add lockscreen wallpapers
-	cp -r $(SYSOUT_DIR)/media/lockscreen $(ZIP_DIR)/system/media/
+pre-zip-misc: add-miui-prebuilt
 
 ifeq ($(USE_ANDROID_OUT),true)
-RELEASE_MIUI += $(RELEASE_PATH)/system/xbin $(RELEASE_PATH)/system/media
-$(RELEASE_PATH)/system/xbin:
-	mkdir -p $(RELEASE_PATH)/system/xbin
-	cp $(SYSOUT_DIR)/xbin/invoke-as $(RELEASE_PATH)/system/xbin/
-	cp $(SYSOUT_DIR)/xbin/busybox $(RELEASE_PATH)/system/xbin/
-
-$(RELEASE_PATH)/system/media:
-	mkdir -p $(RELEASE_PATH)/system/media
-	cp -r $(SYSOUT_DIR)/media/gadget $(RELEASE_PATH)/system/media/
-	cp -r $(SYSOUT_DIR)/media/theme  $(RELEASE_PATH)/system/media/
-	cp -r $(SYSOUT_DIR)/media/wallpaper $(RELEASE_PATH)/system/media/
-	cp -r $(SYSOUT_DIR)/media/lockscreen $(RELEASE_PATH)/system/media/
+RELEASE_MIUI += release-miui-prebuilt
 endif
 	
 zipfile: $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) $(ACT_PRE_ZIP)

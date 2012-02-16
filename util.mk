@@ -5,7 +5,8 @@ usage:
 	@echo "	make zip2sd     - to push the ZIP file to phone in recovery mode"
 	@echo "	make clean      - clear everything for output of this makefile"
 	@echo "	make reallyclean- clear everything of related."
-	@echo " make prepare-ws - prepare the initial workspace for porting
+	@echo " make prepare-ws - prepare the initial workspace for porting"
+	@echo " make patchmiui  - add the miui hook into target framework smali code"
 	@echo "Other helper targets:"
 	@echo "	make apktool-if            - install the framework for apktool"
 	@echo "	make verify                - to check if any error in the makefile"
@@ -15,7 +16,7 @@ usage:
 	@echo "	make sign                  - Sign all generated apks by this makefile and push to phone"
 
 # Target to prepare porting workspace
-prepare-ws: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR)
+prepare-ws: apktool-if copy-miui-resources $(JARS_OUTDIR) $(APPS_OUTDIR)
 
 # Target to install apktool framework 
 apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
@@ -29,6 +30,22 @@ apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
 	@rm -r $(TMP_DIR)/system/framework/*.apk
 	@echo install framework resources completed!
 
+# Target to copy the miu resources
+ifeq ($(USE_ANDROID_OUT),true)
+    SRC_DIR:=$(ANDROID_TOP)
+else
+    SRC_DIR:=$(PORT_ROOT)/miui/src
+endif
+copy-miui-resources:
+	$(APKTOOL) d -f $(SYSOUT_DIR)/framework/framework-miui-res.apk
+	rm -rf framework-miui-res/res
+	cp -r $(SRC_DIR)/frameworks/miui/core/res/res framework-miui-res
+    echo "  - 2" >> framework-miui-res/apktool.yml
+
+# Target to add miui hook into target framework
+patchmiui: prepare-ws
+	$(TOOL_DIR)/patchmiui.sh
+
 # Target to release MIUI jar and apks
 release: $(RELEASE_MIUI) release-framework-base-src
 
@@ -36,11 +53,9 @@ ifeq ($(strip $(ANDROID_BRANCH)),)
 release-framework-base-src:
 	$(error To release source code for framework base, run envsetup -b to specify branch)
 else
-release-framework-base-src:
+release-framework-base-src: release-miui-resources
 	@echo "To release source code for framework base..."
-	$(TOOL_DIR)/release_source.sh $(PORT_ROOT)/android/$(ANDROID_BRANCH) $(ANDROID_TOP) $(RELEASE_PATH)
-	mkdir -p $(RELEASE_PATH)/frameworks/miui
-	cp -r $(ANDROID_TOP)/frameworks/miui/overlay $(RELEASE_PATH)/frameworks/miui
+	$(TOOL_DIR)/release_source.sh $(ANDROID_BRANCH) $(ANDROID_TOP) $(RELEASE_PATH)
 endif
 
 
