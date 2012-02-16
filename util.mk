@@ -52,7 +52,7 @@ framework-miui-res:
 	echo "  - 2" >> framework-miui-res/apktool.yml
 
 # Target to add miui hook into target framework
-patchmiui: prepare-ws
+patchmiui: workspace
 	$(TOOL_DIR)/patchmiui.sh
 
 # Target to release MIUI jar and apks
