@@ -40,7 +40,7 @@ copy-miui-resources:
 	$(APKTOOL) d -f $(SYSOUT_DIR)/framework/framework-miui-res.apk
 	rm -rf framework-miui-res/res
 	cp -r $(SRC_DIR)/frameworks/miui/core/res/res framework-miui-res
-    echo "  - 2" >> framework-miui-res/apktool.yml
+	echo "  - 2" >> framework-miui-res/apktool.yml
 
 # Target to add miui hook into target framework
 patchmiui: prepare-ws
