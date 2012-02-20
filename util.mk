@@ -25,13 +25,6 @@ MIUI_OVERLAY_RES_DIR:=$(SRC_DIR)/frameworks/miui/overlay/frameworks/base/core/re
 
 # Target to prepare porting workspace
 workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR)
-	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
-		cp -r $$dir framework-res/res; \
-	done
-	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
-		$(MERGY_RES) $$dir framework-res/res/`basename $$dir`; \
-	done
-	$(TOOL_DIR)/fix_plurals.sh framework-res
 
 # Target to install apktool framework 
 apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
@@ -45,7 +38,18 @@ apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
 	@rm -r $(TMP_DIR)/system/framework/*.apk
 	@echo install framework resources completed!
 
-framework-miui-res:
+add-miui-overlay:
+	@echo fix the apktool multiple position substitution bug
+	$(TOOL_DIR)/fix_plurals.sh framework-res
+	@echo use aapt to add miui overlay resources into android framework resources
+	@aapt p -x -S $(MIUI_OVERLAY_RES_DIR) -S framework-res/res -A framework-res/assets -M framework-res/AndroidManifest.xml -F $(TMP_DIR)/framework-res.apk
+	@echo reinstall android framework resources
+	$(APKTOOL) if $(TMP_DIR)/framework-res.apk
+	@rm -rf framework-res
+	$(APKTOOL) d $(TMP_DIR)/framework-res.apk
+	@rm $(TMP_DIR)/framework-res.apk
+
+framework-miui-res: add-miui-overlay
 	$(APKTOOL) d -f $(SYSOUT_DIR)/framework/framework-miui-res.apk
 	rm -rf framework-miui-res/res
 	cp -r $(SRC_DIR)/frameworks/miui/core/res/res framework-miui-res

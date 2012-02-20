@@ -17,7 +17,7 @@ add-prebuilt-media:
 add-prebuilt-etc-files:
 	@echo Add prebuilt files under etc
 	cp -f $(SYSOUT_DIR)/etc/apns-conf.xml $(ZIP_DIR)/system/etc/
-	cp -f $(SYSOUT_DIR)/etc/license/ $(ZIP_DIR)/system/etc/
+	cp -rf $(SYSOUT_DIR)/etc/license/ $(ZIP_DIR)/system/etc/
 	cp -f $(SYSOUT_DIR)/etc/telocation.db $(ZIP_DIR)/system/etc/
 	cp -f $(SYSOUT_DIR)/etc/yellowpage.db $(ZIP_DIR)/system/etc/
 
