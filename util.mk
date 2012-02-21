@@ -54,7 +54,7 @@ add-miui-overlay:
 	$(APKTOOL) if $(TMP_DIR)/framework-res.apk
 	@rm $(TMP_DIR)/framework-res.apk
 
-framework-miui-res:
+framework-miui-res: add-miui-overlay
 	$(APKTOOL) d -f $(SYSOUT_DIR)/framework/framework-miui-res.apk
 	rm -rf framework-miui-res/res
 	cp -r $(SRC_DIR)/frameworks/miui/core/res/res framework-miui-res
