@@ -175,6 +175,14 @@ $(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD), $(eval $(call BUILD_CLEAN_APP_templa
 $(foreach app, $(APPS), \
 	$(eval $(call APP_WS_template,$(app),app)))
 $(eval $(call APP_WS_template,framework-res,framework))
+
+# for release
+ifeq ($(USE_ANDROID_OUT),true)
+RELEASE_MIUI += $(RELEASE_PATH)/system/framework/framework-miui-res.apk
+$(RELEASE_PATH)/system/framework/framework-miui-res.apk:
+	cp $(OUT_JAR_PATH)/framework-miui-res.apk $@
+endif
+
 #< TARGET EXPANSION END
 
 #> TARGET FOR ZIPFILE START

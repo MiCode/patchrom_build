@@ -41,12 +41,17 @@ apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
 add-miui-overlay:
 	@echo fix the apktool multiple position substitution bug
 	$(TOOL_DIR)/fix_plurals.sh framework-res
-	@echo use aapt to add miui overlay resources into android framework resources
-	@aapt p -x -S $(MIUI_OVERLAY_RES_DIR) -S framework-res/res -A framework-res/assets -M framework-res/AndroidManifest.xml -F $(TMP_DIR)/framework-res.apk
+	@echo add miui overlay resources
+	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
+		cp -r $$dir framework-res/res; \
+	done
+	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
+		$(MERGY_RES) $$dir framework-res/res/`basename $$dir`; \
+	done
+	$(TOOL_DIR)/remove_redef.py
+	$(APKTOOL) b framework-res $(TMP_DIR)/framework-res.apk
 	@echo reinstall android framework resources
 	$(APKTOOL) if $(TMP_DIR)/framework-res.apk
-	@rm -rf framework-res
-	$(APKTOOL) d $(TMP_DIR)/framework-res.apk
 	@rm $(TMP_DIR)/framework-res.apk
 
 framework-miui-res: add-miui-overlay
