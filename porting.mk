@@ -18,7 +18,7 @@ MERGY_RES   := $(TOOL_DIR)/ResValuesModify/jar/ResValuesModify
 JARS        := services android.policy framework
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
 JARS_OUTDIR := $(addsuffix .jar.out,$(JARS))
-APPS_OUTDIR := $(APPS) framework-res framework-miui-res
+APPS_OUTDIR := $(APPS) framework-res add-miui-overlay framework-miui-res
 BLDJARS     := $(addprefix $(TMP_DIR)/,$(addsuffix .jar,$(JARS)))
 PHN_BLDJARS := $(addsuffix -phone,$(BLDJARS))
 ZIP_BLDJARS := $(addsuffix -tozip,$(BLDJARS))
@@ -202,7 +202,7 @@ ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += release-miui-prebuilt
 endif
 	
-zipfile: $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) $(ACT_PRE_ZIP)
+zipfile: framework-miui-res $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) $(ACT_PRE_ZIP)
 	$(SIGN) sign.zip $(ZIP_DIR)
 	cd $(ZIP_DIR); zip -r ../../$(OUT_ZIP) ./
 	@echo The output zip file is: $(OUT_ZIP)
