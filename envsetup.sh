@@ -9,10 +9,11 @@
 #       android_build_top and android_product_out specified here would not be used.
 #       If android_build_top or android_product_out is empty, then ?
 
-set -- `getopt "a:l:b:h" "$@"`
+set -- `getopt "a:l:b:h:p:" "$@"`
 android_top=
 android_lunch=
 ANDROID_BRANCH=
+PORT_PRODUCT=
 help=
 while :
 do
@@ -20,6 +21,7 @@ case "$1" in
     -a) shift; android_top="$1" ;;
     -l) shift; android_lunch="$1";;
     -b) shift; ANDROID_BRANCH="$1";;
+    -p) shift; PORT_PRODUCT="$1";;
     -h) help=1;;
     --) break ;;
 esac
@@ -63,15 +65,15 @@ else
    fi
 fi
 
-
 if [ -n "$PORT_ROOT" ]; then
     PORT_BUILD=$PORT_ROOT/build
     ANDROID_TOP=${ANDROID_BUILD_TOP:=$1}
     ANDROID_OUT=${ANDROID_PRODUCT_OUT:=$2}
-    export PORT_ROOT PORT_BUILD ANDROID_TOP ANDROID_OUT ANDROID_BRANCH
+    export PORT_ROOT PORT_BUILD ANDROID_TOP ANDROID_OUT ANDROID_BRANCH PORT_PRODUCT
     echo "PORT_ROOT       = $PORT_ROOT"
     echo "ANDROID_TOP     = $ANDROID_TOP"
     echo "ANDROID_OUT     = $ANDROID_OUT"
+    echo "PORT_PRODUCT    = $PORT_PRODUCT"
     echo "USE_ANDROID_OUT = $USE_ANDROID_OUT"
     echo "ANDROID_BRANCH  = $ANDROID_BRANCH"
 fi

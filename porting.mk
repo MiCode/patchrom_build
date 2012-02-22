@@ -4,6 +4,7 @@ include $(PORT_BUILD)/prebuilt.mk
 #> Start of global variable
 # The global variable could be used in local makefile, and the name
 # would not be changed in future
+SHELL       := /bin/bash
 TMP_DIR     := .build
 ZIP_DIR     := $(TMP_DIR)/ZIP
 OUT_ZIP     := $(TMP_DIR)/$(OUT_ZIP_FILE)
