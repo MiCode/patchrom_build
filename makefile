@@ -4,11 +4,11 @@ PRODUCTS := horner i9100 sensation
 PRODUCTS := $(strip $(PRODUCTS))
 PRODUCT  := $(strip $(PORT_PRODUCT))
 
-clean reallyclean zipfile: check-product
-	make -C $(PORT_ROOT)/$(PORT_PRODUCT) $@
-
-defaut: check-product
+zipfile: check-product
 	make -C $(PORT_ROOT)/$(PORT_PRODUCT) zipfile
+
+clean reallyclean: check-product
+	make -C $(PORT_ROOT)/$(PORT_PRODUCT) $@
 
 check-product:
 ifeq ($(PRODUCT),)
