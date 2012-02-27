@@ -16,10 +16,18 @@ SYSOUT_DIR  := $(OUT_SYS_PATH)
 MERGY_RES   := $(TOOL_DIR)/ResValuesModify/jar/ResValuesModify
 #< End of global variable
 
+ifeq ($(USE_ANDROID_OUT),true)
+    MIUI_SRC_DIR:=$(ANDROID_TOP)
+else
+    MIUI_SRC_DIR:=$(PORT_ROOT)/miui/src
+endif
+MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/overlay/frameworks/base/core/res/res
+MIUI_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/core/res/res
+
 JARS        := services android.policy framework
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
 JARS_OUTDIR := $(addsuffix .jar.out,$(JARS))
-APPS_OUTDIR := $(APPS) framework-res framework-miui-res
+APPS_OUTDIR := $(APPS) framework-res
 BLDJARS     := $(addprefix $(TMP_DIR)/,$(addsuffix .jar,$(JARS)))
 PHN_BLDJARS := $(addsuffix -phone,$(BLDJARS))
 ZIP_BLDJARS := $(addsuffix -tozip,$(BLDJARS))
@@ -87,17 +95,37 @@ $(TMP_DIR)/$(1).apk: $(3) $(TMP_DIR)
 	@echo --------------------------------------------
 	cp -r $(2) $(TMP_DIR)
 	$(APKTOOL) b  $(TMP_DIR)/$(2) $$@
-
-ifeq ($(1),framework-miui-res)
-$(3): $(OUT_JAR_PATH)/$(1).apk
-	$(APKTOOL) d -f $(OUT_JAR_PATH)/$(1).apk $(3)
-	@rm -rf $(3)/res
-else
 $(3): $(OUT_APK_PATH)/$(1).apk
 	$(APKTOOL) d -f $(OUT_APK_PATH)/$(1).apk $(3)
-endif
 
 endef
+
+# Target to build framework-res.apk
+# copy the framework-res, add the miui overlay then build
+$(TMP_DIR)/framework-res.apk: $(TMP_DIR) apktool-if
+	@echo build $@...
+	@echo -------------------------------------------
+	cp -r framework-res $(TMP_DIR)
+	@echo add miui overlay resources
+	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
+		cp -r $$dir $(TMP_DIR)/framework-res/res; \
+	done
+	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
+		$(MERGY_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir`; \
+	done
+	$(TOOL_DIR)/remove_redef.py $(TMP_DIR)/framework-res
+	$(APKTOOL) b $(TMP_DIR)/framework-res $@
+	$(APKTOOL) if $@
+
+# Target to build framework-miui-res.apk
+$(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk
+	@echo build $@...
+	@echo ------------------------------------------
+	$(APKTOOL) d -f $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
+	rm -rf $(TMP_DIR)/framework-miui-res/res
+	cp -r $(MIUI_RES_DIR) $(TMP_DIR)/framework-miui-res
+	@echo "  - 2" >> $(TMP_DIR)/framework-miui-res/apktool.yml
+	$(APKTOOL) b $(TMP_DIR)/framework-miui-res $@
 
 #
 # To prepare the workspace to modify the APKs from zip file
@@ -157,9 +185,9 @@ zipone: zipfile $(ACT_AFTER_ZIP)
 $(foreach jar, $(JARS), \
 	$(eval $(call JAR_template,$(jar),$(TMP_DIR)/$(jar))))
 
-$(foreach app, $(APPS) framework-res, \
+$(foreach app, $(APPS), \
 	$(eval $(call APP_template,$(app),$(app))))
-$(foreach app, $(MIUIAPPS_MOD) framework-miui-res, \
+$(foreach app, $(MIUIAPPS_MOD), \
 	$(eval $(call APP_template,$(app),$(app),$(TMP_DIR)/$(app))))
 
 $(foreach app, $(APPS) $(MIUIAPPS_MOD), \
@@ -203,7 +231,7 @@ ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += release-miui-prebuilt
 endif
 	
-zipfile: apktool-if framework-miui-res $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) $(ACT_PRE_ZIP)
+zipfile: $(TMP_DIR)/framework-miui-res.apk $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) $(ACT_PRE_ZIP)
 	$(SIGN) sign.zip $(ZIP_DIR)
 	cd $(ZIP_DIR); zip -r ../../$(OUT_ZIP) ./
 	@echo The output zip file is: $(OUT_ZIP)

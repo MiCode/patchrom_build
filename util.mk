@@ -15,16 +15,8 @@ usage:
 	@echo "	make clean-xxxx/make xxxx  - just as make under android-build-top"
 	@echo "	make sign                  - Sign all generated apks by this makefile and push to phone"
 
-# Target to copy the miui resources
-ifeq ($(USE_ANDROID_OUT),true)
-    SRC_DIR:=$(ANDROID_TOP)
-else
-    SRC_DIR:=$(PORT_ROOT)/miui/src
-endif
-MIUI_OVERLAY_RES_DIR:=$(SRC_DIR)/frameworks/miui/overlay/frameworks/base/core/res/res
-
 # Target to prepare porting workspace
-workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR)
+workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR) fix-framework-res
 
 # Target to install apktool framework 
 apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
@@ -38,27 +30,9 @@ apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
 	@rm -r $(TMP_DIR)/system/framework/*.apk
 	@echo install framework resources completed!
 
-add-miui-overlay:
+fix-framework-res:
 	@echo fix the apktool multiple position substitution bug
 	$(TOOL_DIR)/fix_plurals.sh framework-res
-	@echo add miui overlay resources
-	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
-		cp -r $$dir framework-res/res; \
-	done
-	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
-		$(MERGY_RES) $$dir framework-res/res/`basename $$dir`; \
-	done
-	$(TOOL_DIR)/remove_redef.py
-	$(APKTOOL) b framework-res $(TMP_DIR)/framework-res.apk
-	@echo reinstall android framework resources
-	$(APKTOOL) if $(TMP_DIR)/framework-res.apk
-	@rm $(TMP_DIR)/framework-res.apk
-
-framework-miui-res: add-miui-overlay
-	$(APKTOOL) d -f $(SYSOUT_DIR)/framework/framework-miui-res.apk
-	rm -rf framework-miui-res/res
-	cp -r $(SRC_DIR)/frameworks/miui/core/res/res framework-miui-res
-	echo "  - 2" >> framework-miui-res/apktool.yml
 
 # Target to add miui hook into target framework
 patchmiui: workspace
