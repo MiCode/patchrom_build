@@ -23,6 +23,7 @@ else
 endif
 MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/overlay/frameworks/base/core/res/res
 MIUI_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/core/res/res
+OVERLAY_RES_DIR:=overlay/res
 
 JARS        := services android.policy framework
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
@@ -114,6 +115,9 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR) apktool-if
 		$(MERGY_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir`; \
 	done
 	$(TOOL_DIR)/remove_redef.py $(TMP_DIR)/framework-res
+	@for dir in `ls -d $(OVERLAY_RES_DIR)/*`; do\
+		cp -r $$dir $(TMP_DIR)/framework-res/res; \
+        done
 	$(APKTOOL) b $(TMP_DIR)/framework-res $@
 	$(APKTOOL) if $@
 
