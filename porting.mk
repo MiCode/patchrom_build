@@ -1,17 +1,18 @@
 include $(PORT_BUILD)/localvar.mk
-include $(PORT_BUILD)/prebuilt.mk
 
 #> Start of global variable
 # The global variable could be used in local makefile, and the name
 # would not be changed in future
 SHELL       := /bin/bash
-TMP_DIR     := .build
+TMP_DIR     := out
 ZIP_DIR     := $(TMP_DIR)/ZIP
 OUT_ZIP     := $(TMP_DIR)/$(OUT_ZIP_FILE)
 TOOL_DIR    := $(PORT_ROOT)/tools
 APKTOOL     := $(TOOL_DIR)/apktool
 SIGN        := $(TOOL_DIR)/sign.sh
 ADDMIUI     := $(TOOL_DIR)/add_miui_smail.sh
+SETPROP     := $(TOOL_DIR)/set_build_prop.sh
+PROP_FILE   := $(ZIP_DIR)/system/build.prop
 SYSOUT_DIR  := $(OUT_SYS_PATH)
 MERGY_RES   := $(TOOL_DIR)/ResValuesModify/jar/ResValuesModify
 #< End of global variable
@@ -25,9 +26,10 @@ MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/overlay/frameworks/base/co
 MIUI_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/core/res/res
 OVERLAY_RES_DIR:=overlay/res
 
-JARS        := services android.policy framework
+MIUI_JARS   := services android.policy framework
+JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
-JARS_OUTDIR := $(addsuffix .jar.out,$(JARS))
+JARS_OUTDIR := $(addsuffix .jar.out,$(MIUI_JARS))
 APPS_OUTDIR := $(APPS) framework-res
 BLDJARS     := $(addprefix $(TMP_DIR)/,$(addsuffix .jar,$(JARS)))
 PHN_BLDJARS := $(addsuffix -phone,$(BLDJARS))
@@ -82,6 +84,25 @@ $(1).jar.out:  $(ZIP_FILE)
 	@unzip $(ZIP_FILE) system/framework/$(1).jar -d $(TMP_DIR)
 	@$(APKTOOL) d -f $(TMP_DIR)/system/framework/$(1).jar $$@
 	@rm $(TMP_DIR)/system/framework/$(1).jar
+
+endef
+
+#
+# Template to apktool-build the jar-file that is from phone(i.e, not MIUI)
+# the decoded smali files are located at JARNAME.jar.out
+# $1: the jar name, such as framework2
+define JAR_PHONE_template
+$(TMP_DIR)/$(1).jar-phone:$(TMP_DIR)/$(1).jar
+	adb push $$< /system/framework/$(1).jar
+
+$(TMP_DIR)/$(1).jar-tozip:$(TMP_DIR)/$(1).jar
+	cp $$< $(ZIP_DIR)/system/framework/$(1).jar
+
+$(TMP_DIR)/$(1).jar: $(1).jar.out
+	@echo build $$@...
+	@echo --------------------------------------------
+	cp -r $(1).jar.out $(TMP_DIR)/
+	$(APKTOOL) b $(TMP_DIR)/$(1).jar.out $$@
 
 endef
 
@@ -186,7 +207,7 @@ endef
 zipone: zipfile $(ACT_AFTER_ZIP)
 
 #> TARGETS EXPANSION START
-$(foreach jar, $(JARS), \
+$(foreach jar, $(MIUI_JARS), \
 	$(eval $(call JAR_template,$(jar),$(TMP_DIR)/$(jar))))
 
 $(foreach app, $(APPS), \
@@ -229,7 +250,10 @@ remove-rund-apks:
 	@echo To remove all unnecessary apks:
 	rm -f $(addprefix $(ZIP_DIR)/system/app/, $(addsuffix .apk, $(RUNDAPKS)))
 
-pre-zip-misc: add-miui-prebuilt
+pre-zip-misc: add-miui-prebuilt set-build-prop
+
+set-build-prop:
+	$(SETPROP) $(PROP_FILE) $(PORT_PRODUCT) $(BUILD_NUMBER) $(PLATFORM_VERSION)
 
 ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += release-miui-prebuilt
@@ -243,4 +267,5 @@ zipfile: $(TMP_DIR)/framework-miui-res.apk $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APK
 #< TARGET FOR ZIPFILE END
 
 include $(PORT_BUILD)/util.mk
+include $(PORT_BUILD)/prebuilt.mk
 

@@ -4,6 +4,7 @@
 # 	local-zip-file 		MUST be defined
 # 	local-out-zip-file
 # 	local-modified-apps
+# 	local-modified-jars
 # 	local-miui-apps
 # 	local-miui-modified-apps
 # 	local-remove-apps
@@ -21,7 +22,7 @@ endif
 
 OUT_ZIP_FILE := $(strip $(local-out-zip-file))
 ifeq ($(OUT_ZIP_FILE),)
-    OUT_ZIP_FILE:= porting_miui.zip
+    OUT_ZIP_FILE:= update.zip
 endif
 
 APPS         := $(strip $(local-modified-apps))
@@ -50,6 +51,6 @@ else
     OUT_SYS_PATH := $(PORT_ROOT)/miui/system
     REALLY_CLEAN :=
 endif
-
+PHONE_JARS := $(strip $(local-modified-jars))
 OUT_JAR_PATH := $(OUT_SYS_PATH)/framework
 OUT_APK_PATH := $(OUT_SYS_PATH)/app

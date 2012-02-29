@@ -1,6 +1,8 @@
-add-prebuilt-app:
+add-prebuilt-app: $(ZIP_DIR)/system/xbin/busybox
 	@echo Add prebuilt apps
 	cp -f $(SYSOUT_DIR)/xbin/invoke-as $(ZIP_DIR)/system/xbin/
+
+$(ZIP_DIR)/system/xbin/busybox:
 	cp -f $(SYSOUT_DIR)/xbin/busybox $(ZIP_DIR)/system/xbin/
 
 add-prebuilt-libraries:
