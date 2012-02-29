@@ -209,6 +209,8 @@ zipone: zipfile $(ACT_AFTER_ZIP)
 #> TARGETS EXPANSION START
 $(foreach jar, $(MIUI_JARS), \
 	$(eval $(call JAR_template,$(jar),$(TMP_DIR)/$(jar))))
+$(foreach jar, $(PHONE_JARS), \
+	$(eval $(call JAR_PHONE_template,$(jar))))
 
 $(foreach app, $(APPS), \
 	$(eval $(call APP_template,$(app),$(app))))
