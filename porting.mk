@@ -99,7 +99,7 @@ $(TMP_DIR)/$(1).jar-phone:$(TMP_DIR)/$(1).jar
 $(TMP_DIR)/$(1).jar-tozip:$(TMP_DIR)/$(1).jar
 	cp $$< $(ZIP_DIR)/system/framework/$(1).jar
 
-$(TMP_DIR)/$(1).jar: $(1).jar.out
+$(TMP_DIR)/$(1).jar: $(1).jar.out $(TMP_DIR)
 	@echo build $$@...
 	@echo --------------------------------------------
 	cp -r $(1).jar.out $(TMP_DIR)/
