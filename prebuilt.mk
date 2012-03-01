@@ -7,9 +7,6 @@ $(ZIP_DIR)/system/xbin/busybox:
 
 add-prebuilt-libraries:
 	@echo Add prebuilt libraries
-	cp -f $(SYSOUT_DIR)/lib/liblbesec.so $(ZIP_DIR)/system/lib/
-	cp -f $(SYSOUT_DIR)/lib/libnativecache.so $(ZIP_DIR)/system/lib/
-	cp -f $(SYSOUT_DIR)/lib/libservice.so $(ZIP_DIR)/system/lib/
 	cp -f $(SYSOUT_DIR)/lib/content-types.properties $(ZIP_DIR)/system/lib/
 
 add-prebuilt-media:
@@ -22,6 +19,19 @@ add-prebuilt-etc-files:
 	cp -rf $(SYSOUT_DIR)/etc/license/ $(ZIP_DIR)/system/etc/
 	cp -f $(SYSOUT_DIR)/etc/telocation.db $(ZIP_DIR)/system/etc/
 	cp -f $(SYSOUT_DIR)/etc/yellowpage.db $(ZIP_DIR)/system/etc/
+
+add-lbesec-miui:
+	@echo Add LBESEC_MIUI
+	cp -f $(SYSOUT_DIR)/lib/liblbesec.so $(ZIP_DIR)/system/lib/
+	cp -f $(SYSOUT_DIR)/lib/libnativecache.so $(ZIP_DIR)/system/lib/
+	cp -f $(SYSOUT_DIR)/lib/libservice.so $(ZIP_DIR)/system/lib/
+	cp -f $(SYSOUT_DIR)/bin/installd $(ZIP_DIR)/system/bin
+	cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(ZIP_DIR)/system/app
+
+add-skia-emoji:
+	@echo Add Skia Emoji support
+	cp -f $(SYSOUT_DIR)/lib/libskia.so $(ZIP_DIR)/sysem/lib
+	cp -f $(SYSOUT_DIR)/lib/libhwui.so $(ZIP_DIR)/system/lib
 
 release-prebuilt-app:
 	mkdir -p $(RELEASE_PATH)/system/xbin
