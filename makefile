@@ -1,5 +1,5 @@
 # The currently supported products
-PRODUCTS := horner i9100 sensation
+PRODUCTS := honor i9100 sensation
 
 PRODUCTS := $(strip $(PRODUCTS))
 PRODUCT  := $(strip $(PORT_PRODUCT))
