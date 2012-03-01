@@ -15,6 +15,7 @@ SETPROP     := $(TOOL_DIR)/set_build_prop.sh
 PROP_FILE   := $(ZIP_DIR)/system/build.prop
 SYSOUT_DIR  := $(OUT_SYS_PATH)
 MERGY_RES   := $(TOOL_DIR)/ResValuesModify/jar/ResValuesModify
+BUILD_TARGET_FILES := $(TOOL_DIR)/build_target_files.sh
 #< End of global variable
 
 ifeq ($(USE_ANDROID_OUT),true)
@@ -205,6 +206,9 @@ endif
 endef
 
 zipone: zipfile $(ACT_AFTER_ZIP)
+
+otapackage: metadata zipfile
+	$(BUILD_TARGET_FILES)
 
 #> TARGETS EXPANSION START
 $(foreach jar, $(MIUI_JARS), \
