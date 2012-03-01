@@ -4,8 +4,8 @@ PRODUCTS := horner i9100 sensation
 PRODUCTS := $(strip $(PRODUCTS))
 PRODUCT  := $(strip $(PORT_PRODUCT))
 
-zipfile: check-product
-	make -C $(PORT_ROOT)/$(PORT_PRODUCT) zipfile
+otapackage: check-product
+	make -C $(PORT_ROOT)/$(PORT_PRODUCT) otapackage
 
 clean reallyclean: check-product
 	make -C $(PORT_ROOT)/$(PORT_PRODUCT) $@
