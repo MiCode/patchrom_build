@@ -210,7 +210,7 @@ endef
 
 zipone: zipfile $(ACT_AFTER_ZIP)
 
-otapackage: metadata zipfile
+otapackage: metadata target_files
 	$(BUILD_TARGET_FILES)
 
 #> TARGETS EXPANSION START
@@ -268,13 +268,13 @@ ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += release-miui-prebuilt
 endif
 	
-zipfile: $(TMP_DIR)/framework-miui-res.apk $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) $(ACT_PRE_ZIP)
-	$(SIGN) sign.zip $(ZIP_DIR)
-	cd $(ZIP_DIR); zip -r ../../$(OUT_ZIP) ./
-	@echo The output zip file is: $(OUT_ZIP)
+target_files: $(TMP_DIR)/framework-miui-res.apk $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) $(ACT_PRE_ZIP)
+
+zipfile: target_files
+	@echo The outpu zip file is: $(OUT_ZIP)
+	$(BUILD_TARGET_FILES) $(OUT_ZIP_FILE)
 
 #< TARGET FOR ZIPFILE END
 
 include $(PORT_BUILD)/util.mk
 include $(PORT_BUILD)/prebuilt.mk
-
