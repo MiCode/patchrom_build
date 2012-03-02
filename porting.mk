@@ -270,9 +270,15 @@ endif
 	
 target_files: $(TMP_DIR)/framework-miui-res.apk $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) $(ACT_PRE_ZIP)
 
+# Target to make zipfile which is all signed by testkey. convenient for developement and debug
 zipfile: target_files
-	@echo The outpu zip file is: $(OUT_ZIP)
-	$(BUILD_TARGET_FILES) $(OUT_ZIP_FILE)
+	$(SIGN) sign.zip $(ZIP_DIR)
+	cd $(ZIP_DIR); zip -r ../../$(OUT_ZIP) ./
+	@echo The output zip file is: $(OUT_ZIP)
+
+# Target to test if full ota package will be generate
+testota: target_files
+	$(BUILD_TARGET_FILES) testota.zip
 
 #< TARGET FOR ZIPFILE END
 
