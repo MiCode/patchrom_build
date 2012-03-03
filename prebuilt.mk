@@ -23,10 +23,9 @@ add-prebuilt-etc-files:
 add-lbesec-miui:
 	@echo Add LBESEC_MIUI
 	cp -f $(SYSOUT_DIR)/lib/liblbesec.so $(ZIP_DIR)/system/lib/
-	cp -f $(SYSOUT_DIR)/lib/libnativecache.so $(ZIP_DIR)/system/lib/
-	cp -f $(SYSOUT_DIR)/lib/libservice.so $(ZIP_DIR)/system/lib/
 	cp -f $(SYSOUT_DIR)/bin/installd $(ZIP_DIR)/system/bin
 	cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(ZIP_DIR)/system/app
+	cp -f $(SYSOUT_DIR)/xbin/su $(ZIP_DIR)/system/xbin/
 
 add-skia-emoji:
 	@echo Add Skia Emoji support
