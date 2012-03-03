@@ -132,7 +132,7 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR) apktool-if
 	@echo add miui overlay resources
 	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
 		cp -r $$dir $(TMP_DIR)/framework-res/res; \
-		./customize_framework-res.sh $$dir $(TMP_DIR)/framework-res/res; \
+		#./customize_framework-res.sh $$dir $(TMP_DIR)/framework-res/res; \
 	done
 	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
 		$(MERGY_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir`; \
