@@ -35,9 +35,13 @@ fix-framework-res:
 	@echo fix the apktool multiple position substitution bug
 	$(TOOL_DIR)/fix_plurals.sh framework-res
 
-# Target to add miui hook into target framework
-patchmiui: workspace
-	$(TOOL_DIR)/patchmiui.sh
+# Target to add miui hook into target framework first time
+firstpatch:
+	$(TOOL_DIR)/patchmiui.sh google-framework
+
+# Target to incrementaly add miui hook into target framework
+patchmiui:
+	$(TOOL_DIR)/patchmiui.sh last-framework
 
 # Target to release MIUI jar and apks
 release: $(RELEASE_MIUI) release-framework-base-src

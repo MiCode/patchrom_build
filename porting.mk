@@ -263,7 +263,7 @@ remove-rund-apks:
 pre-zip-misc: add-miui-prebuilt set-build-prop
 
 set-build-prop:
-	$(SETPROP) $(PROP_FILE) $(PORT_PRODUCT) $(BUILD_NUMBER) $(PLATFORM_VERSION)
+	$(SETPROP) $(PROP_FILE) $(PORT_PRODUCT) $(BUILD_NUMBER)
 
 ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += release-miui-prebuilt
