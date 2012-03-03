@@ -132,6 +132,7 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR) apktool-if
 	@echo add miui overlay resources
 	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
 		cp -r $$dir $(TMP_DIR)/framework-res/res; \
+		./customize_framework-res.sh $$dir $(TMP_DIR)/framework-res/res; \
 	done
 	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
 		$(MERGY_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir`; \
@@ -179,7 +180,7 @@ SIGNAPKS += $(1).sign
 $(notdir $(1)).sign $(1).sign: $(1)
 	@echo sign apk $(1) and push to phone as $(2)...
 	@echo --------------------------------------------
-	java -jar $(TOOL_DIR)/signapk.jar $(TOOL_DIR)/platform.x509.pem $(TOOL_DIR)/platform.pk8 $(1) $(1).signed
+	java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/testkey.x509.pem $(PORT_ROOT)/build/security/testkey.pk8 $(1) $(1).signed
 	adb push $(1).signed $(2)
 
 TOZIP_APKS += $(1)-tozip
