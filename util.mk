@@ -10,7 +10,8 @@ usage:
 	@echo "Other helper targets:"
 	@echo "	make apktool-if            - install the framework for apktool"
 	@echo "	make verify                - to check if any error in the makefile"
-	@echo "	make .build/xxxx.jar-phone - to make out a single jar file and push to phone"
+	@echo "	make verify-ita            - to generate an ota for ota verification"
+	@echo "	make out/xxxx.jar-phone - to make out a single jar file and push to phone"
 	@echo "	make xxxx.apk.sign         - to generate a xxxx.apk and sign/push to phone"
 	@echo "	make clean-xxxx/make xxxx  - just as make under android-build-top"
 	@echo "	make sign                  - Sign all generated apks by this makefile and push to phone"
@@ -120,4 +121,16 @@ error-no-zipfile:
 
 error-android-env:
 	$(error local-use-android-out set as true, should run lunch for android first)
+
+last_target_files.zip:
+	make clean
+	make -e VERIFY_OTA=local-ota-update testota
+	cp $(TMP_DIR)/target_files.zip last_target_files.zip
+	cp $(TMP_DIR)/testota.zip last_testota.zip
+	make clean
+
+verify-ota: last_target_files.zip testota
+	$(TOOL_DIR)/releasetools/ota_from_target_files -k ../build/security/testkey -i last_target_files.zip out/target_files.zip $(TMP_DIR)/ota_update.zip
+	mv last_target_files.zip $(TMP_DIR)
+	mv last_testota.zip $(TMP_DIR)
 

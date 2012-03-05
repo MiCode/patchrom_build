@@ -14,6 +14,7 @@
 #
 
 ERR_REPORT   :=
+VERIFY_OTA   :=
 
 ZIP_FILE     := $(strip $(local-zip-file))
 ifeq ($(ZIP_FILE),)
@@ -36,6 +37,7 @@ RUNDAPKS     := $(local-remove-apps)
 ifneq ($(RUNDAPKS),)
     ACT_PRE_ZIP += remove-rund-apks
 endif
+ACT_PRE_ZIP  += $(VERIFY_OTA)
 
 ACT_AFTER_ZIP := $(strip $(local-after-zip))
 
