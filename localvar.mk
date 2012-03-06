@@ -62,7 +62,7 @@ PHONE_JARS := $(strip $(local-modified-jars))
 OUT_JAR_PATH := $(OUT_SYS_PATH)/framework
 OUT_APK_PATH := $(OUT_SYS_PATH)/app
 
-log  := default
+log  := info
 PROG :=
 ifeq ($(strip $(log)),verbose)
 	INFO :=

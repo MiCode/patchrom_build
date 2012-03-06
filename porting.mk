@@ -279,7 +279,7 @@ zipfile: target_files
 
 # Target to test if full ota package will be generate
 fullota: target_files
-	$(HIDEV) $(BUILD_TARGET_FILES) fullota.zip
+	$(HIDEI) $(BUILD_TARGET_FILES) fullota.zip
 
 #< TARGET FOR ZIPFILE END
 
