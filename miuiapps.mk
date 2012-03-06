@@ -13,6 +13,7 @@ private-miui-apps := AntiSpam  \
 					 DownloadProvider  \
 					 DownloadProviderUi  \
 					 Email  \
+					 Exchange \
 					 FileExplorer  \
 					 Gallery  \
 					 Gmail  \
