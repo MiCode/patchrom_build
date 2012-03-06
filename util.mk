@@ -134,3 +134,5 @@ verify-ota: last_target_files.zip testota
 	mv last_target_files.zip $(TMP_DIR)
 	mv last_testota.zip $(TMP_DIR)
 
+miui-apps-included:
+	@echo $(addsuffix .apk,$(local-miui-apps) $(local-miui-modified-apps) framework-miui-res LBESEC_MIUI)
