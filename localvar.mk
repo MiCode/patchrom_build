@@ -5,13 +5,15 @@
 # 	local-out-zip-file
 # 	local-modified-apps
 # 	local-modified-jars
-# 	local-miui-apps
+# 	local-miui-removed-apps
+# 	local-miui-apps (DEPRECATED)
 # 	local-miui-modified-apps
 # 	local-remove-apps
 # 	local-pre-zip
 # 	local-after-zip
 # See i9100/makefile as an example
 #
+include $(PORT_BUILD)/miuiapps.mk
 
 ERR_REPORT   :=
 VERIFY_OTA   :=
@@ -27,8 +29,11 @@ ifeq ($(OUT_ZIP_FILE),)
 endif
 
 APPS         := $(strip $(local-modified-apps))
-MIUIAPPS     := $(strip $(local-miui-apps))
 MIUIAPPS_MOD := $(strip $(local-miui-modified-apps))
+MIUIAPPS     := $(strip \
+                    $(filter-out $(strip $(local-miui-modified-apps)), \
+                                 $(filter-out $(strip $(local-miui-removed-apps)),$(strip $(private-miui-apps)))) \
+			     )
 
 ACT_PRE_ZIP  := pre-zip-misc
 ACT_PRE_ZIP  += $(strip $(local-pre-zip))
@@ -56,3 +61,23 @@ endif
 PHONE_JARS := $(strip $(local-modified-jars))
 OUT_JAR_PATH := $(OUT_SYS_PATH)/framework
 OUT_APK_PATH := $(OUT_SYS_PATH)/app
+
+log  := default
+PROG :=
+ifeq ($(strip $(log)),verbose)
+	INFO :=
+	VORB :=
+else
+	VORB := >/dev/null
+	ifneq ($(strip $(log)),info)
+		INFO := >/dev/null
+	endif
+endif
+ifeq ($(strip $(showcommand)),true)
+	HIDEC :=
+else
+	HIDEC := @
+endif
+HIDEI := $(HIDEC) $(INFO)
+HIDEV := $(HIDEC) $(VORB)
+

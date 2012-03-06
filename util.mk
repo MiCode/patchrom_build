@@ -20,30 +20,32 @@ usage:
 
 # Target to prepare porting workspace
 workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR) fix-framework-res
+	@echo Prepare workspace completed!
 
 # Target to install apktool framework 
 apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
 	@echo install framework-miui-res resources...
-	$(APKTOOL) if $(SYSOUT_DIR)/framework/framework-miui-res.apk
-	@unzip $(ZIP_FILE) "system/framework/*.apk" -d $(TMP_DIR)
-	@for res_file in `find $(TMP_DIR)/system/framework/ -name "*.apk"`; do\
+	$(HIDEV) $(APKTOOL) if $(SYSOUT_DIR)/framework/framework-miui-res.apk
+	$(HIDEV) unzip $(ZIP_FILE) "system/framework/*.apk" -d $(TMP_DIR)
+	$(HIDEC) for res_file in `find $(TMP_DIR)/system/framework/ -name "*.apk"`; do\
 		echo install $$res_file ; \
 		$(APKTOOL) if $$res_file; \
-	done;
-	@rm -r $(TMP_DIR)/system/framework/*.apk
+	done; $(VORB)
+	$(HIDEC) rm -r $(TMP_DIR)/system/framework/*.apk
 	@echo install framework resources completed!
 
 fix-framework-res:
 	@echo fix the apktool multiple position substitution bug
-	$(TOOL_DIR)/fix_plurals.sh framework-res
+	$(HIDEV) $(TOOL_DIR)/fix_plurals.sh framework-res
 
 # Target to add miui hook into target framework first time
 firstpatch:
-	$(TOOL_DIR)/patchmiui.sh google-framework
+	$(HIDEV) $(TOOL_DIR)/patchmiui.sh google-framework
 
 # Target to incrementaly add miui hook into target framework
 patchmiui:
-	$(TOOL_DIR)/patchmiui.sh last-framework
+	$(HIDEV) $(TOOL_DIR)/patchmiui.sh last-framework
+	@echo Patchmiui completed!
 
 # Target to release MIUI jar and apks
 release: $(RELEASE_MIUI) release-framework-base-src
@@ -54,7 +56,7 @@ release-framework-base-src:
 else
 release-framework-base-src: release-miui-resources
 	@echo "To release source code for framework base..."
-	$(TOOL_DIR)/release_source.sh $(ANDROID_BRANCH) $(ANDROID_TOP) $(RELEASE_PATH)
+	$(HIDEV) $(TOOL_DIR)/release_source.sh $(ANDROID_BRANCH) $(ANDROID_TOP) $(RELEASE_PATH)
 endif
 
 
@@ -64,7 +66,8 @@ sign: $(SIGNAPKS)
 
 # Target to clean the .build
 clean:
-	rm -rf $(TMP_DIR)
+	$(HIDEC) rm -rf $(TMP_DIR)
+	@echo clean completed!
 
 reallyclean: clean $(ERR_REPORT) $(REALLY_CLEAN)
 	@echo "ALL CLEANED!"
@@ -107,7 +110,16 @@ verify: $(ERR_REPORT)
 	@echo "USE_ANDROID_OUT = $(USE_ANDROID_OUT)"
 	@echo "RELEASE_MIUI    = $(RELEASE_MIUI)"
 	@echo "MIUIAPPS_MOD    = $(MIUIAPPS_MOD)"
+	@echo "miui-apps       = $(private-miui-apps)"
+	@echo "MIUIAPPS        = $(MIUIAPPS)"
 	@echo "----------------------"
+	@echo ">>>>> OUTPUT VARIABLE:"
+	@echo "PROG    = $(PROG)"
+	@echo "INFO    = $(INFO)"
+	@echo "VORB    = $(VORB)"
+	@echo "HIDEC   = $(HIDEC)"
+	@echo "HIDEI   = $(HIDEI)"
+	@echo "HIDEV   = $(HIDEV)"
 	@echo ">>>>> MORE VARIABLE:"
 	@echo "SIGNAPKS     = $(SIGNAPKS)"
 	@echo "REALLY-CLEAN = $(REALLY_CLEAN)"
@@ -137,8 +149,9 @@ last_target_files.zip:
 
 verify-ota: last_target_files.zip fullota
 	$(TOOL_DIR)/releasetools/ota_from_target_files -k ../build/security/testkey -i last_target_files.zip out/target_files.zip $(TMP_DIR)/ota_update.zip
-	mv last_target_files.zip $(TMP_DIR)
-	mv last_fullota.zip $(TMP_DIR)
+	@mv last_target_files.zip $(TMP_DIR)
+	@mv last_fullota.zip $(TMP_DIR)
 
 miui-apps-included:
-	@echo $(addsuffix .apk,$(local-miui-apps) $(local-miui-modified-apps) framework-miui-res LBESEC_MIUI)
+	@echo $(addsuffix .apk,$(private-miui-apps) framework-miui-res)
+

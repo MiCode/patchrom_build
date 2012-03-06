@@ -54,37 +54,37 @@ $(TMP_DIR)/$(1).jar-phone:$(TMP_DIR)/$(1).jar
 	adb push $$< /system/framework/$(1).jar
 
 $(TMP_DIR)/$(1).jar-tozip:$(TMP_DIR)/$(1).jar
-	cp $$< $(ZIP_DIR)/system/framework/$(1).jar
+	$(HIDEC) cp $$< $(ZIP_DIR)/system/framework/$(1).jar
 
 $(TMP_DIR)/$(1).jar: $(2)_miui
 	@echo build $$@...
-	@echo --------------------------------------------
-	cp -r $(1).jar.out/ $(2)
-	$(ADDMIUI) $(2)_miui $(2)
-	$(APKTOOL) b $(2) $$@
+	$(HIDEC) cp -r $(1).jar.out/ $(2)
+	$(HIDEV) $(ADDMIUI) $(2)_miui $(2)
+	$(HIDEI) $(APKTOOL) b $(2) $$@
+	@echo build $$@ completed!
 
 $(2)_miui: $(OUT_JAR_PATH)/$(1).jar
-	$(APKTOOL) d -f $$< $$@
+	$(HIDEI) $(APKTOOL) d -f $$< $$@
 
 ifeq ($(USE_ANDROID_OUT),true)
 $(OUT_JAR_PATH)/$(1).jar: $(ERR_REPORT)
-	$(MAKE_ATTOP) $(1)
+	$(HIDEI) $(MAKE_ATTOP) $(1)
 
 CLEANJAR += clean-$(1)
 clean-$(1):
-	$(MAKE_ATTOP) clean-$(1)
+	$(HIDEI) $(MAKE_ATTOP) clean-$(1)
 
 RELEASE_MIUI += $(RELEASE_PATH)/system/framework/$(1).jar
 $(RELEASE_PATH)/system/framework/$(1).jar: $(OUT_JAR_PATH)/$(1).jar
-	mkdir -p $(RELEASE_PATH)/system/framework
-	cp $$< $$@
+	$(HIDEC) mkdir -p $(RELEASE_PATH)/system/framework
+	$(HIDEC) cp $$< $$@
 endif
 
 # targets for initial workspace
 $(1).jar.out:  $(ZIP_FILE)
-	@unzip $(ZIP_FILE) system/framework/$(1).jar -d $(TMP_DIR)
-	@$(APKTOOL) d -f $(TMP_DIR)/system/framework/$(1).jar $$@
-	@rm $(TMP_DIR)/system/framework/$(1).jar
+	$(HIDEV) unzip $(ZIP_FILE) system/framework/$(1).jar -d $(TMP_DIR)
+	$(HIDEI) $(APKTOOL) d -f $(TMP_DIR)/system/framework/$(1).jar $$@
+	$(HIDEC) rm $(TMP_DIR)/system/framework/$(1).jar
 
 endef
 
@@ -97,13 +97,13 @@ $(TMP_DIR)/$(1).jar-phone:$(TMP_DIR)/$(1).jar
 	adb push $$< /system/framework/$(1).jar
 
 $(TMP_DIR)/$(1).jar-tozip:$(TMP_DIR)/$(1).jar
-	cp $$< $(ZIP_DIR)/system/framework/$(1).jar
+	$(HIDEC) cp $$< $(ZIP_DIR)/system/framework/$(1).jar
 
 $(TMP_DIR)/$(1).jar: $(1).jar.out $(TMP_DIR)
 	@echo build $$@...
-	@echo --------------------------------------------
-	cp -r $(1).jar.out $(TMP_DIR)/
-	$(APKTOOL) b $(TMP_DIR)/$(1).jar.out $$@
+	$(HIDEC) cp -r $(1).jar.out $(TMP_DIR)/
+	$(HIDEI) $(APKTOOL) b $(TMP_DIR)/$(1).jar.out $$@
+	@echo build $$@ completed!
 
 endef
 
@@ -115,11 +115,12 @@ endef
 define APP_template
 $(TMP_DIR)/$(1).apk: $(3) $(TMP_DIR)
 	@echo build $$@...
-	@echo --------------------------------------------
-	cp -r $(2) $(TMP_DIR)
-	$(APKTOOL) b  $(TMP_DIR)/$(2) $$@
+	$(HIDEC) cp -r $(2) $(TMP_DIR)
+	$(HIDEI) $(APKTOOL) b  $(TMP_DIR)/$(2) $$@
+	@echo build $$@ completed!
+
 $(3): $(OUT_APK_PATH)/$(1).apk
-	$(APKTOOL) d -f $(OUT_APK_PATH)/$(1).apk $(3)
+	$(HIDEI) $(APKTOOL) d -f $(OUT_APK_PATH)/$(1).apk $(3)
 
 endef
 
@@ -127,35 +128,35 @@ endef
 # copy the framework-res, add the miui overlay then build
 $(TMP_DIR)/framework-res.apk: $(TMP_DIR) apktool-if
 	@echo build $@...
-	@echo -------------------------------------------
-	cp -r framework-res $(TMP_DIR)
+	$(HIDEC) cp -r framework-res $(TMP_DIR)
 	@echo add miui overlay resources
-	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
+	$(HIDEC) for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
 		cp -r $$dir $(TMP_DIR)/framework-res/res; \
 		#./customize_framework-res.sh $$dir $(TMP_DIR)/framework-res/res; \
 	done
-	@for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
+	$(HIDEC) for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
 		$(MERGY_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir`; \
-	done
-	$(TOOL_DIR)/remove_redef.py $(TMP_DIR)/framework-res
-	@for dir in `ls -d $(OVERLAY_RES_DIR)/[^v]*`; do\
-                cp -r $$dir $(TMP_DIR)/framework-res/res; \
-        done
-	@for dir in `ls -d $(OVERLAY_RES_DIR)/values*`; do\
-                $(MERGY_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir`; \
-        done
-	$(APKTOOL) b $(TMP_DIR)/framework-res $@
-	$(APKTOOL) if $@
+	done $(VORB)
+	$(HIDEV) $(TOOL_DIR)/remove_redef.py $(TMP_DIR)/framework-res
+	$(HIDEC) for dir in `ls -d $(OVERLAY_RES_DIR)/[^v]*`; do\
+          cp -r $$dir $(TMP_DIR)/framework-res/res; \
+    done
+	$(HIDEC) for dir in `ls -d $(OVERLAY_RES_DIR)/values*`; do\
+          $(MERGY_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir`; \
+    done $(VORB)
+	$(HIDEI) $(APKTOOL) b $(TMP_DIR)/framework-res $@
+	$(HIDEI) $(APKTOOL) if $@
+	@echo build $@ completed!
 
 # Target to build framework-miui-res.apk
 $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk
 	@echo build $@...
-	@echo ------------------------------------------
-	$(APKTOOL) d -f $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
-	rm -rf $(TMP_DIR)/framework-miui-res/res
-	cp -r $(MIUI_RES_DIR) $(TMP_DIR)/framework-miui-res
+	$(HIDEI) $(APKTOOL) d -f $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
+	$(HIDEC) rm -rf $(TMP_DIR)/framework-miui-res/res
+	$(HIDEC) cp -r $(MIUI_RES_DIR) $(TMP_DIR)/framework-miui-res
 	@echo "  - 2" >> $(TMP_DIR)/framework-miui-res/apktool.yml
-	$(APKTOOL) b $(TMP_DIR)/framework-miui-res $@
+	$(HIDEI) $(APKTOOL) b $(TMP_DIR)/framework-miui-res $@
+	@echo build $@ completed!
 
 #
 # To prepare the workspace to modify the APKs from zip file
@@ -163,9 +164,9 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk
 # $2 the apk location under system, such as app or framework
 define APP_WS_template
 $(1): $(ZIPFILE)
-	@unzip $(ZIP_FILE) system/$(2)/$(1).apk -d $(TMP_DIR)
-	@$(APKTOOL) d -f $(TMP_DIR)/system/$(2)/$(1).apk $$@
-	@rm $(TMP_DIR)/system/$(2)/$(1).apk
+	$(HIDEV) unzip $(ZIP_FILE) system/$(2)/$(1).apk -d $(TMP_DIR)
+	$(HIDEI) $(APKTOOL) d -f $(TMP_DIR)/system/$(2)/$(1).apk $$@
+	$(HIDEC) rm $(TMP_DIR)/system/$(2)/$(1).apk
 
 endef
 
@@ -179,14 +180,13 @@ define SIGN_template
 SIGNAPKS += $(1).sign
 $(notdir $(1)).sign $(1).sign: $(1)
 	@echo sign apk $(1) and push to phone as $(2)...
-	@echo --------------------------------------------
-	java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/testkey.x509.pem $(PORT_ROOT)/build/security/testkey.pk8 $(1) $(1).signed
+	$(HIDEC) java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/testkey.x509.pem $(PORT_ROOT)/build/security/testkey.pk8 $(1) $(1).signed
 	adb push $(1).signed $(2)
 
 TOZIP_APKS += $(1)-tozip
 $(1)-tozip : $(1)
-	@echo cp apks-unsinged to zip dirs
-	cp $(1) $(ZIP_DIR)$(2)
+	@echo cp apks-unsinged to zip dirs $(INFO)
+	$(HIDEC) cp $(1) $(ZIP_DIR)$(2)
 endef
 
 #
@@ -196,23 +196,23 @@ endef
 define BUILD_CLEAN_APP_template
 ifeq ($(USE_ANDROID_OUT),true)
 $(OUT_APK_PATH)/$(1).apk:
-	$(MAKE_ATTOP) $(1)
+	$(HIDEI) $(MAKE_ATTOP) $(1)
 
 CLEANMIUIAPP += clean-$(1)
 clean-$(1):
-	$(MAKE_ATTOP) $$@
+	$(HIDEI) $(MAKE_ATTOP) $$@
 
 RELEASE_MIUI += $(RELEASE_PATH)/system/app/$(1).apk
 $(RELEASE_PATH)/system/app/$(1).apk: $(OUT_APK_PATH)/$(1).apk
-	mkdir -p $(RELEASE_PATH)/system/app
-	cp $$< $$@
+	$(HIDEI) mkdir -p $(RELEASE_PATH)/system/app
+	$(HIDEC) cp $$< $$@
 endif
 endef
 
 zipone: zipfile $(ACT_AFTER_ZIP)
 
 otapackage: metadata target_files
-	$(BUILD_TARGET_FILES)
+	$(HIDEV) $(BUILD_TARGET_FILES)
 
 #> TARGETS EXPANSION START
 $(foreach jar, $(MIUI_JARS), \
@@ -251,19 +251,19 @@ endif
 
 #> TARGET FOR ZIPFILE START
 $(TMP_DIR):
-	@mkdir -p $(TMP_DIR)
+	$(HIDEC) mkdir -p $(TMP_DIR)
 
 $(ZIP_DIR): $(TMP_DIR) $(ZIP_FILE)
-	unzip $(ZIP_FILE) -d $@
+	$(HIDEV) unzip $(ZIP_FILE) -d $@
 
 remove-rund-apks:
 	@echo To remove all unnecessary apks:
-	rm -f $(addprefix $(ZIP_DIR)/system/app/, $(addsuffix .apk, $(RUNDAPKS)))
+	$(HIDEC) rm -f $(addprefix $(ZIP_DIR)/system/app/, $(addsuffix .apk, $(RUNDAPKS)))
 
 pre-zip-misc: add-miui-prebuilt set-build-prop
 
 set-build-prop:
-	$(SETPROP) $(PROP_FILE) $(PORT_PRODUCT) $(BUILD_NUMBER)
+	$(HIDEC) $(SETPROP) $(PROP_FILE) $(PORT_PRODUCT) $(BUILD_NUMBER)
 
 ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += release-miui-prebuilt
@@ -273,13 +273,13 @@ target_files: $(TMP_DIR)/framework-miui-res.apk $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZI
 
 # Target to make zipfile which is all signed by testkey. convenient for developement and debug
 zipfile: target_files
-	$(SIGN) sign.zip $(ZIP_DIR)
-	$(BUILD_TARGET_FILES) -n $(OUT_ZIP_FILE)
+	$(HIDEV) $(SIGN) sign.zip $(ZIP_DIR)
+	$(HIDEV) $(BUILD_TARGET_FILES) -n $(OUT_ZIP_FILE)
 	@echo The output zip file is: $(OUT_ZIP)
 
 # Target to test if full ota package will be generate
 fullota: target_files
-	$(BUILD_TARGET_FILES) fullota.zip
+	$(HIDEV) $(BUILD_TARGET_FILES) fullota.zip
 
 #< TARGET FOR ZIPFILE END
 
