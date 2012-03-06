@@ -1,16 +1,18 @@
 usage:
 	@echo "The main target for porting:"
-	@echo "	make zipfile    - to create the full ZIP file"
+	@echo "	make zipfile    - to create the full ZIP file, all apks are signed using testkey"
 	@echo "	make zipone     - zipfile, plus the customized actions, such as zip2sd"
 	@echo "	make zip2sd     - to push the ZIP file to phone in recovery mode"
 	@echo "	make clean      - clear everything for output of this makefile"
 	@echo "	make reallyclean- clear everything of related."
-	@echo " make workspace - prepare the initial workspace for porting"
-	@echo " make patchmiui  - add the miui hook into target framework smali code"
+	@echo " make workspace  - prepare the initial workspace for porting"
+	@echo " make firstpatch - add the miui hook into target framework smali code first time for a device"
+	@echo " make patchmiui  - incrementaly add the miui hook into target framework smali code"
+	@echo " make fullota    - generate full ota package, all apks are signed using apkcerts.txt"
 	@echo "Other helper targets:"
 	@echo "	make apktool-if            - install the framework for apktool"
 	@echo "	make verify                - to check if any error in the makefile"
-	@echo "	make verify-ita            - to generate an ota for ota verification"
+	@echo "	make verify-ota            - to generate an ota for ota verification"
 	@echo "	make out/xxxx.jar-phone - to make out a single jar file and push to phone"
 	@echo "	make xxxx.apk.sign         - to generate a xxxx.apk and sign/push to phone"
 	@echo "	make clean-xxxx/make xxxx  - just as make under android-build-top"
@@ -128,15 +130,15 @@ error-android-env:
 
 last_target_files.zip:
 	make clean
-	make -e VERIFY_OTA=local-ota-update testota
+	make -e VERIFY_OTA=local-ota-update fullota
 	cp $(TMP_DIR)/target_files.zip last_target_files.zip
-	cp $(TMP_DIR)/testota.zip last_testota.zip
+	cp $(TMP_DIR)/testota.zip last_fullota.zip
 	make clean
 
-verify-ota: last_target_files.zip testota
+verify-ota: last_target_files.zip fullota
 	$(TOOL_DIR)/releasetools/ota_from_target_files -k ../build/security/testkey -i last_target_files.zip out/target_files.zip $(TMP_DIR)/ota_update.zip
 	mv last_target_files.zip $(TMP_DIR)
-	mv last_testota.zip $(TMP_DIR)
+	mv last_fullota.zip $(TMP_DIR)
 
 miui-apps-included:
 	@echo $(addsuffix .apk,$(local-miui-apps) $(local-miui-modified-apps) framework-miui-res LBESEC_MIUI)
