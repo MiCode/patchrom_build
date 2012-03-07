@@ -39,6 +39,7 @@ private-miui-apps := AntiSpam  \
 					 Provision \
 					 QuickSearchBox  \
 					 Settings  \
+					 SettingsProvider  \
 					 SoundRecorder  \
 					 SuperMarket  \
 					 Talk  \
