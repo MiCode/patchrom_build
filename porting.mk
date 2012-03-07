@@ -15,6 +15,7 @@ SYSOUT_DIR  := $(OUT_SYS_PATH)
 APKTOOL     := $(TOOL_DIR)/apktool $(APK_VERBOSE)
 SIGN        := $(TOOL_DIR)/sign.sh $(VERBOSE)
 ADDMIUI     := $(TOOL_DIR)/add_miui_smail.sh $(VERBOSE)
+ADDMIUIRES  := $(TOOL_DIR)/add_miui_res.sh $(VERBOSE)
 SETPROP     := $(TOOL_DIR)/set_build_prop.sh
 UNZIP       := unzip $(VERBOSE)
 MERGY_RES   := $(TOOL_DIR)/ResValuesModify/jar/ResValuesModify $(VERBOSE)
@@ -33,6 +34,7 @@ endif
 MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/overlay/frameworks/base/core/res/res
 MIUI_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/core/res/res
 OVERLAY_RES_DIR:=overlay/framework-res/res
+OVERLAY_MIUI_RES_DIR:=overlay/framework-miui-res/res
 
 MIUI_JARS   := services android.policy framework
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
@@ -139,7 +141,7 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR) apktool-if
 	@echo add miui overlay resources
 	$(hide) for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
 		cp -r $$dir $(TMP_DIR)/framework-res/res; \
-		#./customize_framework-res.sh $$dir $(TMP_DIR)/framework-res/res; \
+		$(ADDMIUIRES)  $$dir $(TMP_DIR)/framework-res/res; \
 	done
 	$(hide) for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
 		$(MERGY_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir`; \
@@ -161,6 +163,9 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk
 	$(APKTOOL) d -f $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res/res
 	$(hide) cp -r $(MIUI_RES_DIR) $(TMP_DIR)/framework-miui-res
+	$(hide) for dir in `ls -d $(OVERLAY_MIUI_RES_DIR)/[^v]*`; do\
+          cp -r $$dir $(TMP_DIR)/framework-miui-res/res; \
+        done
 	@echo "  - 2" >> $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(APKTOOL) b $(TMP_DIR)/framework-miui-res $@
 	@echo "<<< build $@ completed!"
