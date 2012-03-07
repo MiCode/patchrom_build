@@ -62,22 +62,31 @@ PHONE_JARS := $(strip $(local-modified-jars))
 OUT_JAR_PATH := $(OUT_SYS_PATH)/framework
 OUT_APK_PATH := $(OUT_SYS_PATH)/app
 
+#
+# log could be set with 'make -e log=value target' and the value:
+#	quiet  : print information about the make stage and the scripts
+#	info   : print more information related to the running scripts
+#	verbose: print all information from executed commands
+# and the default value is 'info'
 log  := info
 PROG :=
+APK_VERBOSE := --verbose
 ifeq ($(strip $(log)),verbose)
 	INFO :=
-	VORB :=
+	VERBOSE :=
 else
-	VORB := >/dev/null
-	ifneq ($(strip $(log)),info)
+	VERBOSE := >/dev/null
+	APK_VERBOSE := --quiet
+	ifeq ($(strip $(log)),quiet)
 		INFO := >/dev/null
 	endif
 endif
+# use 'make -e showcommand=true' to print all executed commands, if not
+# set, only the scripts are printed. To disable all commands (including
+# those scripts), use 'make -s'
 ifeq ($(strip $(showcommand)),true)
-	HIDEC :=
+	hide :=
 else
-	HIDEC := @
+	hide := @
 endif
-HIDEI := $(HIDEC) $(INFO)
-HIDEV := $(HIDEC) $(VORB)
 

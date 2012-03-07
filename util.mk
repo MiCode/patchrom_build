@@ -1,5 +1,5 @@
 usage:
-	@echo "The main target for porting:"
+	@echo ">>> The main target for porting:"
 	@echo "	make zipfile    - to create the full ZIP file, all apks are signed using testkey"
 	@echo "	make zipone     - zipfile, plus the customized actions, such as zip2sd"
 	@echo "	make zip2sd     - to push the ZIP file to phone in recovery mode"
@@ -9,7 +9,7 @@ usage:
 	@echo " make firstpatch - add the miui hook into target framework smali code first time for a device"
 	@echo " make patchmiui  - incrementaly add the miui hook into target framework smali code"
 	@echo " make fullota    - generate full ota package, all apks are signed using apkcerts.txt"
-	@echo "Other helper targets:"
+	@echo ">>> Other helper targets:"
 	@echo "	make apktool-if            - install the framework for apktool"
 	@echo "	make verify                - to check if any error in the makefile"
 	@echo "	make verify-ota            - to generate an ota for ota verification"
@@ -17,6 +17,9 @@ usage:
 	@echo "	make xxxx.apk.sign         - to generate a xxxx.apk and sign/push to phone"
 	@echo "	make clean-xxxx/make xxxx  - just as make under android-build-top"
 	@echo "	make sign                  - Sign all generated apks by this makefile and push to phone"
+	@echo ">>> Environment overrides:"
+	@echo " make -e showcommand=true   - to show all executed commands"
+	@echo " make -e log=quiet|info|verbose - to control the output from make command"
 
 # Target to prepare porting workspace
 workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR) fix-framework-res
@@ -24,27 +27,28 @@ workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR) fix-framework-res
 
 # Target to install apktool framework 
 apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
-	@echo install framework-miui-res resources...
-	$(HIDEV) $(APKTOOL) if $(SYSOUT_DIR)/framework/framework-miui-res.apk
-	$(HIDEV) unzip $(ZIP_FILE) "system/framework/*.apk" -d $(TMP_DIR)
-	$(HIDEC) for res_file in `find $(TMP_DIR)/system/framework/ -name "*.apk"`; do\
+	@echo ">>> Install framework resources for apktool..."
+	@echo install framework-miui-res.apk
+	$(APKTOOL) if $(SYSOUT_DIR)/framework/framework-miui-res.apk
+	$(UNZIP) $(ZIP_FILE) "system/framework/*.apk" -d $(TMP_DIR)
+	$(hide) for res_file in `find $(TMP_DIR)/system/framework/ -name "*.apk"`; do\
 		echo install $$res_file ; \
 		$(APKTOOL) if $$res_file; \
-	done; $(VORB)
-	$(HIDEC) rm -r $(TMP_DIR)/system/framework/*.apk
-	@echo install framework resources completed!
+	done
+	$(hide) rm -r $(TMP_DIR)/system/framework/*.apk
+	@echo "<<< install framework resources completed!"
 
 fix-framework-res:
 	@echo fix the apktool multiple position substitution bug
-	$(HIDEV) $(TOOL_DIR)/fix_plurals.sh framework-res
+	$(FIX_PLURALS) framework-res
 
 # Target to add miui hook into target framework first time
 firstpatch:
-	$(HIDEV) $(TOOL_DIR)/patchmiui.sh google-framework
+	$(PATCH_MIUI) google-framework
 
 # Target to incrementaly add miui hook into target framework
 patchmiui:
-	$(HIDEV) $(TOOL_DIR)/patchmiui.sh last-framework
+	$(PATCH_MIUI) last-framework
 	@echo Patchmiui completed!
 
 # Target to release MIUI jar and apks
@@ -56,7 +60,7 @@ release-framework-base-src:
 else
 release-framework-base-src: release-miui-resources
 	@echo "To release source code for framework base..."
-	$(HIDEV) $(TOOL_DIR)/release_source.sh $(ANDROID_BRANCH) $(ANDROID_TOP) $(RELEASE_PATH)
+	$(RLZ_SOURCE) $(ANDROID_BRANCH) $(ANDROID_TOP) $(RELEASE_PATH)
 endif
 
 
@@ -66,7 +70,7 @@ sign: $(SIGNAPKS)
 
 # Target to clean the .build
 clean:
-	$(HIDEC) rm -rf $(TMP_DIR)
+	$(hide) rm -rf $(TMP_DIR)
 	@echo clean completed!
 
 reallyclean: clean $(ERR_REPORT) $(REALLY_CLEAN)
@@ -116,10 +120,8 @@ verify: $(ERR_REPORT)
 	@echo ">>>>> OUTPUT VARIABLE:"
 	@echo "PROG    = $(PROG)"
 	@echo "INFO    = $(INFO)"
-	@echo "VORB    = $(VORB)"
-	@echo "HIDEC   = $(HIDEC)"
-	@echo "HIDEI   = $(HIDEI)"
-	@echo "HIDEV   = $(HIDEV)"
+	@echo "VERBOSE = $(VERBOSE)"
+	@echo "hide   = $(hide)"
 	@echo ">>>>> MORE VARIABLE:"
 	@echo "SIGNAPKS     = $(SIGNAPKS)"
 	@echo "REALLY-CLEAN = $(REALLY_CLEAN)"
