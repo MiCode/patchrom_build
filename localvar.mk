@@ -35,8 +35,8 @@ MIUIAPPS     := $(strip \
                                  $(filter-out $(strip $(local-miui-removed-apps)),$(strip $(private-miui-apps)))) \
 			     )
 
-ACT_PRE_ZIP  := pre-zip-misc
-ACT_PRE_ZIP  += $(strip $(local-pre-zip))
+ACT_PRE_ZIP  := $(strip $(local-pre-zip))
+ACT_PRE_ZIP  += pre-zip-misc
 
 RUNDAPKS     := $(local-remove-apps)
 ifneq ($(RUNDAPKS),)
