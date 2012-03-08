@@ -44,11 +44,11 @@ fix-framework-res:
 
 # Target to add miui hook into target framework first time
 firstpatch:
-	$(PATCH_MIUI) google-framework
+	$(PATCH_MIUI) $(PORT_ROOT)/android/google-framework $(PORT_ROOT)/android `pwd`
 
 # Target to incrementaly add miui hook into target framework
 patchmiui:
-	$(PATCH_MIUI) last-framework
+	$(PATCH_MIUI) $(PORT_ROOT)/android/last-framework $(PORT_ROOT)/android `pwd`
 	@echo Patchmiui completed!
 
 # Target to release MIUI jar and apks
