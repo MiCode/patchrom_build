@@ -71,6 +71,8 @@ sign: $(SIGNAPKS)
 # Target to clean the .build
 clean:
 	$(hide) rm -rf $(TMP_DIR)
+	$(hide) rm -f releasetools.pyc
+	$(hide) rm -f $(TOOL_DIR)/releasetools/common.pyc $(TOOL_DIR)/releasetools/edify_generator.pyc
 	@echo clean completed!
 
 reallyclean: clean $(ERR_REPORT) $(REALLY_CLEAN)
