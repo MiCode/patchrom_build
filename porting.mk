@@ -16,11 +16,12 @@ APKTOOL     := $(TOOL_DIR)/apktool $(APK_VERBOSE)
 SIGN        := $(TOOL_DIR)/sign.sh $(VERBOSE)
 ADDMIUI     := $(TOOL_DIR)/add_miui_smail.sh $(VERBOSE)
 ADDMIUIRES  := $(TOOL_DIR)/add_miui_res.sh $(VERBOSE)
+PATCH_MIUI_APP  := $(TOOL_DIR)/patch_miui_app.sh $(VERBOSE)
 SETPROP     := $(TOOL_DIR)/set_build_prop.sh
 UNZIP       := unzip $(VERBOSE)
 MERGY_RES   := $(TOOL_DIR)/ResValuesModify/jar/ResValuesModify $(VERBOSE)
 RM_REDEF    := $(TOOL_DIR)/remove_redef.py $(VERBOSE)
-PATCH_MIUI  := $(TOOL_DIR)/patchmiui.sh $(INFO)
+PATCH_MIUI_FRAMEWORK  := $(TOOL_DIR)/patch_miui_framework.sh $(INFO)
 RLZ_SOURCE  := $(TOOL_DIR)/release_source.sh $(VERBOSE)
 FIX_PLURALS := $(TOOL_DIR)/fix_plurals.sh $(VERBOSE)
 BUILD_TARGET_FILES := $(TOOL_DIR)/build_target_files.sh $(INFO)
@@ -125,11 +126,13 @@ define APP_template
 $(TMP_DIR)/$(1).apk: $(3) $(TMP_DIR)
 	@echo ">>> build $$@..."
 	$(hide) cp -r $(2) $(TMP_DIR)
+	$(hide) find $(TMP_DIR)/$(2) -name "*.part" -exec rm {} +;
 	$(APKTOOL) b  $(TMP_DIR)/$(2) $$@
 	@echo "<<< build $$@ completed!"
 
 $(3): $(OUT_APK_PATH)/$(1).apk
 	$(APKTOOL) d -f $(OUT_APK_PATH)/$(1).apk $(3)
+	$(PATCH_MIUI_APP) $(2) $(3)
 
 endef
 
