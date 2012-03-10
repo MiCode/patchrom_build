@@ -126,7 +126,7 @@ define APP_template
 $(TMP_DIR)/$(1).apk: $(3) $(TMP_DIR)
 	@echo ">>> build $$@..."
 	$(hide) cp -r $(2) $(TMP_DIR)
-	$(hide) find $(TMP_DIR)/$(2) -name "*.part" -exec rm {} +;
+	$(hide) find $(TMP_DIR)/$(2) -name "*.part" -exec rm {} \;
 	$(APKTOOL) b  $(TMP_DIR)/$(2) $$@
 	@echo "<<< build $$@ completed!"
 
