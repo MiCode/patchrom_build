@@ -64,7 +64,10 @@ MAKE_ATTOP  := make -C $(ANDROID_TOP)
 # $2: the dir under build for apktool-decoded files, such as .build/services
 define JAR_template
 $(TMP_DIR)/$(1).jar-phone:$(TMP_DIR)/$(1).jar
+	adb remount
+	adb shell stop
 	adb push $$< /system/framework/$(1).jar
+	adb shell start
 
 $(TMP_DIR)/$(1).jar-tozip:$(TMP_DIR)/$(1).jar
 	$(hide) cp $$< $(ZIP_DIR)/system/framework/$(1).jar
@@ -199,6 +202,7 @@ SIGNAPKS += $(1).sign
 $(notdir $(1)).sign $(1).sign: $(1)
 	@echo sign apk $(1) and push to phone as $(2)...
 	java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/testkey.x509.pem $(PORT_ROOT)/build/security/testkey.pk8 $(1) $(1).signed
+	adb remount
 	adb push $(1).signed $(2)
 
 TOZIP_APKS += $(1)-tozip
