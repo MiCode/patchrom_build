@@ -15,7 +15,7 @@ private-miui-apps := AntiSpam  \
 					 Email  \
 					 Exchange \
 					 FileExplorer  \
-					 Gallery2  \
+					 MiuiGallery  \
 					 Gmail  \
 					 GoogleBackupTransport  \
 					 GoogleCalendarSyncAdapter  \
