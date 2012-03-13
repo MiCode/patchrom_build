@@ -215,7 +215,11 @@ $(OUT_APK_PATH)/$(1).apk:
 CLEANMIUIAPP += clean-$(1)
 clean-$(1):
 	$(MAKE_ATTOP) $$@
+endif
+endef
 
+define RELEASE_MIUI_APP_template
+ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += $(RELEASE_PATH)/system/app/$(1).apk
 $(RELEASE_PATH)/system/app/$(1).apk: $(OUT_APK_PATH)/$(1).apk
 	$(hide) mkdir -p $(RELEASE_PATH)/system/app
@@ -249,6 +253,8 @@ $(eval $(call SIGN_template,$(TMP_DIR)/framework-miui-res.apk,/system/framework/
 $(eval $(call SIGN_template,$(TMP_DIR)/framework-res.apk,/system/framework/framework-res.apk))
 
 $(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD), $(eval $(call BUILD_CLEAN_APP_template,$(app))))
+
+$(foreach app, $(ALL_MIUIAPPS), $(eval $(call RELEASE_MIUI_APP_template,$(app))))
 
 $(foreach app, $(APPS), \
 	$(eval $(call APP_WS_template,$(app),app)))

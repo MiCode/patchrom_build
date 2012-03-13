@@ -39,13 +39,13 @@ release-prebuilt-app:
 	$(hide) cp $(SYSOUT_DIR)/xbin/busybox $(RELEASE_PATH)/system/xbin/
 	$(hide) mkdir -p $(RELEASE_PATH)/system/bin
 	$(hide) cp $(SYSOUT_DIR)/bin/installd $(RELEASE_PATH)/system/bin/
+	$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(RELEASE_PATH)/system/app
+	$(hide) cp -f $(SYSOUT_DIR)/xbin/su $(RELEASE_PATH)/system/xbin/
 
 release-prebuilt-libraries:
 	@echo Release prebuilt libraries
 	$(hide) mkdir -p $(RELEASE_PATH)/system/lib
 	$(hide) cp -f $(SYSOUT_DIR)/lib/liblbesec.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libnativecache.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libservice.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libskia.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libhwui.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/content-types.properties $(RELEASE_PATH)/system/lib/

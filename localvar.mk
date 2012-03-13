@@ -29,6 +29,7 @@ ifeq ($(OUT_ZIP_FILE),)
 endif
 
 APPS         := $(strip $(local-modified-apps))
+ALL_MIUIAPPS := $(strip $(private-miui-apps))
 MIUIAPPS_MOD := $(strip $(local-miui-modified-apps))
 MIUIAPPS     := $(strip \
                     $(filter-out $(strip $(local-miui-modified-apps)), \
