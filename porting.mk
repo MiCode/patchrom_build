@@ -19,6 +19,7 @@ ADDMIUIRES  := $(TOOL_DIR)/add_miui_res.sh $(VERBOSE)
 PATCH_MIUI_APP  := $(TOOL_DIR)/patch_miui_app.sh $(VERBOSE)
 SETPROP     := $(TOOL_DIR)/set_build_prop.sh
 UNZIP       := unzip $(VERBOSE)
+ZIP         := zip $(VERBOSE)
 MERGY_RES   := $(TOOL_DIR)/ResValuesModify/jar/ResValuesModify $(VERBOSE)
 RM_REDEF    := $(TOOL_DIR)/remove_redef.py $(VERBOSE)
 PATCH_MIUI_FRAMEWORK  := $(TOOL_DIR)/patch_miui_framework.sh $(INFO)
@@ -281,7 +282,7 @@ remove-rund-apks:
 	$(hide) rm -f $(addprefix $(ZIP_DIR)/system/app/, $(addsuffix .apk, $(RUNDAPKS)))
 	@echo "<<< remove done!"
 
-pre-zip-misc: add-miui-prebuilt set-build-prop
+pre-zip-misc: set-build-prop
 
 set-build-prop:
 	$(SETPROP) $(PROP_FILE) $(PORT_PRODUCT) $(BUILD_NUMBER)
@@ -290,7 +291,7 @@ ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += release-miui-prebuilt
 endif
 	
-target_files: $(TMP_DIR)/framework-miui-res.apk $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) $(ACT_PRE_ZIP)
+target_files: $(TMP_DIR)/framework-miui-res.apk $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) add-miui-prebuilt $(ACT_PRE_ZIP)
 
 # Target to make zipfile which is all signed by testkey. convenient for developement and debug
 zipfile: target_files
