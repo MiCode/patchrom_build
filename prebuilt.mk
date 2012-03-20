@@ -70,7 +70,7 @@ release-miui-resources:
 	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui/core/res
 	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/core/res/res $(RELEASE_PATH)/src/frameworks/miui/core/res
 
-add-miui-prebuilt: add-prebuilt-app add-prebuilt-libraries add-prebuilt-media add-prebuilt-etc-files
+add-miui-prebuilt: add-prebuilt-app add-prebuilt-libraries add-prebuilt-media add-prebuilt-etc-files add-lbesec-miui
 	@echo Add miui prebuilt completed!
 
 release-miui-prebuilt: release-prebuilt-app release-prebuilt-libraries release-prebuilt-media release-prebuilt-etc-files release-miui-resources
