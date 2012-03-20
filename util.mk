@@ -5,10 +5,10 @@ usage:
 	@echo "	make zip2sd     - to push the ZIP file to phone in recovery mode"
 	@echo "	make clean      - clear everything for output of this makefile"
 	@echo "	make reallyclean- clear everything of related."
-	@echo " make workspace  - prepare the initial workspace for porting"
-	@echo " make firstpatch - add the miui hook into target framework smali code first time for a device"
-	@echo " make patchmiui  - incrementaly add the miui hook into target framework smali code"
-	@echo " make fullota    - generate full ota package, all apks are signed using apkcerts.txt"
+	@echo "	make workspace  - prepare the initial workspace for porting"
+	@echo "	make firstpatch - add the miui hook into target framework smali code first time for a device"
+	@echo "	make patchmiui  - incrementaly add the miui hook into target framework smali code"
+	@echo "	make fullota    - generate full ota package, all apks are signed using apkcerts.txt"
 	@echo ">>> Other helper targets:"
 	@echo "	make apktool-if            - install the framework for apktool"
 	@echo "	make verify                - to check if any error in the makefile"
@@ -18,8 +18,8 @@ usage:
 	@echo "	make clean-xxxx/make xxxx  - just as make under android-build-top"
 	@echo "	make sign                  - Sign all generated apks by this makefile and push to phone"
 	@echo ">>> Environment overrides:"
-	@echo " make -e showcommand=true   - to show all executed commands"
-	@echo " make -e log=quiet|info|verbose - to control the output from make command"
+	@echo "	make -e showcommand=true   - to show all executed commands"
+	@echo "	make -e log=quiet|info|verbose - to control the output from make command"
 
 # Target to prepare porting workspace
 workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR) fix-framework-res

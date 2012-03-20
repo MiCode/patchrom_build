@@ -9,6 +9,7 @@ ZIP_DIR     := $(TMP_DIR)/ZIP
 OUT_ZIP     := $(TMP_DIR)/$(OUT_ZIP_FILE)
 TOOL_DIR    := $(PORT_ROOT)/tools
 PROP_FILE   := $(ZIP_DIR)/system/build.prop
+SKIA_FILE	:= $(ZIP_DIR)/system/lib/libskia.so
 SYSOUT_DIR  := $(OUT_SYS_PATH)
 
 # Tool alias used in the makefile
@@ -18,6 +19,7 @@ ADDMIUI     := $(TOOL_DIR)/add_miui_smail.sh $(VERBOSE)
 ADDMIUIRES  := $(TOOL_DIR)/add_miui_res.sh $(VERBOSE)
 PATCH_MIUI_APP  := $(TOOL_DIR)/patch_miui_app.sh $(VERBOSE)
 SETPROP     := $(TOOL_DIR)/set_build_prop.sh
+REWRITE		:= $(TOOL_DIR)/rewrite.py
 UNZIP       := unzip $(VERBOSE)
 ZIP         := zip $(VERBOSE)
 MERGY_RES   := $(TOOL_DIR)/ResValuesModify/jar/ResValuesModify $(VERBOSE)
@@ -282,10 +284,13 @@ remove-rund-apks:
 	$(hide) rm -f $(addprefix $(ZIP_DIR)/system/app/, $(addsuffix .apk, $(RUNDAPKS)))
 	@echo "<<< remove done!"
 
-pre-zip-misc: set-build-prop
+pre-zip-misc: set-build-prop rewrite-lib
 
 set-build-prop:
 	$(SETPROP) $(PROP_FILE) $(PORT_PRODUCT) $(BUILD_NUMBER)
+
+rewrite-lib:
+	$(REWRITE) $(SKIA_FILE) ANDROID_ROOT ANDROID_DATA
 
 ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += release-miui-prebuilt
