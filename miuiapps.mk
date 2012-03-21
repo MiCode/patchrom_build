@@ -23,6 +23,7 @@ private-miui-apps := AntiSpam  \
 					 GoogleLoginService  \
 					 GooglePartnerSetup  \
 					 GoogleServicesFramework  \
+					 LatinIME \
 					 LBESEC_MIUI  \
 					 Maps  \
 					 MediaProvider  \
