@@ -282,6 +282,14 @@ $(TMP_DIR):
 
 $(ZIP_DIR): $(TMP_DIR) $(ZIP_FILE)
 	$(UNZIP) $(ZIP_FILE) -d $@
+ifneq ($(strip $(local-phone-apps)),)
+	$(hide) mv $(ZIP_DIR)/system/app $(ZIP_DIR)/system/app.original
+	$(hide) mkdir $(ZIP_DIR)/system/app
+	$(hide) for apk in $(local-phone-apps); do\
+		cp $(ZIP_DIR)/system/app.original/$$apk.apk $(ZIP_DIR)/system/app; \
+	done
+	$(hide) rm -rf $(ZIP_DIR)/system/app.original
+endif
 
 remove-rund-apks:
 	@echo ">>> remove all unnecessary apks from original ZIP file..."

@@ -8,6 +8,7 @@
 # 	local-miui-removed-apps
 # 	local-miui-apps (DEPRECATED)
 # 	local-miui-modified-apps
+# 	local-phone-apps
 # 	local-remove-apps
 # 	local-pre-zip
 # 	local-after-zip
@@ -39,10 +40,18 @@ MIUIAPPS     := $(strip \
 ACT_PRE_ZIP  := $(strip $(local-pre-zip))
 ACT_PRE_ZIP  += pre-zip-misc
 
-RUNDAPKS     := $(local-remove-apps)
-ifneq ($(RUNDAPKS),)
-    ACT_PRE_ZIP += remove-rund-apks
+# if local-phone-apps is set, local-remove-apps would not be used,
+# and the apps could be removed at target $(ZIP_DIR)
+ifeq ($(strip $(local-phone-apps)),)
+	RUNDAPKS := $(strip $(local-remove-apps))
+	ifneq ($(RUNDAPKS),)
+		ACT_PRE_ZIP += remove-rund-apks
+	endif
+else
+	local-remove-apps :=
+	RUNDAPKS :=
 endif
+
 ACT_PRE_ZIP  += $(VERIFY_OTA)
 
 ACT_AFTER_ZIP := $(strip $(local-after-zip))
