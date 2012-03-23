@@ -172,6 +172,8 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk
 	$(APKTOOL) d -f $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res/res
 	$(hide) cp -r $(MIUI_RES_DIR) $(TMP_DIR)/framework-miui-res
+	$(hide) mkdir -p $(TMP_DIR)/framework-miui-res/res/values-hdpi
+	$(hide) mv $(TMP_DIR)/framework-miui-res/res/values/alias.xml $(TMP_DIR)/framework-miui-res/res/values-hdpi/alias.xml
 	$(hide) for dir in `ls -d $(OVERLAY_MIUI_RES_DIR)/[^v]*`; do\
           cp -r $$dir $(TMP_DIR)/framework-miui-res/res; \
         done
