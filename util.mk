@@ -46,6 +46,10 @@ fix-framework-res:
 firstpatch:
 	$(PATCH_MIUI_FRAMEWORK) $(PORT_ROOT)/android/google-framework $(PORT_ROOT)/android `pwd`
 
+# Target to add miui hook into target framework - custom
+custompatch:
+	$(PATCH_MIUI_FRAMEWORK) `pwd`/DONE/original `pwd`/DONE/patched `pwd`
+
 # Target to incrementaly add miui hook into target framework
 patchmiui:
 	$(PATCH_MIUI_FRAMEWORK) $(PORT_ROOT)/android/last-framework $(PORT_ROOT)/android `pwd`
