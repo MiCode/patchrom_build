@@ -186,7 +186,7 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk
 # $1 the apk name, also the dir name to save the smali files
 # $2 the apk location under system, such as app or framework
 define APP_WS_template
-$(1): $(ZIPFILE)
+$(1): $(ZIP_FILE)
 	$(UNZIP) $(ZIP_FILE) system/$(2)/$(1).apk -d $(TMP_DIR)
 	$(APKTOOL) d -f $(TMP_DIR)/system/$(2)/$(1).apk $$@
 	$(hide) rm $(TMP_DIR)/system/$(2)/$(1).apk
@@ -203,6 +203,7 @@ define SIGN_template
 SIGNAPKS += $(1).sign
 $(notdir $(1)).sign $(1).sign: $(1)
 	@echo sign apk $(1) and push to phone as $(2)...
+	#java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/platform.x509.pem $(PORT_ROOT)/build/security/platform.pk8 $(1) $(1).signed
 	java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/testkey.x509.pem $(PORT_ROOT)/build/security/testkey.pk8 $(1) $(1).signed
 	adb remount
 	adb push $(1).signed $(2)
@@ -281,6 +282,12 @@ endif
 #> TARGET FOR ZIPFILE START
 $(TMP_DIR):
 	$(hide) mkdir -p $(TMP_DIR)
+
+# if the zip file does not exist, would try to generate the zip
+# file from the stockrom dirctory if exist
+$(ZIP_FILE): stockrom
+	$(hide) cd stockrom; $(ZIP) -r ../$(ZIP_FILE) ./
+	$(hide) touch .delete-zip-file-when-clean
 
 $(ZIP_DIR): $(TMP_DIR) $(ZIP_FILE)
 	$(UNZIP) $(ZIP_FILE) -d $@

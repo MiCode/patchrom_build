@@ -70,6 +70,8 @@ sign: $(SIGNAPKS)
 
 # Target to clean the .build
 clean:
+	$(hide) if [ -f ".delete-zip-file-when-clean" ]; then rm $(ZIP_FILE); fi
+	$(hide) rm -f .delete-zip-file-when-clean
 	$(hide) rm -rf $(TMP_DIR)
 	$(hide) rm -f releasetools.pyc
 	$(hide) rm -f $(TOOL_DIR)/releasetools/common.pyc $(TOOL_DIR)/releasetools/edify_generator.pyc
