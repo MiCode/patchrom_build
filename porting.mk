@@ -28,6 +28,7 @@ PATCH_MIUI_FRAMEWORK  := $(TOOL_DIR)/patch_miui_framework.sh $(INFO)
 RLZ_SOURCE  := $(TOOL_DIR)/release_source.sh $(VERBOSE)
 FIX_PLURALS := $(TOOL_DIR)/fix_plurals.sh $(VERBOSE)
 BUILD_TARGET_FILES := $(TOOL_DIR)/build_target_files.sh $(INFO)
+ADB         := adb
 #< End of global variable
 
 ifeq ($(USE_ANDROID_OUT),true)
@@ -64,10 +65,10 @@ MAKE_ATTOP  := make -C $(ANDROID_TOP)
 # $2: the dir under build for apktool-decoded files, such as .build/services
 define JAR_template
 $(TMP_DIR)/$(1).jar-phone:$(TMP_DIR)/$(1).jar
-	adb remount
-	adb shell stop
-	adb push $$< /system/framework/$(1).jar
-	adb shell start
+	$(ADB) remount
+	$(ADB) shell stop
+	$(ADB) push $$< /system/framework/$(1).jar
+	$(ADB) shell start
 
 $(TMP_DIR)/$(1).jar-tozip:$(TMP_DIR)/$(1).jar
 	$(hide) cp $$< $(ZIP_DIR)/system/framework/$(1).jar
@@ -110,7 +111,7 @@ endef
 # $1: the jar name, such as framework2
 define JAR_PHONE_template
 $(TMP_DIR)/$(1).jar-phone:$(TMP_DIR)/$(1).jar
-	adb push $$< /system/framework/$(1).jar
+	$(ADB) push $$< /system/framework/$(1).jar
 
 $(TMP_DIR)/$(1).jar-tozip:$(TMP_DIR)/$(1).jar
 	$(hide) cp $$< $(ZIP_DIR)/system/framework/$(1).jar
@@ -203,8 +204,8 @@ $(notdir $(1)).sign $(1).sign: $(1)
 	@echo sign apk $(1) and push to phone as $(2)...
 	#java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/platform.x509.pem $(PORT_ROOT)/build/security/platform.pk8 $(1) $(1).signed
 	java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/testkey.x509.pem $(PORT_ROOT)/build/security/testkey.pk8 $(1) $(1).signed
-	adb remount
-	adb push $(1).signed $(2)
+	$(ADB) remount
+	$(ADB) push $(1).signed $(2)
 
 TOZIP_APKS += $(1)-tozip
 $(1)-tozip : $(1)
@@ -283,8 +284,8 @@ $(TMP_DIR):
 
 # if the zip file does not exist, would try to generate the zip
 # file from the stockrom dirctory if exist
-$(ZIP_FILE): stockrom
-	$(hide) cd stockrom; $(ZIP) -r ../$(ZIP_FILE) ./
+$(ZIP_FILE):
+	$(hide) cd stockrom && $(ZIP) -r ../$(ZIP_FILE) ./
 	$(hide) touch .delete-zip-file-when-clean
 
 $(ZIP_DIR): $(TMP_DIR) $(ZIP_FILE)
