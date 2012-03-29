@@ -8,6 +8,8 @@ $(ZIP_DIR)/system/xbin/busybox:
 add-prebuilt-libraries:
 	@echo To add prebuilt libraries
 	$(hide) cp -f $(SYSOUT_DIR)/lib/content-types.properties $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libffplayer_jni.so $(ZIP_DIR)/system/lib/
 
 add-prebuilt-media:
 	@echo To add prebuilt media files
