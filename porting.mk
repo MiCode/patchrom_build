@@ -176,6 +176,9 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk
 	$(hide) for dir in `ls -d $(OVERLAY_MIUI_RES_DIR)/[^v]*`; do\
           cp -r $$dir $(TMP_DIR)/framework-miui-res/res; \
         done
+	$(hide) for dir in `ls -d $(OVERLAY_MIUI_RES_DIR)/values*`; do\
+		$(MERGY_RES) $$dir $(TMP_DIR)/framework-miui-res/res/`basename $$dir`; \
+	done
 	@echo "  - 2" >> $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(APKTOOL) b $(TMP_DIR)/framework-miui-res $@
 	@echo "<<< build $@ completed!"
