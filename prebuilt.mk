@@ -51,6 +51,8 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libskia.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libhwui.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/content-types.properties $(RELEASE_PATH)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg.so $(RELEASE_PATH)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libffplayer_jni.so $(RELEASE_PATH)/system/lib/
 
 release-prebuilt-media:
 	@echo Release prebuilt media files
