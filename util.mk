@@ -87,6 +87,7 @@ verify: $(ERR_REPORT)
 	@echo "PORT_ROOT   = $(PORT_ROOT)"
 	@echo "ANDROID_TOP = $(ANDROID_TOP)"
 	@echo "ANDROID_OUT = $(ANDROID_OUT)"
+	@echo "BUILD_NUMBER= $(BUILD_NUMBER)"
 	@echo "----------------------"
 	@echo ">>>>> GLOBAL VARIABLE:"
 	@echo "TMP_DIR    = $(TMP_DIR)"

@@ -31,6 +31,8 @@ BUILD_TARGET_FILES := $(TOOL_DIR)/build_target_files.sh $(INFO)
 ADB         := adb
 #< End of global variable
 
+ROM_BUILD_NUMBER  := $(USER).$(shell date +%Y%m%d.%H%M%S)
+
 ifeq ($(USE_ANDROID_OUT),true)
     MIUI_SRC_DIR:=$(ANDROID_TOP)
 else
@@ -322,12 +324,14 @@ endif
 target_files: $(TMP_DIR)/framework-miui-res.apk $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) add-miui-prebuilt $(ACT_PRE_ZIP)
 
 # Target to make zipfile which is all signed by testkey. convenient for developement and debug
+zipfile: BUILD_NUMBER := zipfile.$(ROM_BUILD_NUMBER)
 zipfile: target_files
 	$(SIGN) sign.zip $(ZIP_DIR)
 	$(BUILD_TARGET_FILES) -n $(OUT_ZIP_FILE)
 	@echo The output zip file is: $(OUT_ZIP)
 
 # Target to test if full ota package will be generate
+fullota: BUILD_NUMBER := fullota.$(ROM_BUILD_NUMBER)
 fullota: target_files
 	@echo ">>> To build out target file: fullota.zip ..."
 	$(BUILD_TARGET_FILES) fullota.zip

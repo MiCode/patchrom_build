@@ -13,7 +13,7 @@ set -- `getopt "a:l:b:h:p:" "$@"`
 android_top=
 android_lunch=
 ANDROID_BRANCH=
-PORT_PRODUCT=
+PORT_PRODUCT="Unknown"
 help=
 while :
 do
