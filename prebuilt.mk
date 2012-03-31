@@ -10,6 +10,7 @@ add-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/content-types.properties $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffplayer_jni.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/framework/miui-framework.jar $(ZIP_DIR)/system/framework/
 
 add-prebuilt-media:
 	@echo To add prebuilt media files
@@ -21,6 +22,7 @@ add-prebuilt-etc-files:
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/license/ $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/telocation.db $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/yellowpage.db $(ZIP_DIR)/system/etc/
+	$(hide) cp -f $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(ZIP_DIR)/system/etc/permissions/
 
 add-lbesec-miui:
 	@echo To add LBESEC_MIUI
@@ -53,6 +55,7 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/content-types.properties $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffplayer_jni.so $(RELEASE_PATH)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/framework/miui-framework.jar $(RELEASE_PATH)/system/framework/
 
 release-prebuilt-media:
 	@echo Release prebuilt media files
@@ -66,6 +69,7 @@ release-prebuilt-etc-files:
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/license/ $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/telocation.db $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/yellowpage.db $(RELEASE_PATH)/system/etc/
+	$(hide) cp -rf $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(RELEASE_PATH)/system/etc/permissions/
 
 release-miui-resources:
 	@echo release miui resources
