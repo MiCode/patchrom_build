@@ -80,6 +80,9 @@ $(TMP_DIR)/$(1).jar: $(2)_miui
 	$(hide) cp -r $(1).jar.out/ $(2)
 	$(ADDMIUI) $(2)_miui $(2)
 	$(APKTOOL) b $(2) $$@
+	$(hide) if [ -f $(1).jar.out/preloaded-classes ]; then \
+		jar -uf $$@ -C $(1).jar.out preloaded-classes; \
+	fi
 	@echo "<<< build $$@ completed!"
 
 $(2)_miui: $(OUT_JAR_PATH)/$(1).jar
