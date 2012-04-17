@@ -16,7 +16,6 @@ private-miui-apps := AntiSpam  \
 					 Exchange \
 					 FileExplorer  \
 					 MiuiGallery  \
-					 Gmail  \
 					 GoogleBackupTransport  \
 					 GoogleCalendarSyncAdapter  \
 					 GoogleContactsSyncAdapter  \
@@ -25,7 +24,6 @@ private-miui-apps := AntiSpam  \
 					 GoogleServicesFramework  \
 					 LatinIME \
 					 LBESEC_MIUI  \
-					 Maps  \
 					 MediaProvider  \
 					 MiuiCompass  \
 					 MiuiHome  \
@@ -43,11 +41,8 @@ private-miui-apps := AntiSpam  \
 					 SettingsProvider  \
 					 SoundRecorder  \
 					 SuperMarket  \
-					 Talk  \
 					 TelephonyProvider  \
 					 TelocationProvider  \
 					 ThemeManager  \
-					 Updater  \
-					 Vending  \
-					 VoiceSearch
+					 Updater
 
