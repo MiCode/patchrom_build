@@ -21,6 +21,7 @@ add-prebuilt-etc-files:
 	$(hide) cp -f $(SYSOUT_DIR)/etc/apns-conf.xml $(ZIP_DIR)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/license/ $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/yellowpage.db $(ZIP_DIR)/system/etc/
+	$(hide) cp -f $(SYSOUT_DIR)/etc/telocation.td $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(ZIP_DIR)/system/etc/permissions/
 
 add-lbesec-miui:
@@ -67,6 +68,7 @@ release-prebuilt-etc-files:
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/apns-conf.xml $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/license/ $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/yellowpage.db $(RELEASE_PATH)/system/etc/
+	$(hide) cp -rf $(SYSOUT_DIR)/etc/telocation.td $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(RELEASE_PATH)/system/etc/permissions/
 
 release-miui-resources:
