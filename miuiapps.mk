@@ -44,5 +44,7 @@ private-miui-apps := AntiSpam  \
 					 TelephonyProvider  \
 					 TelocationProvider  \
 					 ThemeManager  \
-					 Updater
+					 Updater \
+					 Stk \
+					 Bluetooth
 
