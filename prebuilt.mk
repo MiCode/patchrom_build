@@ -23,6 +23,7 @@ add-prebuilt-etc-files:
 	$(hide) cp -f $(SYSOUT_DIR)/etc/yellowpage.db $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/telocation.td $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(ZIP_DIR)/system/etc/permissions/
+	$(hide) cp -f $(SYSOUT_DIR)/etc/unicode_py_index.td $(ZIP_DIR)/system/etc/
 
 add-lbesec-miui:
 	@echo To add LBESEC_MIUI
