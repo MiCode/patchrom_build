@@ -46,5 +46,6 @@ private-miui-apps := AntiSpam  \
 					 ThemeManager  \
 					 Updater \
 					 Stk \
-					 Bluetooth
+					 Bluetooth \
+					 WeatherProvider
 
