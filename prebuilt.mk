@@ -25,7 +25,6 @@ add-prebuilt-etc-files:
 	$(hide) cp -f $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(ZIP_DIR)/system/etc/permissions/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/unicode_py_index.td $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/weather_city.db $(ZIP_DIR)/system/etc/
-	$(hide) cp -f $(SYSOUT_DIR)/etc/unicode_py_index.td $(ZIP_DIR)/system/etc/
 
 add-lbesec-miui:
 	@echo To add LBESEC_MIUI
@@ -73,6 +72,8 @@ release-prebuilt-etc-files:
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/yellowpage.db $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/telocation.td $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(RELEASE_PATH)/system/etc/permissions/
+	$(hide) cp -f $(SYSOUT_DIR)/etc/unicode_py_index.td $(ZIP_DIR)/system/etc/
+	$(hide) cp -f $(SYSOUT_DIR)/etc/weather_city.db $(ZIP_DIR)/system/etc/
 
 release-miui-resources:
 	@echo release miui resources
