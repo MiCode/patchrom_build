@@ -151,7 +151,7 @@ last_target_files.zip:
 	make clean
 	make -e VERIFY_OTA=local-ota-update fullota
 	cp $(TMP_DIR)/target_files.zip last_target_files.zip
-	cp $(TMP_DIR)/testota.zip last_fullota.zip
+	cp $(TMP_DIR)/fullota.zip last_fullota.zip
 	make clean
 
 verify-ota: last_target_files.zip fullota
