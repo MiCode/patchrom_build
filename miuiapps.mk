@@ -48,5 +48,5 @@ private-miui-apps := AntiSpam  \
 					 Stk \
 					 Bluetooth \
 					 WeatherProvider \
-					 JINSHAN_GUARD_PROVIDER
+					 GuardProvider
 
