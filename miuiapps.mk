@@ -29,7 +29,7 @@ private-miui-apps := AntiSpam  \
 					 MiuiHome  \
 					 MiuiSystemUI  \
 					 Mms  \
-					 Monitor  \
+					 NetworkAssistant  \
 					 Music  \
 					 NetworkLocation  \
 					 Notes  \
