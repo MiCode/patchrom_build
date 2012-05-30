@@ -194,9 +194,10 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk
 # $2 the apk location under system, such as app or framework
 define APP_WS_template
 $(1): $(ZIP_FILE)
-	$(UNZIP) $(ZIP_FILE) system/$(2)/$(1).apk -d $(TMP_DIR)
-	$(APKTOOL) d -f $(TMP_DIR)/system/$(2)/$(1).apk $$@
-	$(hide) rm $(TMP_DIR)/system/$(2)/$(1).apk
+	if $(UNZIP) $(ZIP_FILE) system/$(2)/$(1).apk -d $(TMP_DIR) 2>/dev/null; then \
+	$(APKTOOL) d -f $(TMP_DIR)/system/$(2)/$(1).apk $$@ ; else \
+	echo system/$(2)/$(1).apk does not exist, ignored!;  fi
+	$(hide) rm -f $(TMP_DIR)/system/$(2)/$(1).apk
 
 endef
 
