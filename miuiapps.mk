@@ -47,5 +47,6 @@ private-miui-apps := AntiSpam  \
 					 Stk \
 					 Bluetooth \
 					 WeatherProvider \
-					 GuardProvider
+					 GuardProvider \
+					 NetworkAssistant
 
