@@ -28,17 +28,15 @@ workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR) fix-framework-res
 # Target to install apktool framework 
 apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
 	@echo ">>> Install framework resources for apktool..."
+	$(hide) for res_file in `find $(PORT_BUILD)/res/ -name "*.apk"`;do\
+		$(APKTOOL) if $$res_file; \
+	done
 	@echo install framework-miui-res.apk
 	$(APKTOOL) if $(SYSOUT_DIR)/framework/framework-miui-res.apk
 	$(UNZIP) $(ZIP_FILE) "system/framework/*.apk" -d $(TMP_DIR)
 	$(hide) for res_file in `find $(TMP_DIR)/system/framework/ -name "*.apk"`; do\
 		echo install $$res_file ; \
 		$(APKTOOL) if $$res_file; \
-	done
-	$(hide) for res_file in `find $(PORT_BUILD)/res/ -name "*.apk"`;do\
-		if ! [ -f ~/apktool/$$res_file ]; then \
-			$(APKTOOL) if $$res_file; \
-		fi \
 	done
 	$(hide) rm -r $(TMP_DIR)/system/framework/*.apk
 	@echo "<<< install framework resources completed!"
