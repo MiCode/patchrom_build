@@ -35,6 +35,11 @@ apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
 		echo install $$res_file ; \
 		$(APKTOOL) if $$res_file; \
 	done
+	$(hide) for res_file in `find $(PORT_BUILD)/res/ -name "*.apk"`;do\
+		if ! [ -f ~/apktool/$$res_file ]; then \
+			$(APKTOOL) if $$res_file; \
+		fi \
+	done
 	$(hide) rm -r $(TMP_DIR)/system/framework/*.apk
 	@echo "<<< install framework resources completed!"
 

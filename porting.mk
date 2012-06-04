@@ -185,6 +185,9 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk
 		$(MERGY_RES) $$dir $(TMP_DIR)/framework-miui-res/res/`basename $$dir`; \
 	done
 	@echo "  - 2" >> $(TMP_DIR)/framework-miui-res/apktool.yml
+	@echo "  - 3" >> $(TMP_DIR)/framework-miui-res/apktool.yml
+	@echo "  - 4" >> $(TMP_DIR)/framework-miui-res/apktool.yml
+	@echo "  - 5" >> $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(APKTOOL) b $(TMP_DIR)/framework-miui-res $@
 	@echo "<<< build $@ completed!"
 
