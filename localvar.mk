@@ -40,6 +40,12 @@ MIUIAPPS     := $(strip \
 ACT_PRE_ZIP  := $(strip $(local-pre-zip))
 ACT_PRE_ZIP  += pre-zip-misc
 
+ifeq ($(strip $(local-rewrite-skia-lib)),false)
+	REWRITE_SKIA_LIB := false
+else
+	REWRITE_SKIA_LIB := true
+endif
+
 # if local-phone-apps is set, local-remove-apps would not be used,
 # and the apps could be removed at target $(ZIP_DIR)
 ifeq ($(strip $(local-phone-apps)),)

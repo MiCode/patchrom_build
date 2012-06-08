@@ -322,7 +322,9 @@ set-build-prop:
 	$(SETPROP) $(PROP_FILE) $(PORT_PRODUCT) $(BUILD_NUMBER)
 
 rewrite-lib:
-	$(REWRITE) $(SKIA_FILE) ANDROID_ROOT ANDROID_DATA
+	$(hide) if [ $(REWRITE_SKIA_LIB) = "true" ]; then \
+		$(REWRITE) $(SKIA_FILE) ANDROID_ROOT ANDROID_DATA; \
+	fi
 
 ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += release-miui-prebuilt
