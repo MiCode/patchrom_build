@@ -109,6 +109,7 @@ verify: $(ERR_REPORT)
 	@echo "local-modified-apps   = $(local-modified-apps)"
 	@echo "local-miui-apps       = $(local-miui-apps)"
 	@echo "local-remove-apps     = $(local-remove-apps)"
+	@echo "local-phone-apps      = $(local-phone-apps)"
 	@echo "local-pre-zip         = $(local-pre-zip)"
 	@echo "local-after-zip       = $(local-after-zip)"
 	@echo "----------------------"
