@@ -48,5 +48,6 @@ private-miui-apps := AntiSpam  \
 					 Bluetooth \
 					 WeatherProvider \
 					 GuardProvider \
-					 NetworkAssistant
+					 NetworkAssistant \
+					 XiaomiServiceFramework
 
