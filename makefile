@@ -1,5 +1,5 @@
 # The currently supported products
-PRODUCTS := honor i9100 sensation lt18i onex mx p1 gnote razr ones i9300 lt26i
+PRODUCTS := honor i9100 sensation lt18i onex mx p1 gnote razr ones i9300 lt26i vivo
 
 PRODUCTS := $(strip $(PRODUCTS))
 PRODUCT  := $(strip $(PORT_PRODUCT))
