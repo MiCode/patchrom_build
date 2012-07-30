@@ -30,7 +30,11 @@ workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR) fix-framework-res
 	@echo Prepare workspace completed!
 
 # Target to install apktool framework 
-apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
+apktool-if: $(TMP_DIR)/apktool-if
+
+#TODO all apktool if result file is at $HOME/apktool/framework/
+APKTOOL_IF_RESULT_FILE := $(HOME)/apktool/framework
+$(TMP_DIR)/apktool-if: $(ZIP_FILE) $(APKTOOL_IF_RESULT_FILE)/6.apk | $(TMP_DIR)
 	@echo ">>> Install framework resources for apktool..."
 	$(hide) for res_file in `find $(PORT_BUILD)/res/ -name "*.apk"`;do\
 		$(APKTOOL) if $$res_file; \
@@ -44,6 +48,9 @@ apktool-if: $(SYSOUT_DIR)/framework/framework.jar $(ZIP_FILE)
 	done
 	$(hide) rm -r $(TMP_DIR)/system/framework/*.apk
 	@echo "<<< install framework resources completed!"
+	@touch $@
+
+$(APKTOOL_IF_RESULT_FILE)/6.apk:
 
 fix-framework-res:
 	@echo fix the apktool multiple position substitution bug
@@ -130,6 +137,7 @@ verify: $(ERR_REPORT)
 	@echo "miui-apps       = $(private-miui-apps)"
 	@echo "MIUIAPPS        = $(MIUIAPPS)"
 	@echo "OTA_BASE        = $(OTA_BASE)"
+	@echo "APKTOOL_IF_RESULT_FILE = $(APKTOOL_IF_RESULT_FILE)"
 	@echo "----------------------"
 	@echo ">>>>> OUTPUT VARIABLE:"
 	@echo "PROG    = $(PROG)"

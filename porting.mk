@@ -60,6 +60,11 @@ RELEASE_MIUI:=
 RELEASE_PATH:= $(PORT_ROOT)/miui
 MAKE_ATTOP  := make -C $(ANDROID_TOP)
 
+# helper functions
+define all-files-under-dir
+$(strip $(filter-out $(1),$(shell find $(1) -name "*.*")))
+endef
+
 #
 # Extract the jar file from ZIP file and replaced the modified smails
 # with MIUI features, and these smali files are stored in xxxx.jar.out
@@ -74,8 +79,11 @@ $(TMP_DIR)/$(1).jar-phone:$(TMP_DIR)/$(1).jar
 
 $(TMP_DIR)/$(1).jar-tozip:$(TMP_DIR)/$(1).jar
 	$(hide) cp $$< $(ZIP_DIR)/system/framework/$(1).jar
+	@touch $$@
 
-$(TMP_DIR)/$(1).jar: $(2)_miui
+source-files-for-$(1) := $$(call all-files-under-dir,$(1).jar.out)
+
+$(TMP_DIR)/$(1).jar: $(2)_miui $$(source-files-for-$(1))
 	@echo ">>> build $$@..."
 	$(hide) cp -r $(1).jar.out/ $(2)
 	$(ADDMIUI) $(2)_miui $(2)
@@ -120,8 +128,10 @@ $(TMP_DIR)/$(1).jar-phone:$(TMP_DIR)/$(1).jar
 
 $(TMP_DIR)/$(1).jar-tozip:$(TMP_DIR)/$(1).jar
 	$(hide) cp $$< $(ZIP_DIR)/system/framework/$(1).jar
+	@touch $$@
 
-$(TMP_DIR)/$(1).jar: $(1).jar.out $(TMP_DIR)
+source-files-for-$(1) := $$(call all-files-under-dir,$(1).jar.out)
+$(TMP_DIR)/$(1).jar: $$(source-files-for-$(1)) | $(TMP_DIR)
 	@echo ">>> build $$@..."
 	$(hide) cp -r $(1).jar.out $(TMP_DIR)/
 	$(APKTOOL) b $(TMP_DIR)/$(1).jar.out $$@
@@ -135,7 +145,8 @@ endef
 # $2: the dir name, might be different from apk name
 # $3: to specify if the smali files should be decoded from MIUI first
 define APP_template
-$(TMP_DIR)/$(1).apk: $(3) $(TMP_DIR)
+source-files-for-$(2) := $$(call all-files-under-dir,$(2))
+$(TMP_DIR)/$(1).apk: $$(source-files-for-$(2)) $(3) | $(TMP_DIR)
 	@echo ">>> build $$@..."
 	$(hide) cp -r $(2) $(TMP_DIR)
 	$(hide) find $(TMP_DIR)/$(2) -name "*.part" -exec rm {} \;
@@ -151,7 +162,8 @@ endef
 
 # Target to build framework-res.apk
 # copy the framework-res, add the miui overlay then build
-$(TMP_DIR)/framework-res.apk: $(TMP_DIR) apktool-if
+#TODO need to add changed files for all related, and re-install framework-res.apk make sense?
+$(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if
 	@echo ">>> build $@..."
 	$(hide) cp -r framework-res $(TMP_DIR)
 	@echo add miui overlay resources
@@ -223,6 +235,7 @@ $(notdir $(1)).sign $(1).sign: $(1)
 TOZIP_APKS += $(1)-tozip
 $(1)-tozip : $(1)
 	$(hide) cp $(1) $(ZIP_DIR)$(2)
+	@touch $$@
 endef
 
 #
@@ -301,7 +314,7 @@ $(ZIP_FILE):
 	$(hide) cd stockrom && $(ZIP) -r ../$(ZIP_FILE) ./
 	$(hide) touch .delete-zip-file-when-clean
 
-$(ZIP_DIR): $(TMP_DIR) $(ZIP_FILE)
+$(ZIP_DIR): $(ZIP_FILE) | $(TMP_DIR)
 	$(UNZIP) $(ZIP_FILE) -d $@
 ifneq ($(strip $(local-phone-apps)),)
 	$(hide) mv $(ZIP_DIR)/system/app $(ZIP_DIR)/system/app.original
@@ -331,14 +344,19 @@ ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += release-miui-prebuilt
 endif
 	
-target_files: $(TMP_DIR)/framework-miui-res.apk $(ZIP_DIR) $(ZIP_BLDJARS) $(TOZIP_APKS) add-miui-prebuilt $(ACT_PRE_ZIP)
+target_files: | $(ZIP_DIR)
+target_files: $(TMP_DIR)/framework-miui-res.apk $(ZIP_BLDJARS) $(TOZIP_APKS) add-miui-prebuilt $(ACT_PRE_ZIP)
 
 # Target to make zipfile which is all signed by testkey. convenient for developement and debug
 zipfile: BUILD_NUMBER := zipfile.$(ROM_BUILD_NUMBER)
-zipfile: target_files
-	$(SIGN) sign.zip $(ZIP_DIR)
+zipfile: target_files $(TMP_DIR)/sign-zipfile-dir
 	$(BUILD_TARGET_FILES) -n $(OUT_ZIP_FILE)
 	@echo The output zip file is: $(OUT_ZIP)
+
+#TODO add all depend sign..
+$(TMP_DIR)/sign-zipfile-dir:
+	$(SIGN) sign.zip $(ZIP_DIR)
+	@touch $@
 
 # Target to test if full ota package will be generate
 fullota: BUILD_NUMBER := fullota.$(ROM_BUILD_NUMBER)
