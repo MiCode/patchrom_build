@@ -85,6 +85,7 @@ source-files-for-$(1) := $$(call all-files-under-dir,$(1).jar.out)
 
 $(TMP_DIR)/$(1).jar: $(2)_miui $$(source-files-for-$(1))
 	@echo ">>> build $$@..."
+	$(hide) rm -rf $(2)
 	$(hide) cp -r $(1).jar.out/ $(2)
 	$(ADDMIUI) $(2)_miui $(2)
 	$(APKTOOL) b $(2) $$@
@@ -133,6 +134,7 @@ $(TMP_DIR)/$(1).jar-tozip:$(TMP_DIR)/$(1).jar
 source-files-for-$(1) := $$(call all-files-under-dir,$(1).jar.out)
 $(TMP_DIR)/$(1).jar: $$(source-files-for-$(1)) | $(TMP_DIR)
 	@echo ">>> build $$@..."
+	$(hide) rm -rf $(TMP_DIR)/$(1).jar.out
 	$(hide) cp -r $(1).jar.out $(TMP_DIR)/
 	$(APKTOOL) b $(TMP_DIR)/$(1).jar.out $$@
 	@echo "<<< build $$@ completed!"
@@ -155,6 +157,7 @@ $(TMP_DIR)/$(1).apk: $$(source-files-for-$(2)) $(3) | $(TMP_DIR)
 	@echo "<<< build $$@ completed!"
 
 $(3): $(OUT_APK_PATH)/$(1).apk
+	$(hide) rm -rf $(3)
 	$(APKTOOL) d -f $(OUT_APK_PATH)/$(1).apk $(3)
 	$(PATCH_MIUI_APP) $(2) $(3)
 
@@ -163,8 +166,12 @@ endef
 # Target to build framework-res.apk
 # copy the framework-res, add the miui overlay then build
 #TODO need to add changed files for all related, and re-install framework-res.apk make sense?
-$(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if
+framework-res-source-files := $(call all-files-under-dir,framework-res)
+framework-res-overlay-files:= $(call all-files-under-dir,$(MIUI_OVERLAY_RES_DIR))
+
+$(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files) $(framework-res-overlay-files)
 	@echo ">>> build $@..."
+	$(hide) rm -rf $(TMP_DIR)/framework-res
 	$(hide) cp -r framework-res $(TMP_DIR)
 	@echo add miui overlay resources
 	$(hide) for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
@@ -186,8 +193,9 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if
 	@echo "<<< build $@ completed!"
 
 # Target to build framework-miui-res.apk
-$(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk
+$(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/framework-miui-res.apk
 	@echo ">>> build $@..."
+	$(hide) rm -rf $(TMP_DIR)/framework-miui-res
 	$(APKTOOL) d -f $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res/res
 	$(hide) cp -r $(MIUI_RES_DIR) $(TMP_DIR)/framework-miui-res
@@ -232,8 +240,9 @@ $(notdir $(1)).sign $(1).sign: $(1)
 	$(ADB) remount
 	$(ADB) push $(1).signed $(2)
 
-TOZIP_APKS += $(1)-tozip
-$(1)-tozip : $(1)
+mark-tozip-for-$(1) := $(TMP_DIR)/$$(shell basename $(1))-tozip
+TOZIP_APKS += $$(mark-tozip-for-$(1))
+$$(mark-tozip-for-$(1)) : $(1)
 	$(hide) cp $(1) $(ZIP_DIR)$(2)
 	@touch $$@
 endef
@@ -356,7 +365,7 @@ zipfile: target_files $(TMP_DIR)/sign-zipfile-dir
 #TODO add all depend sign..
 $(TMP_DIR)/sign-zipfile-dir:
 	$(SIGN) sign.zip $(ZIP_DIR)
-	@touch $@
+	#@touch $@
 
 # Target to test if full ota package will be generate
 fullota: BUILD_NUMBER := fullota.$(ROM_BUILD_NUMBER)

@@ -108,7 +108,7 @@ endif
 
 # variable for local-ota
 ifeq ($(strip $(otabase)),)
-	OTA_BASE := $(shell adb shell getprop ro.build.version.incremental 2>/dev/null | sed -e "s/zipfile.//" | sed -e "s/://g")
+	OTA_BASE := $(shell adb shell getprop ro.build.version.incremental 2>/dev/null | tail -n 1 | sed -e "s/zipfile.//" | sed -e "s/://g")
 else
 	OTA_BASE := $(strip $(otabase))
 endif
