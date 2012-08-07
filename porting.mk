@@ -62,7 +62,7 @@ MAKE_ATTOP  := make -C $(ANDROID_TOP)
 
 # helper functions
 define all-files-under-dir
-$(strip $(filter-out $(1),$(shell find $(1) -name "*.*")))
+$(strip $(filter-out $(1),$(shell find $(1) -name "*.*" 2>/dev/null)))
 endef
 
 #
@@ -134,7 +134,7 @@ $(TMP_DIR)/$(1).jar-tozip:$(TMP_DIR)/$(1).jar
 source-files-for-$(1) := $$(call all-files-under-dir,$(1).jar.out)
 $(TMP_DIR)/$(1).jar: $$(source-files-for-$(1)) | $(TMP_DIR)
 	@echo ">>> build $$@..."
-	$(hide) rm -rf $(TMP_DIR)/$(1).jar.out
+	#$(hide) rm -rf $(TMP_DIR)/$(1).jar.out
 	$(hide) cp -r $(1).jar.out $(TMP_DIR)/
 	$(APKTOOL) b $(TMP_DIR)/$(1).jar.out $$@
 	@echo "<<< build $$@ completed!"
@@ -167,7 +167,7 @@ endef
 # copy the framework-res, add the miui overlay then build
 #TODO need to add changed files for all related, and re-install framework-res.apk make sense?
 framework-res-source-files := $(call all-files-under-dir,framework-res)
-framework-res-overlay-files:= $(call all-files-under-dir,$(MIUI_OVERLAY_RES_DIR))
+framework-res-overlay-files:= $(call all-files-under-dir,$(MIUI_OVERLAY_RES_DIR)) $(call all-files-under-dir,overlay)
 
 $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files) $(framework-res-overlay-files)
 	@echo ">>> build $@..."
