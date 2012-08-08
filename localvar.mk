@@ -117,3 +117,8 @@ ifeq ($(strip $(OTA_BASE)),)
 	OTA_BASE :=unknown
 endif
 
+ifeq ($(strip $(include_data_partition)),true)
+	INCLUDE_DATA_PARTITION := true
+else
+	INCLUDE_DATA_PARTITION := false
+endif

@@ -274,7 +274,7 @@ endef
 zipone: zipfile $(ACT_AFTER_ZIP)
 
 otapackage: metadata target_files
-	$(BUILD_TARGET_FILES)
+	$(BUILD_TARGET_FILES) $(INCLUDE_DATA_PARTITION)
 
 #> TARGETS EXPANSION START
 $(foreach jar, $(MIUI_JARS), \
@@ -359,7 +359,7 @@ target_files: $(TMP_DIR)/framework-miui-res.apk $(ZIP_BLDJARS) $(TOZIP_APKS) add
 # Target to make zipfile which is all signed by testkey. convenient for developement and debug
 zipfile: BUILD_NUMBER := zipfile.$(ROM_BUILD_NUMBER)
 zipfile: target_files $(TMP_DIR)/sign-zipfile-dir
-	$(BUILD_TARGET_FILES) -n $(OUT_ZIP_FILE)
+	$(BUILD_TARGET_FILES) $(INCLUDE_DATA_PARTITION) -n $(OUT_ZIP_FILE)
 	@echo The output zip file is: $(OUT_ZIP)
 
 #TODO add all depend sign..
@@ -371,7 +371,7 @@ $(TMP_DIR)/sign-zipfile-dir:
 fullota: BUILD_NUMBER := fullota.$(ROM_BUILD_NUMBER)
 fullota: target_files
 	@echo ">>> To build out target file: fullota.zip ..."
-	$(BUILD_TARGET_FILES) fullota.zip
+	$(BUILD_TARGET_FILES) $(INCLUDE_DATA_PARTITION) fullota.zip
 	@echo "<<< build target file completed!"
 
 #< TARGET FOR ZIPFILE END
