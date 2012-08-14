@@ -49,5 +49,6 @@ private-miui-apps := AntiSpam  \
 					 WeatherProvider \
 					 GuardProvider \
 					 NetworkAssistant \
-					 XiaomiServiceFramework
+					 XiaomiServiceFramework \
+					 MiuiVideoPlayer
 
