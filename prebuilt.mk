@@ -8,7 +8,7 @@ $(ZIP_DIR)/system/xbin/busybox:
 add-prebuilt-libraries:
 	@echo To add prebuilt libraries
 	$(hide) cp -f $(SYSOUT_DIR)/lib/content-types.properties $(ZIP_DIR)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_xm.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffplayer_jni.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/framework/miui-framework.jar $(ZIP_DIR)/system/framework/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_latinime.so $(ZIP_DIR)/system/lib/
@@ -58,7 +58,7 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libskia.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libhwui.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/content-types.properties $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg.so $(RELEASE_PATH)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_xm.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffplayer_jni.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/framework/miui-framework.jar $(RELEASE_PATH)/system/framework/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_latinime.so $(RELEASE_PATH)/system/lib/
