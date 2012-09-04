@@ -67,16 +67,19 @@ ifeq ($(strip $(USE_ANDROID_OUT)),true)
          ERR_REPORT += error-android-env
     else
          OUT_SYS_PATH := $(ANDROID_OUT)/system
+         OUT_DATA_PATH := $(ANDROID_OUT)/data
 	 REALLY_CLEAN = $(CLEANJAR) $(CLEANMIUIAPP)
     endif
 else
     USE_ANDROID_OUT := false
     OUT_SYS_PATH := $(PORT_ROOT)/miui/system
+    OUT_DATA_PATH := $(PORT_ROOT)/miui/data
     REALLY_CLEAN :=
 endif
 PHONE_JARS := $(strip $(local-modified-jars))
 OUT_JAR_PATH := $(OUT_SYS_PATH)/framework
 OUT_APK_PATH := $(OUT_SYS_PATH)/app
+OUT_PREINSTALL_APK_PATH := $(OUT_DATA_PATH)/media/preinstall_apps
 
 #
 # log could be set with 'make -e log=value target' and the value:
@@ -117,8 +120,8 @@ ifeq ($(strip $(OTA_BASE)),)
 	OTA_BASE :=unknown
 endif
 
-ifeq ($(strip $(include_data_partition)),true)
-	INCLUDE_DATA_PARTITION := true
+ifeq ($(strip $(include_thirdpart_app)),true)
+	INCLUDE_THIRDPART_APP := true
 else
-	INCLUDE_DATA_PARTITION := false
+	INCLUDE_THIRDPART_APP := false
 endif

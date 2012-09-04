@@ -1,6 +1,8 @@
 add-prebuilt-app: $(ZIP_DIR)/system/xbin/busybox
 	@echo To add prebuilt apps
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/invoke-as $(ZIP_DIR)/system/xbin/
+	$(hide) mkdir -p $(ZIP_DIR)/data/media
+	$(hide) cp -rf $(DATAOUT_DIR)/media/preinstall_apps/ $(ZIP_DIR)/data/media/
 
 $(ZIP_DIR)/system/xbin/busybox:
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/busybox $(ZIP_DIR)/system/xbin/
@@ -50,6 +52,9 @@ release-prebuilt-app:
 	$(hide) cp $(SYSOUT_DIR)/bin/installd $(RELEASE_PATH)/system/bin/
 	$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(RELEASE_PATH)/system/app
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/su $(RELEASE_PATH)/system/xbin/
+	$(hide) mkdir -p $(RELEASE_PATH)/data/media
+	$(hide) cp -rf $(DATAOUT_DIR)/media/preinstall_apps/ $(RELEASE_PATH)/data/media/
+
 
 release-prebuilt-libraries:
 	@echo Release prebuilt libraries
@@ -76,6 +81,7 @@ release-prebuilt-etc-files:
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/license/ $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/yellowpage.db $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/telocation.td $(RELEASE_PATH)/system/etc/
+	$(hide) mkdir -p $(RELEASE_PATH)/system/etc/permissions/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(RELEASE_PATH)/system/etc/permissions/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/unicode_py_index.td $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/weather_city.db $(RELEASE_PATH)/system/etc/
