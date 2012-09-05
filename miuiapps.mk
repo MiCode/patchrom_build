@@ -52,3 +52,7 @@ private-miui-apps := AntiSpam  \
 					 XiaomiServiceFramework \
 					 MiuiVideoPlayer
 
+private-preinstall-apps := VoiceAssist  \
+					 GameCenter \
+					 Weather
+

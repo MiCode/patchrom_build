@@ -213,5 +213,5 @@ ota-base-restore: $(use_previous_target_file)
 	rm -rf /tmp/SYSTEM/app
 
 miui-apps-included:
-	@echo $(addsuffix .apk,$(private-miui-apps) framework-miui-res)
+	@echo $(addsuffix .apk,$(private-miui-apps) $(private-preinstall-apps) framework-miui-res)
 
