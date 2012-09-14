@@ -54,5 +54,6 @@ private-miui-apps := AntiSpam  \
 
 private-preinstall-apps := VoiceAssist  \
 					 GameCenter \
-					 Weather
+					 Weather \
+					 InputMethod
 
