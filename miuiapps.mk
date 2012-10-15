@@ -56,5 +56,6 @@ private-miui-apps := AntiSpam  \
 private-preinstall-apps := VoiceAssist  \
 					 GameCenter \
 					 Weather \
-					 InputMethod
+					 InputMethod \
+					 AlipayMsp
 
