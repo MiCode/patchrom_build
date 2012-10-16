@@ -57,5 +57,5 @@ private-preinstall-apps := VoiceAssist  \
 					 GameCenter \
 					 Weather \
 					 InputMethod \
-					 AlipayMsp
-
+					 AlipayMsp \
+					 MiuiVideo
