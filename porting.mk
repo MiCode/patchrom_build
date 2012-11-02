@@ -15,6 +15,7 @@ DATAOUT_DIR  := $(OUT_DATA_PATH)
 
 # Tool alias used in the makefile
 APKTOOL     := $(TOOL_DIR)/apktool $(APK_VERBOSE)
+AAPT        := aapt
 SIGN        := $(TOOL_DIR)/sign.sh $(VERBOSE)
 ADDMIUI     := $(TOOL_DIR)/add_miui_smail.sh $(VERBOSE)
 ADDMIUIRES  := $(TOOL_DIR)/add_miui_res.sh $(VERBOSE)
@@ -32,7 +33,7 @@ BUILD_TARGET_FILES := $(TOOL_DIR)/build_target_files.sh $(INFO)
 ADB         := adb
 #< End of global variable
 
-ROM_BUILD_NUMBER  := $(USER).$(shell date +%Y%m%d.%H%M%S)
+ROM_BUILD_NUMBER  := $(shell date +%Y%m%d.%H%M%S)
 
 ifeq ($(USE_ANDROID_OUT),true)
     MIUI_SRC_DIR:=$(ANDROID_TOP)
@@ -44,7 +45,7 @@ MIUI_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/core/res/res
 OVERLAY_RES_DIR:=overlay/framework-res/res
 OVERLAY_MIUI_RES_DIR:=overlay/framework-miui-res/res
 
-MIUI_JARS   := services android.policy framework
+MIUI_JARS   := services android.policy framework framework2
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
 JARS_OUTDIR := $(addsuffix .jar.out,$(MIUI_JARS))
@@ -340,7 +341,7 @@ remove-rund-apks:
 	$(hide) rm -f $(addprefix $(ZIP_DIR)/system/app/, $(addsuffix .apk, $(RUNDAPKS)))
 	@echo "<<< remove done!"
 
-pre-zip-misc: set-build-prop rewrite-lib
+pre-zip-misc: set-build-prop
 
 set-build-prop:
 	$(SETPROP) $(PROP_FILE) $(PORT_PRODUCT) $(BUILD_NUMBER)
@@ -358,7 +359,7 @@ target_files: | $(ZIP_DIR)
 target_files: $(TMP_DIR)/framework-miui-res.apk $(ZIP_BLDJARS) $(TOZIP_APKS) add-miui-prebuilt $(ACT_PRE_ZIP)
 
 # Target to make zipfile which is all signed by testkey. convenient for developement and debug
-zipfile: BUILD_NUMBER := zipfile.$(ROM_BUILD_NUMBER)
+zipfile: BUILD_NUMBER := 01.$(ROM_BUILD_NUMBER)
 zipfile: target_files $(TMP_DIR)/sign-zipfile-dir
 	$(BUILD_TARGET_FILES) $(INCLUDE_THIRDPART_APP) -n $(OUT_ZIP_FILE)
 	@echo The output zip file is: $(OUT_ZIP)
@@ -369,7 +370,7 @@ $(TMP_DIR)/sign-zipfile-dir:
 	#@touch $@
 
 # Target to test if full ota package will be generate
-fullota: BUILD_NUMBER := fullota.$(ROM_BUILD_NUMBER)
+fullota: BUILD_NUMBER := 02.$(ROM_BUILD_NUMBER)
 fullota: target_files
 	@echo ">>> To build out target file: fullota.zip ..."
 	$(BUILD_TARGET_FILES) $(INCLUDE_THIRDPART_APP) fullota.zip

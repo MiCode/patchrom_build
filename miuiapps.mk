@@ -13,7 +13,6 @@ private-miui-apps := AntiSpam  \
 					 DownloadProvider  \
 					 DownloadProviderUi  \
 					 Email  \
-					 Exchange \
 					 FileExplorer  \
 					 MiuiGallery  \
 					 GoogleBackupTransport  \
@@ -53,9 +52,12 @@ private-miui-apps := AntiSpam  \
 					 MiuiVideoPlayer \
 					 VpnDialogs
 
+#					Exchange \
+
 private-preinstall-apps := VoiceAssist  \
 					 GameCenter \
 					 Weather \
 					 InputMethod \
 					 AlipayMsp \
-					 MiuiVideo
+					 MiuiVideo \
+					 Userbook

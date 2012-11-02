@@ -64,6 +64,7 @@ else
        return
    fi
 fi
+export PATH=$PORT_ROOT/tools:$PATH
 
 if [ -n "$PORT_ROOT" ]; then
     PORT_BUILD=$PORT_ROOT/build
@@ -77,4 +78,3 @@ if [ -n "$PORT_ROOT" ]; then
     echo "USE_ANDROID_OUT = $USE_ANDROID_OUT"
     echo "ANDROID_BRANCH  = $ANDROID_BRANCH"
 fi
-
