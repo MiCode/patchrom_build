@@ -116,6 +116,12 @@ else
 	OTA_BASE := $(strip $(otabase))
 endif
 
+ifeq ($(strip $(otatype)),fullota)
+	OTA_TYPE := fullota
+else
+	OTA_TYPE := zipfile
+endif
+
 ifeq ($(strip $(OTA_BASE)),)
 	OTA_BASE :=unknown
 endif
