@@ -50,9 +50,8 @@ private-miui-apps := AntiSpam  \
 					 NetworkAssistant \
 					 XiaomiServiceFramework \
 					 MiuiVideoPlayer \
-					 VpnDialogs
-
-#					Exchange \
+					 VpnDialogs \
+					 Exchange2
 
 private-preinstall-apps := VoiceAssist  \
 					 GameCenter \
