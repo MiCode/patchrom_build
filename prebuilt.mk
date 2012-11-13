@@ -21,6 +21,7 @@ add-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell_jni.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libshellservice.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libphotocli.so $(ZIP_DIR)/system/lib/
 
 
 add-prebuilt-media:
@@ -81,6 +82,7 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell_jni.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libshellservice.so $(RELEASE_PATH)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libphotocli.so $(RELEASE_PATH)/system/lib/
 
 release-prebuilt-media:
 	@echo Release prebuilt media files
