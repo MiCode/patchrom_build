@@ -92,7 +92,9 @@ $(TMP_DIR)/$(1).jar: $(2)_miui $$(source-files-for-$(1))
 	$(ADDMIUI) $(2)_miui $(2)
 	$(APKTOOL) b $(2) $$@
 	$(PREPARE_PRELOADED_CLASSES) $(ZIP_FILE) $(2) $(OUT_JAR_PATH)
-	$(hide) if [ -f $(2)/preloaded-classes ];then \
+	$(hide) if [ -f $(1).jar.out/preloaded-classes ]; then \
+		jar -uf $$@ -C $(1).jar.out preloaded-classes; \
+	elif [ -f $(2)/preloaded-classes ];then \
 		jar -uf $$@ -C $(2) preloaded-classes; \
 	fi
 	@echo "<<< build $$@ completed!"
