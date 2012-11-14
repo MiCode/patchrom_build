@@ -35,6 +35,7 @@ add-prebuilt-etc-files:
 	$(hide) cp -f $(SYSOUT_DIR)/etc/yellowpage.db $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/telocation.idf $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(ZIP_DIR)/system/etc/permissions/
+	$(hide) cp -f $(SYSOUT_DIR)/etc/unicode_py_index.td $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/weather_city.db $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/permission_config.json $(ZIP_DIR)/system/etc/
 
@@ -97,6 +98,7 @@ release-prebuilt-etc-files:
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/telocation.idf $(RELEASE_PATH)/system/etc/
 	$(hide) mkdir -p $(RELEASE_PATH)/system/etc/permissions/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(RELEASE_PATH)/system/etc/permissions/
+	$(hide) cp -rf $(SYSOUT_DIR)/etc/unicode_py_index.td $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/weather_city.db $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/permission_config.json $(RELEASE_PATH)/system/etc/
 
