@@ -32,6 +32,7 @@ RLZ_SOURCE  := $(TOOL_DIR)/release_source.sh $(VERBOSE)
 FIX_PLURALS := $(TOOL_DIR)/fix_plurals.sh $(VERBOSE)
 BUILD_TARGET_FILES := $(TOOL_DIR)/build_target_files.sh $(INFO)
 ADB         := adb
+REMOVE_RES  := $(TOOL_DIR)/remove_res.sh
 #< End of global variable
 
 ROM_BUILD_NUMBER  := $(shell date +%Y%m%d.%H%M%S)
@@ -194,6 +195,8 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
 	$(hide) for dir in `ls -d $(OVERLAY_RES_DIR)/values* 2>/dev/null`; do\
           $(MERGY_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir`; \
 	done
+	@echo remove other language resources
+	$(hide) $(REMOVE_RES) $(TMP_DIR)/framework-res/res
 	$(APKTOOL) b $(TMP_DIR)/framework-res $@
 	$(APKTOOL) if $@
 	@echo "<<< build $@ completed!"
