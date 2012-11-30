@@ -43,7 +43,6 @@ private-miui-apps := AntiSpam  \
 					 TelocationProvider  \
 					 ThemeManager  \
 					 Updater \
-					 Stk \
 					 Bluetooth \
 					 WeatherProvider \
 					 GuardProvider \
