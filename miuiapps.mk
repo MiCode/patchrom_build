@@ -39,6 +39,7 @@ private-miui-apps := AntiSpam  \
 					 SettingsProvider  \
 					 SoundRecorder  \
 					 SuperMarket  \
+					 Stk  \
 					 TelephonyProvider  \
 					 TelocationProvider  \
 					 ThemeManager  \
