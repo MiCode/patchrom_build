@@ -164,7 +164,8 @@ $(TMP_DIR)/$(1).apk: $$(source-files-for-$(2)) $(3) | $(TMP_DIR)
 
 $(3): $(OUT_APK_PATH)/$(1).apk
 	$(hide) rm -rf $(3)
-	$(APKTOOL) d -f $(OUT_APK_PATH)/$(1).apk $(3)
+	$(APKTOOL) d -t miui -f $(OUT_APK_PATH)/$(1).apk $(3)
+	$(hide) sed -i "/tag:/d" $(3)/apktool.yml
 	$(PATCH_MIUI_APP) $(2) $(3)
 
 endef
