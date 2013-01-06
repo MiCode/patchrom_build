@@ -316,6 +316,9 @@ ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += $(RELEASE_PATH)/system/framework/framework-miui-res.apk
 $(RELEASE_PATH)/system/framework/framework-miui-res.apk:
 	cp $(OUT_JAR_PATH)/framework-miui-res.apk $@
+RELEASE_MIUI += $(RELEASE_PATH)/system/framework/framework-res.apk
+$(RELEASE_PATH)/system/framework/framework-res.apk:
+	cp $(OUT_JAR_PATH)/framework-res.apk $@
 endif
 
 #< TARGET EXPANSION END
