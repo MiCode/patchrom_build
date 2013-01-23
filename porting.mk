@@ -25,7 +25,8 @@ SETPROP     := $(TOOL_DIR)/set_build_prop.sh
 REWRITE		:= $(TOOL_DIR)/rewrite.py
 UNZIP       := unzip $(VERBOSE)
 ZIP         := zip $(VERBOSE)
-MERGY_RES   := $(TOOL_DIR)/ResValuesModify/jar/ResValuesModify $(VERBOSE)
+MERGE_RES   := $(TOOL_DIR)/ResValuesModify/jar/ResValuesModify $(VERBOSE)
+MERGE_RULE  := $(TOOL_DIR)/ResValuesModify/jar/config
 RM_REDEF    := $(TOOL_DIR)/remove_redef.py $(VERBOSE)
 PATCH_MIUI_FRAMEWORK  := $(TOOL_DIR)/patch_miui_framework.sh $(INFO)
 RLZ_SOURCE  := $(TOOL_DIR)/release_source.sh $(VERBOSE)
@@ -186,14 +187,14 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
 		$(ADDMIUIRES)  $$dir $(TMP_DIR)/framework-res/res; \
 	done
 	$(hide) for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
-		$(MERGY_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir`; \
+		$(MERGE_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir` $(MERGE_RULE); \
 	done
 	$(RM_REDEF) $(TMP_DIR)/framework-res
 	$(hide) for dir in `ls -d $(OVERLAY_RES_DIR)/[^v]* 2>/dev/null`; do\
           cp -r $$dir $(TMP_DIR)/framework-res/res; \
 	done
 	$(hide) for dir in `ls -d $(OVERLAY_RES_DIR)/values* 2>/dev/null`; do\
-          $(MERGY_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir`; \
+          $(MERGE_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir` $(MERGE_RULE); \
 	done
 	$(APKTOOL) b $(TMP_DIR)/framework-res $@
 	$(APKTOOL) if $@
@@ -210,7 +211,7 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/
           cp -r $$dir $(TMP_DIR)/framework-miui-res/res; \
         done
 	$(hide) for dir in `ls -d $(OVERLAY_MIUI_RES_DIR)/values*`; do\
-		$(MERGY_RES) $$dir $(TMP_DIR)/framework-miui-res/res/`basename $$dir`; \
+		$(MERGE_RES) $$dir $(TMP_DIR)/framework-miui-res/res/`basename $$dir` $(MERGE_RULE); \
 	done
 	@echo "  - 2" >> $(TMP_DIR)/framework-miui-res/apktool.yml
 	@echo "  - 3" >> $(TMP_DIR)/framework-miui-res/apktool.yml
