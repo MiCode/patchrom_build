@@ -1,7 +1,6 @@
 add-prebuilt-app: $(ZIP_DIR)/system/xbin/busybox
 	@echo To add prebuilt apps
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/invoke-as $(ZIP_DIR)/system/xbin/
-	$(hide) cp -f $(SYSOUT_DIR)/xbin/shelld $(ZIP_DIR)/system/xbin/
 	$(hide) mkdir -p $(ZIP_DIR)/data/media
 	$(hide) cp -rf $(DATAOUT_DIR)/media/preinstall_apps/ $(ZIP_DIR)/data/media/
 
@@ -55,7 +54,6 @@ release-prebuilt-app:
 	@echo Release prebuilt apps
 	$(hide) mkdir -p $(RELEASE_PATH)/system/xbin
 	$(hide) cp $(SYSOUT_DIR)/xbin/invoke-as $(RELEASE_PATH)/system/xbin/
-	$(hide) cp $(SYSOUT_DIR)/xbin/shelld $(RELEASE_PATH)/system/xbin/
 	$(hide) cp $(SYSOUT_DIR)/xbin/busybox $(RELEASE_PATH)/system/xbin/
 	$(hide) mkdir -p $(RELEASE_PATH)/system/bin
 	$(hide) cp $(SYSOUT_DIR)/bin/installd $(RELEASE_PATH)/system/bin/
