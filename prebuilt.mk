@@ -12,12 +12,15 @@ add-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/content-types.properties $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_xm.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffplayer_jni.so $(ZIP_DIR)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/framework/miui-framework.jar $(ZIP_DIR)/system/framework/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_latinime.so $(ZIP_DIR)/system/lib/
+	#$(hide) cp -f $(SYSOUT_DIR)/framework/miui-framework.jar $(ZIP_DIR)/system/framework/
+	#$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_latinime.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/liblocSDK_*.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_resource_drm.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libaudiofp.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libphotocli.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageutilities_jni.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libpatcher_jni.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/fonts/TobysHand.ttf $(ZIP_DIR)/system/fonts/
 
 
 add-prebuilt-media:
@@ -30,8 +33,8 @@ add-prebuilt-etc-files:
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/license/ $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/yellowpage.db $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/telocation.idf $(ZIP_DIR)/system/etc/
-	$(hide) cp -f $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(ZIP_DIR)/system/etc/permissions/
-	$(hide) cp -f $(SYSOUT_DIR)/etc/unicode_py_index.td $(ZIP_DIR)/system/etc/
+	#$(hide) cp -f $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(ZIP_DIR)/system/etc/permissions/
+	#$(hide) cp -f $(SYSOUT_DIR)/etc/unicode_py_index.td $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/weather_city.db $(ZIP_DIR)/system/etc/
 	$(hide) cp -f $(SYSOUT_DIR)/etc/permission_config.json $(ZIP_DIR)/system/etc/
 
@@ -69,12 +72,14 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/content-types.properties $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_xm.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffplayer_jni.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/framework/miui-framework.jar $(RELEASE_PATH)/system/framework/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_latinime.so $(RELEASE_PATH)/system/lib/
+	#$(hide) cp -f $(SYSOUT_DIR)/framework/miui-framework.jar $(RELEASE_PATH)/system/framework/
+	#$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_latinime.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/liblocSDK_*.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_resource_drm.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libaudiofp.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libphotocli.so $(RELEASE_PATH)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageutilities_jni.so $(RELEASE_PATH)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libpatcher_jni.so $(RELEASE_PATH)/system/lib/
 
 release-prebuilt-media:
 	@echo Release prebuilt media files
@@ -89,7 +94,7 @@ release-prebuilt-etc-files:
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/yellowpage.db $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/telocation.idf $(RELEASE_PATH)/system/etc/
 	$(hide) mkdir -p $(RELEASE_PATH)/system/etc/permissions/
-	$(hide) cp -rf $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(RELEASE_PATH)/system/etc/permissions/
+	#$(hide) cp -rf $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(RELEASE_PATH)/system/etc/permissions/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/unicode_py_index.td $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/weather_city.db $(RELEASE_PATH)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/permission_config.json $(RELEASE_PATH)/system/etc/

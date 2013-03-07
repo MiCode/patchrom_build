@@ -21,7 +21,6 @@ private-miui-apps := AntiSpam  \
 					 GoogleLoginService  \
 					 GooglePartnerSetup  \
 					 GoogleServicesFramework  \
-					 LatinIME \
 					 LBESEC_MIUI  \
 					 MediaProvider  \
 					 MiuiCompass  \
@@ -59,4 +58,5 @@ private-preinstall-apps := VoiceAssist  \
 					 InputMethod \
 					 AlipayMsp \
 					 MiuiVideo \
+					 MiShop \
 					 Userbook
