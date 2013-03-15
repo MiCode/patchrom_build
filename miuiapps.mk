@@ -44,6 +44,7 @@ private-miui-apps := AntiSpam  \
 					 ThemeManager  \
 					 Updater \
 					 Bluetooth \
+                                         Weather \
 					 WeatherProvider \
 					 GuardProvider \
 					 NetworkAssistant \
@@ -54,7 +55,6 @@ private-miui-apps := AntiSpam  \
 
 private-preinstall-apps := VoiceAssist  \
 					 GameCenter \
-					 Weather \
 					 InputMethod \
 					 AlipayMsp \
 					 MiuiVideo \
