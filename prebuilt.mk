@@ -81,6 +81,7 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageutilities_jni.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libpatcher_jni.so $(RELEASE_PATH)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libmp3lame.so $(RELEASE_PATH)/system/lib/
+	$(hide) mkdir -p $(RELEASE_PATH)/system/fonts/
 	$(hide) cp -f $(SYSOUT_DIR)/fonts/TobysHand.ttf $(RELEASE_PATH)/system/fonts/
 
 release-prebuilt-media:
