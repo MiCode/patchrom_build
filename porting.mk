@@ -12,6 +12,7 @@ PROP_FILE   := $(ZIP_DIR)/system/build.prop
 SKIA_FILE	:= $(ZIP_DIR)/system/lib/libskia.so
 SYSOUT_DIR  := $(OUT_SYS_PATH)
 DATAOUT_DIR  := $(OUT_DATA_PATH)
+STOCKROM_DIR := stockrom
 
 # Tool alias used in the makefile
 APKTOOL     := $(TOOL_DIR)/apktool $(APK_VERBOSE)
@@ -21,6 +22,7 @@ ADDMIUI     := $(TOOL_DIR)/add_miui_smail.sh $(VERBOSE)
 PREPARE_PRELOADED_CLASSES := $(TOOL_DIR)/prepare_preloaded_classes.sh $(VERBOSE)
 ADDMIUIRES  := $(TOOL_DIR)/add_miui_res.sh $(VERBOSE)
 PATCH_MIUI_APP  := $(TOOL_DIR)/patch_miui_app.sh $(VERBOSE)
+FIX_9PATCH_PNG  := $(TOOL_DIR)/fix_9patch_png.sh $(VERBOSE)
 SETPROP     := $(TOOL_DIR)/set_build_prop.sh
 REWRITE		:= $(TOOL_DIR)/rewrite.py
 UNZIP       := unzip $(VERBOSE)
@@ -161,6 +163,9 @@ $(TMP_DIR)/$(1).apk: $$(source-files-for-$(2)) $(3) | $(TMP_DIR)
 	$(hide) find $(TMP_DIR)/$(2) -name "*.part" -exec rm {} \;
 	$(hide) find $(TMP_DIR)/$(2) -name "*.smali.method" -exec rm {} \;
 	$(APKTOOL) b  $(TMP_DIR)/$(2) $$@
+	@echo "9Patch png fix $$@..."
+	$(FIX_9PATCH_PNG) $(1) $(OUT_APK_PATH) $(TMP_DIR) $(3)
+	@echo "fix $$@ completed!"
 	@echo "<<< build $$@ completed!"
 
 $(3): $(OUT_APK_PATH)/$(1).apk
@@ -197,6 +202,9 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
           $(MERGE_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir` $(MERGE_RULE); \
 	done
 	$(APKTOOL) b $(TMP_DIR)/framework-res $@
+	@echo "9Patch png fix $@..."
+	$(FIX_9PATCH_PNG) framework-res $(STOCKROM_DIR)/system/framework $(TMP_DIR) framework-res
+	@echo "fix $@ completed!"
 	$(APKTOOL) if $@
 	@echo "<<< build $@ completed!"
 
@@ -218,6 +226,9 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/
 	@echo "  - 4" >> $(TMP_DIR)/framework-miui-res/apktool.yml
 	@echo "  - 5" >> $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(APKTOOL) b $(TMP_DIR)/framework-miui-res $@
+	@echo "9Patch png fix $@..."
+	$(FIX_9PATCH_PNG) framework-miui-res $(OUT_JAR_PATH) $(TMP_DIR) framework-miui-res
+	@echo "fix $@ completed!"
 	@echo "<<< build $@ completed!"
 
 #
@@ -331,7 +342,7 @@ $(TMP_DIR):
 # if the zip file does not exist, would try to generate the zip
 # file from the stockrom dirctory if exist
 $(ZIP_FILE):
-	$(hide) cd stockrom && $(ZIP) -r ../$(ZIP_FILE) ./
+	$(hide) cd $(STOCKROM_DIR) && $(ZIP) -r ../$(ZIP_FILE) ./
 	$(hide) touch .delete-zip-file-when-clean
 
 $(ZIP_DIR): $(ZIP_FILE) | $(TMP_DIR)
