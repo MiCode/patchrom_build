@@ -12,7 +12,7 @@ PROP_FILE   := $(ZIP_DIR)/system/build.prop
 SKIA_FILE	:= $(ZIP_DIR)/system/lib/libskia.so
 SYSOUT_DIR  := $(OUT_SYS_PATH)
 DATAOUT_DIR  := $(OUT_DATA_PATH)
-STOCKROM_DIR := stockrom
+STOCKROM_DIR := $(basename $(ZIP_FILE))
 
 # Tool alias used in the makefile
 APKTOOL     := $(TOOL_DIR)/apktool $(APK_VERBOSE)
@@ -164,7 +164,11 @@ $(TMP_DIR)/$(1).apk: $$(source-files-for-$(2)) $(3) | $(TMP_DIR)
 	$(hide) find $(TMP_DIR)/$(2) -name "*.smali.method" -exec rm {} \;
 	$(APKTOOL) b  $(TMP_DIR)/$(2) $$@
 	@echo "9Patch png fix $$@..."
-	$(FIX_9PATCH_PNG) $(1) $(OUT_APK_PATH) $(TMP_DIR) $(3)
+ifeq ($(3),)
+	$(FIX_9PATCH_PNG) $(1) $(STOCKROM_DIR)/system/app $(TMP_DIR)
+else
+	$(FIX_9PATCH_PNG) $(1) $(OUT_APK_PATH) $(TMP_DIR) $(1)/res
+endif
 	@echo "fix $$@ completed!"
 	@echo "<<< build $$@ completed!"
 
@@ -202,6 +206,9 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
           $(MERGE_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir` $(MERGE_RULE); \
 	done
 	$(APKTOOL) b $(TMP_DIR)/framework-res $@
+	@echo "9Patch png fix $@..."
+	$(FIX_9PATCH_PNG) framework-res $(STOCKROM_DIR)/system/framework $(TMP_DIR) $(MIUI_OVERLAY_RES_DIR) $(OVERLAY_RES_DIR)
+	@echo "fix $@ completed!"
 	$(APKTOOL) if $@
 	@echo "<<< build $@ completed!"
 
@@ -223,9 +230,6 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/
 	@echo "  - 4" >> $(TMP_DIR)/framework-miui-res/apktool.yml
 	@echo "  - 5" >> $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(APKTOOL) b $(TMP_DIR)/framework-miui-res $@
-	@echo "9Patch png fix $@..."
-	$(FIX_9PATCH_PNG) framework-miui-res $(OUT_JAR_PATH) $(TMP_DIR) framework-miui-res
-	@echo "fix $@ completed!"
 	@echo "<<< build $@ completed!"
 
 #
