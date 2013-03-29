@@ -53,55 +53,55 @@ add-skia-emoji:
 
 release-prebuilt-app:
 	@echo Release prebuilt apps
-	$(hide) mkdir -p $(RELEASE_PATH)/system/xbin
-	$(hide) cp $(SYSOUT_DIR)/xbin/busybox $(RELEASE_PATH)/system/xbin/
-	$(hide) mkdir -p $(RELEASE_PATH)/system/bin
-	$(hide) cp $(SYSOUT_DIR)/bin/installd $(RELEASE_PATH)/system/bin/
-	$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(RELEASE_PATH)/system/app
-	$(hide) cp -f $(SYSOUT_DIR)/xbin/su $(RELEASE_PATH)/system/xbin/
+	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/xbin
+	$(hide) cp $(SYSOUT_DIR)/xbin/busybox $(RELEASE_PATH)/$(DENSITY)/system/xbin/
+	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/bin
+	$(hide) cp $(SYSOUT_DIR)/bin/installd $(RELEASE_PATH)/$(DENSITY)/system/bin/
+	$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(RELEASE_PATH)/$(DENSITY)/system/app
+	$(hide) cp -f $(SYSOUT_DIR)/xbin/su $(RELEASE_PATH)/$(DENSITY)/system/xbin/
 	$(hide) mkdir -p $(RELEASE_PATH)/data/media
 	$(hide) cp -rf $(DATAOUT_DIR)/media/preinstall_apps/ $(RELEASE_PATH)/data/media/
 
 
 release-prebuilt-libraries:
 	@echo Release prebuilt libraries
-	$(hide) mkdir -p $(RELEASE_PATH)/system/lib
-	$(hide) cp -f $(SYSOUT_DIR)/lib/liblbesec.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libskia.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libhwui.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/content-types.properties $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_xm.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libffplayer_jni.so $(RELEASE_PATH)/system/lib/
-	#$(hide) cp -f $(SYSOUT_DIR)/framework/miui-framework.jar $(RELEASE_PATH)/system/framework/
-	#$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_latinime.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/liblocSDK_*.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_resource_drm.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libaudiofp.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libphotocli.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageutilities_jni.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libpatcher_jni.so $(RELEASE_PATH)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libmp3lame.so $(RELEASE_PATH)/system/lib/
-	$(hide) mkdir -p $(RELEASE_PATH)/system/fonts/
-	$(hide) cp -f $(SYSOUT_DIR)/fonts/TobysHand.ttf $(RELEASE_PATH)/system/fonts/
+	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/lib
+	$(hide) cp -f $(SYSOUT_DIR)/lib/liblbesec.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libskia.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libhwui.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/content-types.properties $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_xm.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libffplayer_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	#$(hide) cp -f $(SYSOUT_DIR)/framework/miui-framework.jar $(RELEASE_PATH)/$(DENSITY)/system/framework/
+	#$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_latinime.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/liblocSDK_*.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_resource_drm.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libaudiofp.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libphotocli.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageutilities_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libpatcher_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libmp3lame.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/fonts/
+	$(hide) cp -f $(SYSOUT_DIR)/fonts/TobysHand.ttf $(RELEASE_PATH)/$(DENSITY)/system/fonts/
 
 release-prebuilt-media:
 	@echo Release prebuilt media files
-	$(hide) mkdir -p $(RELEASE_PATH)/system/media
-	$(hide) cp -rf $(SYSOUT_DIR)/media $(RELEASE_PATH)/system
+	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/media
+	$(hide) cp -rf $(SYSOUT_DIR)/media $(RELEASE_PATH)/$(DENSITY)/system
 
 release-prebuilt-etc-files:
 	@echo Release prebuilt etc-files
-	$(hide) mkdir -p $(RELEASE_PATH)/system/etc
-	$(hide) cp -rf $(SYSOUT_DIR)/etc/apns-conf.xml $(RELEASE_PATH)/system/etc/
-	$(hide) cp -rf $(SYSOUT_DIR)/etc/license/ $(RELEASE_PATH)/system/etc/
-	$(hide) cp -rf $(SYSOUT_DIR)/etc/yellowpage.db $(RELEASE_PATH)/system/etc/
-	$(hide) cp -rf $(SYSOUT_DIR)/etc/telocation.idf $(RELEASE_PATH)/system/etc/
-	$(hide) mkdir -p $(RELEASE_PATH)/system/etc/permissions/
-	#$(hide) cp -rf $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(RELEASE_PATH)/system/etc/permissions/
-	#$(hide) cp -rf $(SYSOUT_DIR)/etc/unicode_py_index.td $(RELEASE_PATH)/system/etc/
-	$(hide) cp -rf $(SYSOUT_DIR)/etc/pinyinindex.idf $(RELEASE_PATH)/system/etc/
-	$(hide) cp -rf $(SYSOUT_DIR)/etc/weather_city.db $(RELEASE_PATH)/system/etc/
-	$(hide) cp -rf $(SYSOUT_DIR)/etc/permission_config.json $(RELEASE_PATH)/system/etc/
+	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/etc
+	$(hide) cp -rf $(SYSOUT_DIR)/etc/apns-conf.xml $(RELEASE_PATH)/$(DENSITY)/system/etc/
+	$(hide) cp -rf $(SYSOUT_DIR)/etc/license/ $(RELEASE_PATH)/$(DENSITY)/system/etc/
+	$(hide) cp -rf $(SYSOUT_DIR)/etc/yellowpage.db $(RELEASE_PATH)/$(DENSITY)/system/etc/
+	$(hide) cp -rf $(SYSOUT_DIR)/etc/telocation.idf $(RELEASE_PATH)/$(DENSITY)/system/etc/
+	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/etc/permissions/
+	#$(hide) cp -rf $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(RELEASE_PATH)/$(DENSITY)/system/etc/permissions/
+	#$(hide) cp -rf $(SYSOUT_DIR)/etc/unicode_py_index.td $(RELEASE_PATH)/$(DENSITY)/system/etc/
+	$(hide) cp -rf $(SYSOUT_DIR)/etc/pinyinindex.idf $(RELEASE_PATH)/$(DENSITY)/system/etc/
+	$(hide) cp -rf $(SYSOUT_DIR)/etc/weather_city.db $(RELEASE_PATH)/$(DENSITY)/system/etc/
+	$(hide) cp -rf $(SYSOUT_DIR)/etc/permission_config.json $(RELEASE_PATH)/$(DENSITY)/system/etc/
 
 release-miui-resources:
 	@echo release miui resources

@@ -114,9 +114,9 @@ CLEANJAR += clean-$(1)
 clean-$(1):
 	$(MAKE_ATTOP) clean-$(1)
 
-RELEASE_MIUI += $(RELEASE_PATH)/system/framework/$(1).jar
-$(RELEASE_PATH)/system/framework/$(1).jar: $(OUT_JAR_PATH)/$(1).jar
-	$(hide) mkdir -p $(RELEASE_PATH)/system/framework
+RELEASE_MIUI += $(RELEASE_PATH)/$(DENSITY)/system/framework/$(1).jar
+$(RELEASE_PATH)/$(DENSITY)/system/framework/$(1).jar: $(OUT_JAR_PATH)/$(1).jar
+	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/framework
 	$(hide) cp $$< $$@
 endif
 
@@ -284,9 +284,9 @@ endef
 
 define RELEASE_MIUI_APP_template
 ifeq ($(USE_ANDROID_OUT),true)
-RELEASE_MIUI += $(RELEASE_PATH)/system/app/$(1).apk
-$(RELEASE_PATH)/system/app/$(1).apk: $(OUT_APK_PATH)/$(1).apk
-	$(hide) mkdir -p $(RELEASE_PATH)/system/app
+RELEASE_MIUI += $(RELEASE_PATH)/$(DENSITY)/system/app/$(1).apk
+$(RELEASE_PATH)/$(DENSITY)/system/app/$(1).apk: $(OUT_APK_PATH)/$(1).apk
+	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/app
 	$(hide) cp $$< $$@
 endif
 endef
@@ -326,11 +326,11 @@ $(eval $(call APP_WS_template,framework-res,framework))
 
 # for release
 ifeq ($(USE_ANDROID_OUT),true)
-RELEASE_MIUI += $(RELEASE_PATH)/system/framework/framework-miui-res.apk
-$(RELEASE_PATH)/system/framework/framework-miui-res.apk:
+RELEASE_MIUI += $(RELEASE_PATH)/$(DENSITY)/system/framework/framework-miui-res.apk
+$(RELEASE_PATH)/$(DENSITY)/system/framework/framework-miui-res.apk:
 	cp $(OUT_JAR_PATH)/framework-miui-res.apk $@
-RELEASE_MIUI += $(RELEASE_PATH)/system/framework/framework-res.apk
-$(RELEASE_PATH)/system/framework/framework-res.apk:
+RELEASE_MIUI += $(RELEASE_PATH)/$(DENSITY)/system/framework/framework-res.apk
+$(RELEASE_PATH)/$(DENSITY)/system/framework/framework-res.apk:
 	cp $(OUT_JAR_PATH)/framework-res.apk $@
 endif
 

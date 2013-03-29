@@ -12,6 +12,7 @@
 # 	local-remove-apps
 # 	local-pre-zip
 # 	local-after-zip
+# 	local-density  (HDPI or XHDPI)
 # See i9100/makefile as an example
 #
 include $(PORT_BUILD)/miuiapps.mk
@@ -36,6 +37,13 @@ MIUIAPPS     := $(strip \
                     $(filter-out $(strip $(local-miui-modified-apps)), \
                                  $(filter-out $(strip $(local-miui-removed-apps)),$(strip $(private-miui-apps)))) \
 			     )
+
+# specify the density for apps, HDPI OR XHDPI, default is XHDPI
+DENSITY := $(strip $(local-density))
+ifneq ($(DENSITY), HDPI)
+    DENSITY := XHDPI
+endif
+
 
 ACT_PRE_ZIP  := $(strip $(local-pre-zip))
 ACT_PRE_ZIP  += pre-zip-misc
@@ -72,7 +80,7 @@ ifeq ($(strip $(USE_ANDROID_OUT)),true)
     endif
 else
     USE_ANDROID_OUT := false
-    OUT_SYS_PATH := $(PORT_ROOT)/miui/system
+    OUT_SYS_PATH := $(PORT_ROOT)/miui/$(DENSITY)/system
     OUT_DATA_PATH := $(PORT_ROOT)/miui/data
     REALLY_CLEAN :=
 endif
