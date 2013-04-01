@@ -1,5 +1,6 @@
 add-prebuilt-app: $(ZIP_DIR)/system/xbin/busybox
 	@echo To add prebuilt apps
+	$(hide) cp -f $(SYSOUT_DIR)/xbin/shelld $(ZIP_DIR)/system/xbin/
 	$(hide) mkdir -p $(ZIP_DIR)/data/media
 	$(hide) cp -rf $(DATAOUT_DIR)/media/preinstall_apps/ $(ZIP_DIR)/data/media/
 
@@ -16,6 +17,9 @@ add-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/liblocSDK_*.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_resource_drm.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libaudiofp.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell_jni.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libshellservice.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libphotocli.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageutilities_jni.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libpatcher_jni.so $(ZIP_DIR)/system/lib/
@@ -54,6 +58,7 @@ add-skia-emoji:
 release-prebuilt-app:
 	@echo Release prebuilt apps
 	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/xbin
+	$(hide) cp $(SYSOUT_DIR)/xbin/shelld $(RELEASE_PATH)/$(DENSITY)/system/xbin/
 	$(hide) cp $(SYSOUT_DIR)/xbin/busybox $(RELEASE_PATH)/$(DENSITY)/system/xbin/
 	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/bin
 	$(hide) cp $(SYSOUT_DIR)/bin/installd $(RELEASE_PATH)/$(DENSITY)/system/bin/
@@ -77,6 +82,9 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/liblocSDK_*.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_resource_drm.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libaudiofp.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libshellservice.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libphotocli.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageutilities_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libpatcher_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
