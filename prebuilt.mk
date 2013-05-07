@@ -25,6 +25,7 @@ add-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libpatcher_jni.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/fonts/TobysHand.ttf $(ZIP_DIR)/system/fonts/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libmp3lame.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libFreqFilter.so $(ZIP_DIR)/system/lib/
 
 
 add-prebuilt-media:
@@ -91,6 +92,7 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libmp3lame.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/fonts/
 	$(hide) cp -f $(SYSOUT_DIR)/fonts/TobysHand.ttf $(RELEASE_PATH)/$(DENSITY)/system/fonts/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libFreqFilter.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 
 release-prebuilt-media:
 	@echo Release prebuilt media files
