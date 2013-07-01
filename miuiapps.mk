@@ -41,7 +41,6 @@ private-miui-apps := AntiSpam  \
 					 SuperMarket  \
 					 Stk  \
 					 TelephonyProvider  \
-					 TelocationProvider  \
 					 ThemeManager  \
 					 Updater \
 					 Bluetooth \
@@ -52,6 +51,7 @@ private-miui-apps := AntiSpam  \
 					 XiaomiServiceFramework \
 					 MiuiVideoPlayer \
 					 VpnDialogs \
+					 YellowPage \
 					 Exchange2 \
 					 AirkanPhoneService \
 					 Transfer
