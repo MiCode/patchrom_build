@@ -1,8 +1,8 @@
 add-prebuilt-app: $(ZIP_DIR)/system/xbin/busybox
 	@echo To add prebuilt apps
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/shelld $(ZIP_DIR)/system/xbin/
-	$(hide) mkdir -p $(ZIP_DIR)/data/media
-	$(hide) cp -rf $(DATAOUT_DIR)/media/preinstall_apps/ $(ZIP_DIR)/data/media/
+	$(hide) mkdir -p $(ZIP_DIR)/data/miui
+	$(hide) cp -rf $(DATAOUT_DIR)/miui/preinstall_apps/ $(ZIP_DIR)/data/miui/
 
 $(ZIP_DIR)/system/xbin/busybox:
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/busybox $(ZIP_DIR)/system/xbin/
@@ -46,9 +46,9 @@ add-prebuilt-etc-files:
 
 add-lbesec-miui:
 	@echo To add LBESEC_MIUI
-	$(hide) cp -f $(SYSOUT_DIR)/lib/liblbesec.so $(ZIP_DIR)/system/lib/
+	#$(hide) cp -f $(SYSOUT_DIR)/lib/liblbesec.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/bin/installd $(ZIP_DIR)/system/bin
-	$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(ZIP_DIR)/system/app
+	#$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(ZIP_DIR)/system/app
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/su $(ZIP_DIR)/system/xbin/
 
 add-skia-emoji:
@@ -65,8 +65,8 @@ release-prebuilt-app:
 	$(hide) cp $(SYSOUT_DIR)/bin/installd $(RELEASE_PATH)/$(DENSITY)/system/bin/
 	$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(RELEASE_PATH)/$(DENSITY)/system/app
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/su $(RELEASE_PATH)/$(DENSITY)/system/xbin/
-	$(hide) mkdir -p $(RELEASE_PATH)/data/media
-	$(hide) cp -rf $(DATAOUT_DIR)/media/preinstall_apps/ $(RELEASE_PATH)/data/media/
+	$(hide) mkdir -p $(RELEASE_PATH)/data/miui
+	$(hide) cp -rf $(DATAOUT_DIR)/miui/preinstall_apps/ $(RELEASE_PATH)/data/miui/
 
 
 release-prebuilt-libraries:

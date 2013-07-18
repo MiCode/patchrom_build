@@ -9,9 +9,11 @@
 #       android_build_top and android_product_out specified here would not be used.
 #       If android_build_top or android_product_out is empty, then ?
 
-set -- `getopt "a:l:b:h:p:" "$@"`
+set -- `getopt "a:i:l:b:h:p:" "$@"`
 android_top=
 android_lunch=
+android_out=
+android_product=
 ANDROID_BRANCH=
 PORT_PRODUCT="Unknown"
 help=
@@ -19,6 +21,7 @@ while :
 do
 case "$1" in
     -a) shift; android_top="$1" ;;
+	-i) shift; android_product="$1" ;;
     -l) shift; android_lunch="$1";;
     -b) shift; ANDROID_BRANCH="$1";;
     -p) shift; PORT_PRODUCT="$1";;
@@ -30,7 +33,7 @@ done
 shift
 
 if [ -n "$help" ]; then
-    echo "Usage: . /path/to/envsetup [-a android-top [-l lunch-option] [-b android-branch]]"
+    echo "Usage: . /path/to/envsetup [-a android-top [-i android-product] [-l lunch-option] [-b android-branch]]"
     return
 fi
 
@@ -39,13 +42,20 @@ if [ -n "$android_top" ]; then
          echo "Failed: $android_top does not exist"
          return
     fi
-    PORT_ROOT=$PWD
-    cd $android_top
-    . build/envsetup.sh
-    lunch $android_lunch
+    ANDROID_BUILD_TOP=
+    ANDROID_PRODUCT_OUT=
+    if [ ! -n "$android_product" ]; then
+        PORT_ROOT=$PWD
+        cd $android_top
+        . build/envsetup.sh
+        lunch $android_lunch
+        cd $PORT_ROOT
+    else
+        android_top=${android_top%/}
+        android_out=$android_top/out/target/product/$android_product
+    fi
     USE_ANDROID_OUT=true
     export USE_ANDROID_OUT
-    cd $PORT_ROOT
 else
     ANDROID_BRANCH=
 fi
@@ -68,8 +78,8 @@ export PATH=$PORT_ROOT/tools:$PATH
 
 if [ -n "$PORT_ROOT" ]; then
     PORT_BUILD=$PORT_ROOT/build
-    ANDROID_TOP=${ANDROID_BUILD_TOP:=$1}
-    ANDROID_OUT=${ANDROID_PRODUCT_OUT:=$2}
+    ANDROID_TOP=${ANDROID_BUILD_TOP:=$android_top}
+    ANDROID_OUT=${ANDROID_PRODUCT_OUT:=$android_out}
     export PORT_ROOT PORT_BUILD ANDROID_TOP ANDROID_OUT ANDROID_BRANCH PORT_PRODUCT
     echo "PORT_ROOT       = $PORT_ROOT"
     echo "ANDROID_TOP     = $ANDROID_TOP"

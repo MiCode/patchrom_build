@@ -33,6 +33,7 @@ RM_REDEF    := $(TOOL_DIR)/remove_redef.py $(VERBOSE)
 PATCH_MIUI_FRAMEWORK  := $(TOOL_DIR)/patch_miui_framework.sh $(INFO)
 RLZ_SOURCE  := $(TOOL_DIR)/release_source.sh $(VERBOSE)
 FIX_PLURALS := $(TOOL_DIR)/fix_plurals.sh $(VERBOSE)
+RESTORE_OBSOLETE_KEYGUARD := $(TOOL_DIR)/restore_obsolete_keyguard.sh $(VERBOSE)
 BUILD_TARGET_FILES := $(TOOL_DIR)/build_target_files.sh $(INFO)
 ADB         := adb
 #< End of global variable
@@ -49,7 +50,7 @@ MIUI_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/core/res/res
 OVERLAY_RES_DIR:=overlay/framework-res/res
 OVERLAY_MIUI_RES_DIR:=overlay/framework-miui-res/res
 
-MIUI_JARS   := services android.policy framework framework2
+MIUI_JARS   := services android.policy framework secondary-framework
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
 JARS_OUTDIR := $(addsuffix .jar.out,$(MIUI_JARS))
@@ -216,7 +217,8 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
 $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/framework-miui-res.apk
 	@echo ">>> build $@..."
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res
-	$(APKTOOL) d -f $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
+	$(APKTOOL) d -f -t miui $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
+	$(hide) sed -i "/tag:/d" $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res/res
 	$(hide) cp -r $(MIUI_RES_DIR) $(TMP_DIR)/framework-miui-res
 	$(hide) for dir in `ls -d $(OVERLAY_MIUI_RES_DIR)/[^v]*`; do\
@@ -225,10 +227,7 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/
 	$(hide) for dir in `ls -d $(OVERLAY_MIUI_RES_DIR)/values*`; do\
 		$(MERGE_RES) $$dir $(TMP_DIR)/framework-miui-res/res/`basename $$dir` $(MERGE_RULE); \
 	done
-	@echo "  - 2" >> $(TMP_DIR)/framework-miui-res/apktool.yml
-	@echo "  - 3" >> $(TMP_DIR)/framework-miui-res/apktool.yml
-	@echo "  - 4" >> $(TMP_DIR)/framework-miui-res/apktool.yml
-	@echo "  - 5" >> $(TMP_DIR)/framework-miui-res/apktool.yml
+	$(hide) sed -i "s/- 1/- 1\n  - 2\n  - 3\n  - 4\n  - 5/g" $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(APKTOOL) b $(TMP_DIR)/framework-miui-res $@
 	@echo "<<< build $@ completed!"
 
