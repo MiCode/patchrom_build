@@ -21,7 +21,7 @@ while :
 do
 case "$1" in
     -a) shift; android_top="$1" ;;
-	-i) shift; android_product="$1" ;;
+	-t) shift; android_product="$1" ;;
     -l) shift; android_lunch="$1";;
     -b) shift; ANDROID_BRANCH="$1";;
     -p) shift; PORT_PRODUCT="$1";;
