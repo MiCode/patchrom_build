@@ -9,7 +9,7 @@
 #       android_build_top and android_product_out specified here would not be used.
 #       If android_build_top or android_product_out is empty, then ?
 
-set -- `getopt "a:i:l:b:h:p:" "$@"`
+set -- `getopt "a:t:l:b:h:p:" "$@"`
 android_top=
 android_lunch=
 android_out=
@@ -33,7 +33,7 @@ done
 shift
 
 if [ -n "$help" ]; then
-    echo "Usage: . /path/to/envsetup [-a android-top [-i android-product] [-l lunch-option] [-b android-branch]]"
+    echo "Usage: . /path/to/envsetup [-a android-top [-t android-product] [-l lunch-option] [-b android-branch]]"
     return
 fi
 
