@@ -73,7 +73,7 @@ patchmiui:
 	@echo Patchmiui completed!
 
 # Target to release MIUI jar and apks
-release: $(RELEASE_MIUI) release-framework-base-src
+release: $(RELEASE_MIUI)
 
 ifeq ($(strip $(ANDROID_BRANCH)),)
 release-framework-base-src:
