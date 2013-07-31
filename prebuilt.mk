@@ -16,6 +16,7 @@ add-prebuilt-libraries:
 	#$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_latinime.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/liblocSDK_*.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_resource_drm.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_resource_patcher.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libaudiofp.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell_jni.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell.so $(ZIP_DIR)/system/lib/
@@ -82,6 +83,7 @@ release-prebuilt-libraries:
 	#$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_latinime.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/liblocSDK_*.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_resource_drm.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libjni_resource_patcher.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libaudiofp.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libshell.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
