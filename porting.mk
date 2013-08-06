@@ -50,7 +50,7 @@ MIUI_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/core/res/res
 OVERLAY_RES_DIR:=overlay/framework-res/res
 OVERLAY_MIUI_RES_DIR:=overlay/framework-miui-res/res
 
-MIUI_JARS   := services android.policy framework secondary-framework
+MIUI_JARS   := services android.policy framework secondary-framework mediatek-framework
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
 JARS_OUTDIR := $(addsuffix .jar.out,$(MIUI_JARS))
