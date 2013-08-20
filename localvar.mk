@@ -40,7 +40,7 @@ MIUIAPPS     := $(strip \
 
 # specify the density for apps, HDPI OR XHDPI, default is XHDPI
 DENSITY := $(strip $(local-density))
-ifneq ($(DENSITY), HDPI)
+ifeq ($(DENSITY),)
     DENSITY := XHDPI
 endif
 
