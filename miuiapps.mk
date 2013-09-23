@@ -54,7 +54,8 @@ private-miui-apps := AntiSpam  \
 					 YellowPage \
 					 Exchange2 \
 					 AirkanPhoneService \
-					 Transfer
+					 Transfer \
+					 MiWallpaper
 
 private-preinstall-apps := VoiceAssist  \
 					 GameCenter \
