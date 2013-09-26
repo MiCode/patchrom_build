@@ -15,7 +15,7 @@
 # 	local-density  (HDPI or XHDPI)
 # See i9100/makefile as an example
 #
-include $(PORT_BUILD)/miuiapps.mk
+include $(PORT_ROOT)/build/$(PATCHROM_BRANCH).mk
 
 ERR_REPORT   :=
 VERIFY_OTA   :=
@@ -38,9 +38,11 @@ MIUIAPPS     := $(strip \
                                  $(filter-out $(strip $(local-miui-removed-apps)),$(strip $(private-miui-apps)))) \
 			     )
 
+MIUI_JARS := $(strip $(private-miui-jars))
+
 # specify the density for apps, HDPI OR XHDPI, default is XHDPI
 DENSITY := $(strip $(local-density))
-ifneq ($(DENSITY), HDPI)
+ifeq ($(DENSITY),)
     DENSITY := XHDPI
 endif
 

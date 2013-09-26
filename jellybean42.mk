@@ -1,11 +1,11 @@
 private-miui-apps := AntiSpam  \
 					 Backup  \
+					 BaiduNetworkLocation  \
 					 Browser  \
 					 BugReport  \
 					 Calculator  \
 					 Calendar  \
 					 CalendarProvider  \
-					 ChromeBookmarksSyncAdapter  \
 					 CloudService  \
 					 Contacts  \
 					 ContactsProvider  \
@@ -15,21 +15,15 @@ private-miui-apps := AntiSpam  \
 					 DownloadProviderUi  \
 					 Email  \
 					 FileExplorer  \
+					 FusedLocation \
+					 LBESEC_MIUI \
 					 MiuiGallery  \
-					 GoogleBackupTransport  \
-					 GoogleCalendarSyncAdapter  \
-					 GoogleContactsSyncAdapter  \
-					 GoogleLoginService  \
-					 GooglePartnerSetup  \
-					 GoogleServicesFramework  \
-					 LBESEC_MIUI  \
 					 MediaProvider  \
 					 MiuiCompass  \
 					 MiuiHome  \
 					 MiuiSystemUI  \
 					 Mms  \
 					 Music  \
-					 NetworkLocation  \
 					 Notes  \
 					 PackageInstaller  \
 					 Phone  \
@@ -39,11 +33,9 @@ private-miui-apps := AntiSpam  \
 					 SettingsProvider  \
 					 SoundRecorder  \
 					 SuperMarket  \
-					 Stk  \
 					 TelephonyProvider  \
 					 ThemeManager  \
 					 Updater \
-					 Bluetooth \
 					 Weather \
 					 WeatherProvider \
 					 GuardProvider \
@@ -65,3 +57,9 @@ private-preinstall-apps := VoiceAssist  \
 					 MiuiVideo \
 					 MiShop \
 					 Userbook
+
+private-miui-jars := android.policy \
+					 framework \
+					 framework_ext \
+					 telephony-common \
+					 services

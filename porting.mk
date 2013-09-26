@@ -33,6 +33,7 @@ RM_REDEF    := $(TOOL_DIR)/remove_redef.py $(VERBOSE)
 PATCH_MIUI_FRAMEWORK  := $(TOOL_DIR)/patch_miui_framework.sh $(INFO)
 RLZ_SOURCE  := $(TOOL_DIR)/release_source.sh $(VERBOSE)
 FIX_PLURALS := $(TOOL_DIR)/fix_plurals.sh $(VERBOSE)
+RESTORE_OBSOLETE_KEYGUARD := $(TOOL_DIR)/restore_obsolete_keyguard.sh $(VERBOSE)
 BUILD_TARGET_FILES := $(TOOL_DIR)/build_target_files.sh $(INFO)
 ADB         := adb
 #< End of global variable
@@ -49,7 +50,6 @@ MIUI_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/core/res/res
 OVERLAY_RES_DIR:=overlay/framework-res/res
 OVERLAY_MIUI_RES_DIR:=overlay/framework-miui-res/res
 
-MIUI_JARS   := services android.policy framework framework2
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
 JARS_OUTDIR := $(addsuffix .jar.out,$(MIUI_JARS))
