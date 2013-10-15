@@ -25,6 +25,8 @@ add-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageutilities_jni.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libpatcher_jni.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/fonts/TobysHand.ttf $(ZIP_DIR)/system/fonts/
+	$(hide) cp -f $(SYSOUT_DIR)/fonts/Miui-Bold.ttf $(ZIP_DIR)/system/fonts/
+	$(hide) cp -f $(SYSOUT_DIR)/fonts/Miui-Regular.ttf $(ZIP_DIR)/system/fonts/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libmp3lame.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libFreqFilter.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageprocessor_jni.so $(ZIP_DIR)/system/lib/
@@ -96,6 +98,8 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libmp3lame.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/fonts/
 	$(hide) cp -f $(SYSOUT_DIR)/fonts/TobysHand.ttf $(RELEASE_PATH)/$(DENSITY)/system/fonts/
+	$(hide) cp -f $(SYSOUT_DIR)/fonts/Miui-Bold.ttf $(RELEASE_PATH)/$(DENSITY)/system/fonts/
+	$(hide) cp -f $(SYSOUT_DIR)/fonts/Miui-Regular.ttf $(RELEASE_PATH)/$(DENSITY)/system/fonts/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libFreqFilter.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageprocessor_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libMiuiGalleryJNI.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
