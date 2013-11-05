@@ -10,6 +10,7 @@ private-miui-apps := AntiSpam  \
 					 Contacts  \
 					 ContactsProvider  \
 					 DataHubProvider \
+					 DefaultContainerService \
 					 DeskClock  \
 					 DownloadProvider  \
 					 DownloadProviderUi  \
