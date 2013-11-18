@@ -1,6 +1,6 @@
 private-miui-apps := AntiSpam  \
+					 AMAPNetworkLocation \
 					 Backup  \
-					 BaiduNetworkLocation  \
 					 Browser  \
 					 BugReport  \
 					 Calculator  \
