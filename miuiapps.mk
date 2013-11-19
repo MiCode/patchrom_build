@@ -47,14 +47,14 @@ private-miui-apps := AntiSpam  \
 					 AirkanPhoneService \
 					 Transfer \
 					 MiWallpaper \
-					 PaymentService 
+					 PaymentService \
+					 VoiceAssist \
+					 MiuiVideo
 
-private-preinstall-apps := VoiceAssist  \
-					 GameCenter \
+private-preinstall-apps := GameCenter \
 					 GameCenterSDKService \
 					 InputMethod \
 					 AlipayMsp \
-					 MiuiVideo \
 					 MiShop \
 					 Userbook \
 					 BrRemoteService \
