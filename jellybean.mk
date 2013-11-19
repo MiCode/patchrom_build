@@ -58,13 +58,13 @@ private-miui-apps := AntiSpam  \
 					 Transfer \
 					 MiWallpaper \
 					 PaymentService \
+					 VoiceAssist \
+					 MiuiVideo
 
-private-preinstall-apps := VoiceAssist  \
-					 GameCenter \
+private-preinstall-apps := GameCenter \
 					 GameCenterSDKService \
 					 InputMethod \
 					 AlipayMsp \
-					 MiuiVideo \
 					 MiShop \
 					 Userbook
 
