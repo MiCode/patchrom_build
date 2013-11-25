@@ -33,6 +33,9 @@ add-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libMiuiGalleryJNI.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libkeygen_jni.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libNativeApi.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libDmplayer.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_armv7_neon.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libPlayer_jni_armv7_neon.so $(ZIP_DIR)/system/lib/
 
 add-prebuilt-media:
 	@echo To add prebuilt media files
@@ -106,6 +109,9 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libMiuiGalleryJNI.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libkeygen_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libNativeApi.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libDmplayer.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_armv7_neon.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libPlayer_jni_armv7_neon.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 
 release-prebuilt-media:
 	@echo Release prebuilt media files
