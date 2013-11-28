@@ -125,7 +125,7 @@ release-prebuilt-etc-files:
 	#$(hide) cp -rf $(SYSOUT_DIR)/etc/permissions/miui-framework.xml $(RELEASE_PATH)/$(DENSITY)/system/etc/permissions/
 	#$(hide) cp -rf $(SYSOUT_DIR)/etc/unicode_py_index.td $(RELEASE_PATH)/$(DENSITY)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/pinyinindex.idf $(RELEASE_PATH)/$(DENSITY)/system/etc/
-	$(hide) cp -rf $(SYSOUT_DIR)/etc/weather_city.db $(RELEASE_PATH)/$(DENSITY)/system/etc/
+	#$(hide) cp -rf $(SYSOUT_DIR)/etc/weather_city.db $(RELEASE_PATH)/$(DENSITY)/system/etc/
 	$(hide) cp -rf $(SYSOUT_DIR)/etc/permission_config.json $(RELEASE_PATH)/$(DENSITY)/system/etc/
 
 release-miui-resources:
