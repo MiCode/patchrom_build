@@ -59,8 +59,8 @@ private-preinstall-apps := GameCenter \
 					 MiShop \
 					 Userbook
 
-private-miui-jars := android.policy \
+private-miui-jars := services \
+					 android.policy \
+					 telephony-common \
 					 framework \
 					 framework_ext \
-					 telephony-common \
-					 services
