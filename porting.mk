@@ -47,8 +47,10 @@ else
 endif
 MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/overlay/frameworks/base/core/res/res
 MIUI_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/core/res/res
+PLATFORM_MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res/res
 OVERLAY_RES_DIR:=overlay/framework-res/res
 OVERLAY_MIUI_RES_DIR:=overlay/framework-miui-res/res
+PLATFORM_OVERLAY_MIUI_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res/res
 
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
@@ -195,7 +197,14 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
 		cp -r $$dir $(TMP_DIR)/framework-res/res; \
 		$(ADDMIUIRES)  $$dir $(TMP_DIR)/framework-res/res; \
 	done
+	$(hide) for dir in `ls -d $(PLATFORM_MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
+		cp -r $$dir $(TMP_DIR)/framework-res/res; \
+		$(ADDMIUIRES)  $$dir $(TMP_DIR)/framework-res/res; \
+	done
 	$(hide) for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
+		$(MERGE_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir` $(MERGE_RULE); \
+	done
+	$(hide) for dir in `ls -d $(PLATFORM_MIUI_OVERLAY_RES_DIR)/values*`; do\
 		$(MERGE_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir` $(MERGE_RULE); \
 	done
 	$(RM_REDEF) $(TMP_DIR)/framework-res
@@ -219,6 +228,12 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/
 	$(APKTOOL) d -f $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res/res
 	$(hide) cp -r $(MIUI_RES_DIR) $(TMP_DIR)/framework-miui-res
+	$(hide) for dir in `ls -d $(PLATFORM_OVERLAY_MIUI_RES_DIR)/[^v]*`; do\
+		cp -r $$dir $(TMP_DIR)/framework-miui-res/res; \
+	done
+	$(hide) for dir in `ls -d $(PLATFORM_OVERLAY_MIUI_RES_DIR)/values*`; do\
+		$(MERGE_RES) $$dir $(TMP_DIR)/framework-miui-res/res/`basename $$dir` $(MERGE_RULE); \
+	done
 	$(hide) for dir in `ls -d $(OVERLAY_MIUI_RES_DIR)/[^v]*`; do\
           cp -r $$dir $(TMP_DIR)/framework-miui-res/res; \
         done
