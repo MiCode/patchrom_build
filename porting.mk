@@ -227,21 +227,13 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res
 	$(APKTOOL) d -f $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res/res
-	$(hide) cp -r $(MIUI_RES_DIR) $(TMP_DIR)/framework-miui-res
-	$(hide) for dir in `ls -d $(PLATFORM_OVERLAY_MIUI_RES_DIR)/[^v]*`; do\
-		cp -r $$dir $(TMP_DIR)/framework-miui-res/res; \
-	done
-	$(hide) for dir in `ls -d $(PLATFORM_OVERLAY_MIUI_RES_DIR)/values*`; do\
-		$(MERGE_RES) $$dir $(TMP_DIR)/framework-miui-res/res/`basename $$dir` $(MERGE_RULE); \
-	done
-	$(hide) for dir in `ls -d $(OVERLAY_MIUI_RES_DIR)/[^v]*`; do\
-          cp -r $$dir $(TMP_DIR)/framework-miui-res/res; \
-        done
-	$(hide) for dir in `ls -d $(OVERLAY_MIUI_RES_DIR)/values*`; do\
-		$(MERGE_RES) $$dir $(TMP_DIR)/framework-miui-res/res/`basename $$dir` $(MERGE_RULE); \
-	done
 	$(hide) sed -i "s/- 1/- 1\n  - 2\n  - 3\n  - 4\n  - 5/g" $(TMP_DIR)/framework-miui-res/apktool.yml
-	$(APKTOOL) b $(TMP_DIR)/framework-miui-res $@
+	$(hide) mkdir -p $(OVERLAY_MIUI_RES_DIR)
+	$(hide) $(AAPT) p -f -x -S $(OVERLAY_MIUI_RES_DIR) -S $(PLATFORM_OVERLAY_MIUI_RES_DIR) \
+		-S $(MIUI_RES_DIR) -M $(TMP_DIR)/framework-miui-res/AndroidManifest.xml \
+		-I $(APKTOOL_IF_RESULT_FILE)/1.apk -I $(APKTOOL_IF_RESULT_FILE)/2.apk \
+		-I $(APKTOOL_IF_RESULT_FILE)/3.apk -I $(APKTOOL_IF_RESULT_FILE)/4.apk \
+		-I $(APKTOOL_IF_RESULT_FILE)/5.apk -F $@
 	@echo "<<< build $@ completed!"
 
 #
