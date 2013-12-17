@@ -47,6 +47,7 @@ else
 endif
 MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/overlay/frameworks/base/core/res/res
 MIUI_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/core/res/res
+MIUI_KEYGUARD_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui-opt/keyguard/res
 PLATFORM_MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res/res
 OVERLAY_RES_DIR:=overlay/framework-res/res
 OVERLAY_MIUI_RES_DIR:=overlay/framework-miui-res/res
@@ -229,7 +230,10 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res/res
 	$(hide) sed -i "s/- 1/- 1\n  - 2\n  - 3\n  - 4\n  - 5/g" $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(hide) mkdir -p $(OVERLAY_MIUI_RES_DIR)
-	$(hide) $(AAPT) p -f -x -S $(OVERLAY_MIUI_RES_DIR) -S $(PLATFORM_OVERLAY_MIUI_RES_DIR) \
+	$(hide) $(AAPT) p -f -x --auto-add-overlay \
+		-S $(OVERLAY_MIUI_RES_DIR) \
+		-S $(PLATFORM_OVERLAY_MIUI_RES_DIR) \
+		-S $(MIUI_KEYGUARD_RES_DIR) \
 		-S $(MIUI_RES_DIR) -M $(TMP_DIR)/framework-miui-res/AndroidManifest.xml \
 		-I $(APKTOOL_IF_RESULT_FILE)/1.apk -I $(APKTOOL_IF_RESULT_FILE)/2.apk \
 		-I $(APKTOOL_IF_RESULT_FILE)/3.apk -I $(APKTOOL_IF_RESULT_FILE)/4.apk \
