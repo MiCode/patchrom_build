@@ -61,12 +61,10 @@ private-miui-apps := AntiSpam  \
 					 VoiceAssist \
 					 MiuiVideo
 
-private-preinstall-apps := GameCenter \
-					 GameCenterSDKService \
-					 InputMethod \
-					 AlipayMsp \
+private-preinstall-apps := AlipayMsp \
 					 MiShop \
-					 Userbook
+					 Userbook \
+					 VoiceRecognizerXunfei
 
 private-miui-jars := services \
 				android.policy \
