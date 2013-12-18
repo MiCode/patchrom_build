@@ -51,12 +51,8 @@ private-miui-apps := AntiSpam  \
 					 VoiceAssist \
 					 MiuiVideo
 
-private-preinstall-apps := GameCenter \
-					 GameCenterSDKService \
-					 InputMethod \
-					 AlipayMsp \
+private-preinstall-apps := AlipayMsp \
+					 AtciService \
 					 MiShop \
 					 Userbook \
-					 BrRemoteService \
-					 BackupAndRestore \
-					 AtciService
+					 VoiceRecognizerXunfei
