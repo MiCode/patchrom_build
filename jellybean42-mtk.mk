@@ -52,7 +52,13 @@ private-miui-apps := AntiSpam  \
 					 MiuiVideo
 
 private-preinstall-apps := AlipayMsp \
-					 AtciService \
-					 MiShop \
-					 Userbook \
-					 VoiceRecognizerXunfei
+                     AtciService \
+                     MiShop \
+                     Userbook \
+                     VoiceRecognizerXunfei
+
+private-miui-jars := services \
+                     android.policy \
+                     mediatek-framework \
+                     framework \
+                     secondary-framework

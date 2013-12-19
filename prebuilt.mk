@@ -25,6 +25,8 @@ add-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageutilities_jni.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libpatcher_jni.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/fonts/TobysHand.ttf $(ZIP_DIR)/system/fonts/
+	$(hide) cp -f $(SYSOUT_DIR)/fonts/Miui-Bold.ttf $(ZIP_DIR)/system/fonts/
+	$(hide) cp -f $(SYSOUT_DIR)/fonts/Miui-Regular.ttf $(ZIP_DIR)/system/fonts/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libmp3lame.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libFreqFilter.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageprocessor_jni.so $(ZIP_DIR)/system/lib/
@@ -53,9 +55,9 @@ add-prebuilt-etc-files:
 
 add-lbesec-miui:
 	@echo To add LBESEC_MIUI
-	#$(hide) cp -f $(SYSOUT_DIR)/lib/liblbesec.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/liblbesec.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/bin/installd $(ZIP_DIR)/system/bin
-	#$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(ZIP_DIR)/system/app
+	$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(ZIP_DIR)/system/app
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/su $(ZIP_DIR)/system/xbin/
 
 add-skia-emoji:
@@ -100,6 +102,8 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libmp3lame.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/fonts/
 	$(hide) cp -f $(SYSOUT_DIR)/fonts/TobysHand.ttf $(RELEASE_PATH)/$(DENSITY)/system/fonts/
+	$(hide) cp -f $(SYSOUT_DIR)/fonts/Miui-Bold.ttf $(RELEASE_PATH)/$(DENSITY)/system/fonts/
+	$(hide) cp -f $(SYSOUT_DIR)/fonts/Miui-Regular.ttf $(RELEASE_PATH)/$(DENSITY)/system/fonts/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libFreqFilter.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageprocessor_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libMiuiGalleryJNI.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
@@ -132,8 +136,14 @@ release-miui-resources:
 	@echo release miui resources
 	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui
 	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/overlay $(RELEASE_PATH)/src/frameworks/miui
+	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res
+	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res/res $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res
 	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui/core/res
 	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/core/res/res $(RELEASE_PATH)/src/frameworks/miui/core/res
+	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res
+	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res/res $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res
+	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui-opt/keyguard
+	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui-opt/keyguard/res $(RELEASE_PATH)/src/frameworks/miui-opt/keyguard
 	$(hide) cd $(ANDROID_TOP); tar -cf $(RELEASE_PATH)/src/res.tar packages/apps/*/res
 	$(hide) cd $(RELEASE_PATH)/src;tar -xf res.tar;rm res.tar
 
