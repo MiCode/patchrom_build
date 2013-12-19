@@ -226,7 +226,8 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
 $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/framework-miui-res.apk
 	@echo ">>> build $@..."
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res
-	$(APKTOOL) d -f $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
+	$(APKTOOL) d -f -t miui $(OUT_JAR_PATH)/framework-miui-res.apk $(TMP_DIR)/framework-miui-res
+	$(hide) sed -i "/tag:/d" $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res/res
 	$(hide) sed -i "s/- 1/- 1\n  - 2\n  - 3\n  - 4\n  - 5/g" $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(hide) mkdir -p $(OVERLAY_MIUI_RES_DIR)
