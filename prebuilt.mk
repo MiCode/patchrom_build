@@ -137,11 +137,11 @@ release-miui-resources:
 	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui
 	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/overlay $(RELEASE_PATH)/src/frameworks/miui
 	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res
-	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res/res $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res
+	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res/res $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res &
 	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui/core/res
 	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/core/res/res $(RELEASE_PATH)/src/frameworks/miui/core/res
 	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res
-	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res/res $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res
+	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res/res $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res &
 	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui-opt/keyguard
 	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui-opt/keyguard/res $(RELEASE_PATH)/src/frameworks/miui-opt/keyguard
 	$(hide) cd $(ANDROID_TOP); tar -cf $(RELEASE_PATH)/src/res.tar packages/apps/*/res
