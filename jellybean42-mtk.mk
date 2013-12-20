@@ -49,7 +49,8 @@ private-miui-apps := AntiSpam  \
 					 MiWallpaper \
 					 PaymentService \
 					 VoiceAssist \
-					 MiuiVideo
+					 MiuiVideo \
+					 KingSoftCleaner
 
 private-preinstall-apps := AlipayMsp \
                      AtciService \
