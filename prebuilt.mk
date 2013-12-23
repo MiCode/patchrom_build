@@ -32,8 +32,7 @@ add-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageprocessor_jni.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libMiuiGalleryJNI.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libkeygen_jni.so $(ZIP_DIR)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libNativeApi.so $(ZIP_DIR)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libDmplayer.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libfile_scanner.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_armv7_neon.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libPlayer_jni_armv7_neon.so $(ZIP_DIR)/system/lib/
 
@@ -108,8 +107,7 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libimageprocessor_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libMiuiGalleryJNI.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libkeygen_jni.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libNativeApi.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
-	$(hide) cp -f $(SYSOUT_DIR)/lib/libDmplayer.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libfile_scanner.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_armv7_neon.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libPlayer_jni_armv7_neon.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 
