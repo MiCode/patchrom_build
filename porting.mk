@@ -232,13 +232,13 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/
 	$(hide) sed -i "s/- 1/- 1\n  - 2\n  - 3\n  - 4\n  - 5/g" $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(hide) mkdir -p $(OVERLAY_MIUI_RES_DIR)
 	$(hide) $(AAPT) p -f -x --auto-add-overlay \
+		--wlan-replace Wi-Fi --wlan-replace WiFi \
+		--min-sdk-version $(subst v,,$(ANDROID_PLATFORM)) --target-sdk-version $(subst v,,$(ANDROID_PLATFORM)) \
 		-S $(OVERLAY_MIUI_RES_DIR) \
 		-S $(PLATFORM_OVERLAY_MIUI_RES_DIR) \
 		-S $(MIUI_KEYGUARD_RES_DIR) \
 		-S $(MIUI_RES_DIR) -M $(TMP_DIR)/framework-miui-res/AndroidManifest.xml \
-		-I $(APKTOOL_IF_RESULT_FILE)/1.apk -I $(APKTOOL_IF_RESULT_FILE)/2.apk \
-		-I $(APKTOOL_IF_RESULT_FILE)/3.apk -I $(APKTOOL_IF_RESULT_FILE)/4.apk \
-		-I $(APKTOOL_IF_RESULT_FILE)/5.apk -F $@
+		-I $(APKTOOL_IF_RESULT_FILE)/1.apk -I $(APKTOOL_IF_RESULT_FILE)/5.apk -F $@
 	@echo "<<< build $@ completed!"
 
 #
