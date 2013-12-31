@@ -35,6 +35,10 @@ add-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libfile_scanner.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_armv7_neon.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libPlayer_jni_armv7_neon.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libembed_thunder_manager.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libembed_thunder.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libxl_common.so $(ZIP_DIR)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libxldpbrothers.so $(ZIP_DIR)/system/lib/
 
 add-prebuilt-media:
 	@echo To add prebuilt media files
@@ -110,6 +114,10 @@ release-prebuilt-libraries:
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libfile_scanner.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libffmpeg_armv7_neon.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/lib/libPlayer_jni_armv7_neon.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libembed_thunder_manager.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libembed_thunder.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libxl_common.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
+	$(hide) cp -f $(SYSOUT_DIR)/lib/libxldpbrothers.so $(RELEASE_PATH)/$(DENSITY)/system/lib/
 
 release-prebuilt-media:
 	@echo Release prebuilt media files
