@@ -56,7 +56,8 @@ private-preinstall-apps := AlipayMsp \
                      AtciService \
                      MiShop \
                      Userbook \
-                     VoiceRecognizerXunfei
+                     VoiceRecognizerXunfei \
+                     XunfeiSpeechService3
 
 private-miui-jars := services \
                      android.policy \
