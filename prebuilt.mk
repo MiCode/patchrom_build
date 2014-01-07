@@ -12,7 +12,7 @@ add-prebuilt-libraries:
 ifeq ($(USE_ANDROID_OUT),true)
 	$(hide) for file in `find $(SYSOUT_DIR)/lib -type f`; do \
 		file=`echo $$file | sed "s#$(SYSOUT_DIR)\/##g"`; \
-		match=`grep $$file $(PORT_ROOT)/android/filelist.txt`; \
+		match=`grep $$file $(PORT_ROOT)/build/filelist.txt`; \
 		if [ $$? -eq 1 ];then \
 			cp -f $(SYSOUT_DIR)/$$file $(ZIP_DIR)/system/$$file; \
 		fi \
@@ -35,7 +35,7 @@ add-prebuilt-etc-files:
 ifeq ($(USE_ANDROID_OUT),true)
     $(hide) for file in `find $(SYSOUT_DIR)/etc -type f`; do \
         file=`echo $$file | sed "s#$(SYSOUT_DIR)\/##g"`; \
-        match=`grep $$file $(PORT_ROOT)/android/filelist.txt`; \
+        match=`grep $$file $(PORT_ROOT)/build/filelist.txt`; \
         if [ $$? -eq 1 ];then \
             cp -f $(SYSOUT_DIR)/$$file $(ZIP_DIR)/system/$$file; \
         fi \
