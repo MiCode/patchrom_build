@@ -14,6 +14,7 @@ ifeq ($(USE_ANDROID_OUT),true)
 		file=`echo $$file | sed "s#$(SYSOUT_DIR)\/##g"`; \
 		match=`grep $$file $(PORT_ROOT)/build/filelist.txt`; \
 		if [ $$? -eq 1 ];then \
+			mkdir -p $(ZIP_DIR)/system/`dirname $$file`; \
 			cp -f $(SYSOUT_DIR)/$$file $(ZIP_DIR)/system/$$file; \
 		fi \
     done
@@ -33,15 +34,16 @@ add-prebuilt-fonts:
 add-prebuilt-etc-files:
 	@echo To add prebuilt files under etc
 ifeq ($(USE_ANDROID_OUT),true)
-    $(hide) for file in `find $(SYSOUT_DIR)/etc -type f`; do \
-        file=`echo $$file | sed "s#$(SYSOUT_DIR)\/##g"`; \
-        match=`grep $$file $(PORT_ROOT)/build/filelist.txt`; \
-        if [ $$? -eq 1 ];then \
-            cp -f $(SYSOUT_DIR)/$$file $(ZIP_DIR)/system/$$file; \
-        fi \
-    done
+	$(hide) for file in `find $(SYSOUT_DIR)/etc -type f`; do \
+		file=`echo $$file | sed "s#$(SYSOUT_DIR)\/##g"`; \
+		match=`grep $$file $(PORT_ROOT)/build/filelist.txt`; \
+		if [ $$? -eq 1 ];then \
+			mkdir -p $(ZIP_DIR)/system/`dirname $$file`; \
+			cp -f $(SYSOUT_DIR)/$$file $(ZIP_DIR)/system/$$file; \
+		fi \
+	done
 else
-    $(hide) cp -rf $(SYSOUT_DIR)/etc $(ZIP_DIR)/system
+	$(hide) cp -rf $(SYSOUT_DIR)/etc $(ZIP_DIR)/system
 endif
 
 add-lbesec-miui:
