@@ -50,7 +50,9 @@ private-miui-apps := AntiSpam  \
 					 PaymentService \
 					 VoiceAssist \
 					 MiuiVideo \
-					 KingSoftCleaner
+					 KingSoftCleaner \
+					 GameCenter \
+					 GameCenterSDKService
 
 private-preinstall-apps := AlipayMsp \
                      AtciService \
