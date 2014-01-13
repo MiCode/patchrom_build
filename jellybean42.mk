@@ -52,7 +52,9 @@ private-miui-apps := AntiSpam  \
 					 VoiceAssist \
 					 MiuiVideo \
 					 KingSoftCleaner \
-					 LiveWallpapersPicker
+					 LiveWallpapersPicker \
+					 GameCenter \
+					 GameCenterSDKService
 
 private-preinstall-apps := AlipayMsp \
 					 MiShop \
