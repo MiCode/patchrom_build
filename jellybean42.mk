@@ -41,7 +41,6 @@ private-miui-apps := AntiSpam  \
 					 GuardProvider \
 					 NetworkAssistant \
 					 XiaomiServiceFramework \
-					 MiuiVideoPlayer \
 					 VpnDialogs \
 					 YellowPage \
 					 Exchange2 \
