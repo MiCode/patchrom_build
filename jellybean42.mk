@@ -60,7 +60,8 @@ private-preinstall-apps := AlipayMsp \
 					 MiShop \
 					 Userbook \
 					 VoiceRecognizerXunfei \
-					 XunfeiSpeechService3 
+					 XunfeiSpeechService3 \
+					 O2O
 
 private-miui-jars := services \
 					 android.policy \
