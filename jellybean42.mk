@@ -53,7 +53,8 @@ private-miui-apps := AntiSpam  \
 					 KingSoftCleaner \
 					 LiveWallpapersPicker \
 					 GameCenter \
-					 GameCenterSDKService
+					 GameCenterSDKService \
+					 NetworkAssistant2
 
 private-preinstall-apps := AlipayMsp \
 					 MiShop \

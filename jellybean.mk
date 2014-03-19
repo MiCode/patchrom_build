@@ -61,7 +61,8 @@ private-miui-apps := AntiSpam  \
 					 MiuiVideo \
 					 KingSoftCleaner \
 					 GameCenter \
-					 GameCenterSDKService
+					 GameCenterSDKService \
+					 NetworkAssistant2
 
 private-preinstall-apps := AlipayMsp \
 					 MiShop \
