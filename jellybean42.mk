@@ -43,7 +43,6 @@ private-miui-apps := AntiSpam  \
 					 XiaomiServiceFramework \
 					 VpnDialogs \
 					 YellowPage \
-					 Exchange2 \
 					 AirkanPhoneService \
 					 Transfer \
 					 MiWallpaper \
