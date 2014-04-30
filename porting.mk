@@ -45,7 +45,7 @@ ifeq ($(USE_ANDROID_OUT),true)
 else
     MIUI_SRC_DIR:=$(PORT_ROOT)/miui/src
 endif
-MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)miui/res-overlay/common/frameworks/base/core/res/res
+MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/common/frameworks/base/core/res/res
 MIUI_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/base/core/res/res
 MIUI_KEYGUARD_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/opt/keyguard/res
 PLATFORM_MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/platform/$(ANDROID_PLATFORM)/frameworks/base/core/res/res
