@@ -39,7 +39,6 @@ private-miui-apps := AntiSpam  \
 					 Weather \
 					 WeatherProvider \
 					 GuardProvider \
-					 NetworkAssistant \
 					 XiaomiServiceFramework \
 					 VpnDialogs \
 					 YellowPage \
