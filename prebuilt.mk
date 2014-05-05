@@ -1,8 +1,12 @@
 add-prebuilt-app: $(ZIP_DIR)/system/xbin/busybox
 	@echo To add prebuilt apps
-	$(hide) cp -f $(SYSOUT_DIR)/xbin/shelld $(ZIP_DIR)/system/xbin/
-	$(hide) mkdir -p $(ZIP_DIR)/data/media
-	$(hide) cp -rf $(DATAOUT_DIR)/media/preinstall_apps/ $(ZIP_DIR)/data/media/
+	$(hide) cp -f $(SYSOUT_DIR)/xbin/shelld $(ZIP_DIR)/system/xbin
+	$(hide) mkdir -p $(ZIP_DIR)/data/miui
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/* $(ZIP_DIR)/data/miui
+	$(hide) mkdir -p $(ZIP_DIR)/data/miui/cust/preinstall_apps
+	$(hide) cp -rf $(OUT_CUST_PATH)/data/preinstall_apps/ota-*.apk $(ZIP_DIR)/data/miui/cust/preinstall_apps
+	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn $(ZIP_DIR)/data/miui/cust
+
 
 $(ZIP_DIR)/system/xbin/busybox:
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/busybox $(ZIP_DIR)/system/xbin/
@@ -67,8 +71,11 @@ release-prebuilt-app:
 	$(hide) cp $(SYSOUT_DIR)/bin/installd $(RELEASE_PATH)/$(DENSITY)/system/bin/
 	$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(RELEASE_PATH)/$(DENSITY)/system/app
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/su $(RELEASE_PATH)/$(DENSITY)/system/xbin/
-	$(hide) mkdir -p $(RELEASE_PATH)/data/media
-	$(hide) cp -rf $(DATAOUT_DIR)/media/preinstall_apps/ $(RELEASE_PATH)/data/media/
+	$(hide) mkdir -p $(RELEASE_PATH)/data/miui
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/* $(RELEASE_PATH)/data/miui
+	$(hide) mkdir -p $(RELEASE_PATH)/cust/data/preinstall_apps
+	$(hide) cp -rf $(OUT_CUST_PATH)/data/preinstall_apps/ota-*.apk $(RELEASE_PATH)/cust/data/preinstall_apps
+	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn $(RELEASE_PATH)/cust/data
 
 
 release-prebuilt-libraries:

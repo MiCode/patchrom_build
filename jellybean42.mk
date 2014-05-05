@@ -54,12 +54,10 @@ private-miui-apps := AntiSpam  \
 					 GameCenterSDKService \
 					 NetworkAssistant2
 
-private-preinstall-apps := AlipayMsp \
-					 MiShop \
-					 Userbook \
-					 VoiceRecognizerXunfei \
-					 XunfeiSpeechService3 \
-					 O2O
+private-preinstall-apps := ota-miui-MiShop \
+                     ota-partner-NetworkAssistant \
+                     ota-partner-XunfeiSpeechService3 \
+                     Userbook
 
 private-miui-jars := services \
 					 android.policy \
