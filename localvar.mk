@@ -32,10 +32,16 @@ endif
 
 APPS         := $(strip $(local-modified-apps))
 ALL_MIUIAPPS := $(strip $(private-miui-apps))
+ALL_PRIV_MIUIAPPS := $(strip $(private-miui-priv-apps))
 MIUIAPPS_MOD := $(strip $(local-miui-modified-apps))
+PRIV_MIUIAPPS_MOD := $(strip $(local-priv-miui-modified-apps))
 MIUIAPPS     := $(strip \
                     $(filter-out $(strip $(local-miui-modified-apps)), \
                                  $(filter-out $(strip $(local-miui-removed-apps)),$(strip $(private-miui-apps)))) \
+			     )
+PRIV_MIUIAPPS:= $(strip \
+                    $(filter-out $(strip $(local-priv-miui-modified-apps)), \
+                                 $(filter-out $(strip $(local-priv-miui-removed-apps)),$(strip $(private-miui-priv-apps)))) \
 			     )
 
 MIUI_JARS := $(strip $(private-miui-jars))
@@ -78,19 +84,18 @@ ifeq ($(strip $(USE_ANDROID_OUT)),true)
     else
          OUT_SYS_PATH := $(ANDROID_OUT)/system
          OUT_DATA_PATH := $(ANDROID_OUT)/data
-         OUT_CUST_PATH := $(ANDROID_OUT)/cust
 	 REALLY_CLEAN = $(CLEANJAR) $(CLEANMIUIAPP)
     endif
 else
     USE_ANDROID_OUT := false
     OUT_SYS_PATH := $(PORT_ROOT)/miui/$(DENSITY)/system
     OUT_DATA_PATH := $(PORT_ROOT)/miui/data
-    OUT_CUST_PATH := $(PORT_ROOT)/miui/cust
     REALLY_CLEAN :=
 endif
 PHONE_JARS := $(strip $(local-modified-jars))
 OUT_JAR_PATH := $(OUT_SYS_PATH)/framework
 OUT_APK_PATH := $(OUT_SYS_PATH)/app
+OUT_PRIV_APK_PATH := $(OUT_SYS_PATH)/priv-app
 OUT_PREINSTALL_APK_PATH := $(OUT_DATA_PATH)/media/preinstall_apps
 
 #

@@ -39,6 +39,7 @@ private-miui-apps := AntiSpam  \
 					 Weather \
 					 WeatherProvider \
 					 GuardProvider \
+					 NetworkAssistant \
 					 XiaomiServiceFramework \
 					 VpnDialogs \
 					 YellowPage \
@@ -54,10 +55,12 @@ private-miui-apps := AntiSpam  \
 					 GameCenterSDKService \
 					 NetworkAssistant2
 
-private-preinstall-apps := ota-miui-MiShop \
-                     ota-partner-NetworkAssistant \
-                     ota-partner-XunfeiSpeechService3 \
-                     Userbook
+private-preinstall-apps := AlipayMsp \
+					 MiShop \
+					 Userbook \
+					 VoiceRecognizerXunfei \
+					 XunfeiSpeechService3 \
+					 O2O
 
 private-miui-jars := services \
 					 android.policy \

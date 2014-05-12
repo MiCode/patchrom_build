@@ -45,13 +45,16 @@ ifeq ($(USE_ANDROID_OUT),true)
 else
     MIUI_SRC_DIR:=$(PORT_ROOT)/miui/src
 endif
+
+PLATFORM_OVERLAY := $(strip $(shell grep "OVERLAY" $(PORT_ROOT)/android/README | cut -d'=' -f2))
+
 MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/common/frameworks/base/core/res/res
 MIUI_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/base/core/res/res
 MIUI_KEYGUARD_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/opt/keyguard/res
-PLATFORM_MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/platform/$(ANDROID_PLATFORM)/frameworks/base/core/res/res
+PLATFORM_MIUI_OVERLAY_RES_DIRS:=$(addsuffix /frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/miui/res-overlay/platform/, $(subst v16,,$(PLATFORM_OVERLAY))))
 OVERLAY_RES_DIR:=overlay/framework-res/res
 OVERLAY_MIUI_RES_DIR:=overlay/framework-miui-res/res
-PLATFORM_OVERLAY_MIUI_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/platform/$(ANDROID_PLATFORM)/miui/frameworks/base/core/res/res
+PLATFORM_OVERLAY_MIUI_RES_DIRS:=$(addsuffix /miui/frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/miui/res-overlay/platform/, $(PLATFORM_OVERLAY)))
 
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
@@ -183,6 +186,31 @@ $(3): $(OUT_APK_PATH)/$(1).apk
 
 endef
 
+define PRIV_APP_template
+source-files-for-$(2) := $$(call all-files-under-dir,$(2))
+$(TMP_DIR)/$(1).apk: $$(source-files-for-$(2)) $(3) | $(TMP_DIR)
+	@echo ">>> build $$@..."
+	$(hide) cp -r $(2) $(TMP_DIR)
+	$(hide) find $(TMP_DIR)/$(2) -name "*.part" -exec rm {} \;
+	$(hide) find $(TMP_DIR)/$(2) -name "*.smali.method" -exec rm {} \;
+	$(APKTOOL) b  $(TMP_DIR)/$(2) $$@
+	@echo "9Patch png fix $$@..."
+ifeq ($(3),)
+	$(FIX_9PATCH_PNG) $(1) $(STOCKROM_DIR)/system/priv-app $(TMP_DIR)
+else
+	$(FIX_9PATCH_PNG) $(1) $(OUT_PRIV_APK_PATH) $(TMP_DIR) $(1)/res
+endif
+	@echo "fix $$@ completed!"
+	@echo "<<< build $$@ completed!"
+
+$(3): $(OUT_PRIV_APK_PATH)/$(1).apk
+	$(hide) rm -rf $(3)
+	$(APKTOOL) d -t miui -f $(OUT_PRIV_APK_PATH)/$(1).apk $(3)
+	$(hide) sed -i "/tag:/d" $(3)/apktool.yml
+	$(PATCH_MIUI_APP) $(2) $(3)
+
+endef
+
 # Target to build framework-res.apk
 # copy the framework-res, add the miui overlay then build
 #TODO need to add changed files for all related, and re-install framework-res.apk make sense?
@@ -193,31 +221,17 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
 	@echo ">>> build $@..."
 	$(hide) rm -rf $(TMP_DIR)/framework-res
 	$(hide) cp -r framework-res $(TMP_DIR)
-	@echo add miui overlay resources
-	$(hide) for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
-		cp -r $$dir $(TMP_DIR)/framework-res/res; \
-		$(ADDMIUIRES)  $$dir $(TMP_DIR)/framework-res/res; \
-	done
-	$(hide) for dir in `ls -d $(PLATFORM_MIUI_OVERLAY_RES_DIR)/[^v]*`; do\
-		cp -r $$dir $(TMP_DIR)/framework-res/res; \
-		$(ADDMIUIRES)  $$dir $(TMP_DIR)/framework-res/res; \
-	done
-	$(hide) for dir in `ls -d $(MIUI_OVERLAY_RES_DIR)/values*`; do\
-		$(MERGE_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir` $(MERGE_RULE); \
-	done
-	$(hide) for dir in `ls -d $(PLATFORM_MIUI_OVERLAY_RES_DIR)/values*`; do\
-		$(MERGE_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir` $(MERGE_RULE); \
-	done
-	$(RM_REDEF) $(TMP_DIR)/framework-res
-	$(hide) for dir in `ls -d $(OVERLAY_RES_DIR)/[^v]* 2>/dev/null`; do\
-          cp -r $$dir $(TMP_DIR)/framework-res/res; \
-	done
-	$(hide) for dir in `ls -d $(OVERLAY_RES_DIR)/values* 2>/dev/null`; do\
-          $(MERGE_RES) $$dir $(TMP_DIR)/framework-res/res/`basename $$dir` $(MERGE_RULE); \
-	done
-	$(APKTOOL) b $(TMP_DIR)/framework-res $@
+	#for call ./customize_framework-res.sh
+	$(hide) $(ADDMIUIRES) $(TMP_DIR)/framework-res/res $(TMP_DIR)/framework-res/res
+	$(hide) $(AAPT) p -f -x --wlan-replace Wi-Fi --wlan-replace WiFi \
+		--min-sdk-version $(subst v,,$(ANDROID_PLATFORM)) --target-sdk-version $(subst v,,$(ANDROID_PLATFORM)) \
+		-S $(OVERLAY_RES_DIR) \
+		$(addprefix -S , $(PLATFORM_MIUI_OVERLAY_RES_DIRS)) \
+		-S $(MIUI_OVERLAY_RES_DIR) \
+		-S $(TMP_DIR)/framework-res/res -A $(TMP_DIR)/framework-res/assets \
+		-M $(TMP_DIR)/framework-res/AndroidManifest.xml -F $@
 	@echo "9Patch png fix $@..."
-	$(FIX_9PATCH_PNG) framework-res $(STOCKROM_DIR)/system/framework $(TMP_DIR) $(MIUI_OVERLAY_RES_DIR) $(OVERLAY_RES_DIR)
+	#$(FIX_9PATCH_PNG) framework-res $(STOCKROM_DIR)/system/framework $(TMP_DIR) $(MIUI_OVERLAY_RES_DIR) $(OVERLAY_RES_DIR)
 	@echo "fix $@ completed!"
 	$(APKTOOL) if $@
 	@echo "<<< build $@ completed!"
@@ -235,7 +249,7 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/
 		--wlan-replace Wi-Fi --wlan-replace WiFi \
 		--min-sdk-version $(subst v,,$(ANDROID_PLATFORM)) --target-sdk-version $(subst v,,$(ANDROID_PLATFORM)) \
 		-S $(OVERLAY_MIUI_RES_DIR) \
-		-S $(PLATFORM_OVERLAY_MIUI_RES_DIR) \
+		$(addprefix -S , $(PLATFORM_OVERLAY_MIUI_RES_DIRS)) \
 		-S $(MIUI_KEYGUARD_RES_DIR) \
 		-S $(MIUI_RES_DIR) -M $(TMP_DIR)/framework-miui-res/AndroidManifest.xml \
 		-I $(APKTOOL_IF_RESULT_FILE)/1.apk -I $(APKTOOL_IF_RESULT_FILE)/5.apk -F $@
@@ -300,6 +314,15 @@ $(RELEASE_PATH)/$(DENSITY)/system/app/$(1).apk: $(OUT_APK_PATH)/$(1).apk
 endif
 endef
 
+define RELEASE_PRIV_MIUI_APP_template
+ifeq ($(USE_ANDROID_OUT),true)
+RELEASE_MIUI += $(RELEASE_PATH)/$(DENSITY)/system/priv-app/$(1).apk
+$(RELEASE_PATH)/$(DENSITY)/system/priv-app/$(1).apk: $(OUT_PRIV_APK_PATH)/$(1).apk
+	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/priv-app
+	$(hide) cp $$< $$@
+endif
+endef
+
 zipone: zipfile $(ACT_AFTER_ZIP)
 
 otapackage: metadata target_files
@@ -316,18 +339,26 @@ $(foreach app, $(APPS), \
 $(foreach app, $(MIUIAPPS_MOD), \
 	$(eval $(call APP_template,$(app),$(app),$(TMP_DIR)/$(app))))
 
+$(foreach app, $(PRIV_MIUIAPPS_MOD), \
+	$(eval $(call PRIV_APP_template,$(app),$(app),$(TMP_DIR)/$(app))))
+
 $(foreach app, $(APPS) $(MIUIAPPS_MOD), \
 	$(eval $(call SIGN_template,$(TMP_DIR)/$(app).apk,/system/app/$(app).apk)))
-$(foreach app, $(MIUIAPPS), \
+$(foreach app, $(MIUIAPPS) , \
 	$(eval $(call SIGN_template,$(OUT_APK_PATH)/$(app).apk,/system/app/$(app).apk)))
+
+$(foreach app, $(PRIV_MIUIAPPS) , \
+	$(eval $(call SIGN_template,$(OUT_PRIV_APK_PATH)/$(app).apk,/system/priv-app/$(app).apk)))
 
 $(eval $(call SIGN_template,$(TMP_DIR)/framework-miui-res.apk,/system/framework/framework-miui-res.apk))
 
 $(eval $(call SIGN_template,$(TMP_DIR)/framework-res.apk,/system/framework/framework-res.apk))
 
-$(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD), $(eval $(call BUILD_CLEAN_APP_template,$(app))))
+$(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD) $(PRIV_MIUIAPPS) $(PRIV_MIUIAPPS_MOD), $(eval $(call BUILD_CLEAN_APP_template,$(app))))
 
 $(foreach app, $(ALL_MIUIAPPS), $(eval $(call RELEASE_MIUI_APP_template,$(app))))
+
+$(foreach app, $(ALL_PRIV_MIUIAPPS), $(eval $(call RELEASE_PRIV_MIUI_APP_template,$(app))))
 
 $(foreach app, $(APPS), \
 	$(eval $(call APP_WS_template,$(app),app)))
