@@ -84,19 +84,20 @@ ifeq ($(strip $(USE_ANDROID_OUT)),true)
     else
          OUT_SYS_PATH := $(ANDROID_OUT)/system
          OUT_DATA_PATH := $(ANDROID_OUT)/data
+         OUT_CUST_PATH := $(ANDROID_OUT)/cust
 	 REALLY_CLEAN = $(CLEANJAR) $(CLEANMIUIAPP)
     endif
 else
     USE_ANDROID_OUT := false
     OUT_SYS_PATH := $(PORT_ROOT)/miui/$(DENSITY)/system
     OUT_DATA_PATH := $(PORT_ROOT)/miui/data
+    OUT_CUST_PATH := $(PORT_ROOT)/miui/cust
     REALLY_CLEAN :=
 endif
 PHONE_JARS := $(strip $(local-modified-jars))
 OUT_JAR_PATH := $(OUT_SYS_PATH)/framework
 OUT_APK_PATH := $(OUT_SYS_PATH)/app
 OUT_PRIV_APK_PATH := $(OUT_SYS_PATH)/priv-app
-OUT_PREINSTALL_APK_PATH := $(OUT_DATA_PATH)/media/preinstall_apps
 
 #
 # log could be set with 'make -e log=value target' and the value:
