@@ -396,6 +396,14 @@ ifneq ($(strip $(local-phone-apps)),)
 	done
 	$(hide) rm -rf $(ZIP_DIR)/system/app.original
 endif
+ifneq ($(strip $(local-phone-priv-apps)),)
+	$(hide) mv $(ZIP_DIR)/system/priv-app $(ZIP_DIR)/system/priv-app.original
+	$(hide) mkdir $(ZIP_DIR)/system/priv-app
+	$(hide) for apk in $(local-phone-priv-apps); do\
+		cp $(ZIP_DIR)/system/priv-app.original/$$apk.apk $(ZIP_DIR)/system/priv-app; \
+	done
+	$(hide) rm -rf $(ZIP_DIR)/system/priv-app.original
+endif
 
 remove-rund-apks:
 	@echo ">>> remove all unnecessary apks from original ZIP file..."
