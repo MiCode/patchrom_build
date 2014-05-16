@@ -52,9 +52,9 @@ MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/common/frameworks/base/co
 MIUI_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/base/core/res/res
 MIUI_KEYGUARD_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/opt/keyguard/res
 PLATFORM_MIUI_OVERLAY_RES_DIRS:=$(addsuffix /frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/miui/res-overlay/platform/, $(subst v16,,$(PLATFORM_OVERLAY))))
-OVERLAY_RES_DIR:=overlay/framework-res/res
-OVERLAY_MIUI_RES_DIR:=overlay/framework-miui-res/res
 PLATFORM_OVERLAY_MIUI_RES_DIRS:=$(addsuffix /miui/frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/miui/res-overlay/platform/, $(PLATFORM_OVERLAY)))
+OVERLAY_RES_DIRS:=overlay/framework-res/res $(PLATFORM_MIUI_OVERLAY_RES_DIRS) $(MIUI_OVERLAY_RES_DIR)
+OVERLAY_MIUI_RES_DIRS:=overlay/framework-miui-res/res $(PLATFORM_OVERLAY_MIUI_RES_DIRS) $(MIUI_KEYGUARD_RES_DIR)
 
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
@@ -225,9 +225,7 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
 	$(hide) $(ADDMIUIRES) $(TMP_DIR)/framework-res/res $(TMP_DIR)/framework-res/res
 	$(hide) $(AAPT) p -f -x --wlan-replace Wi-Fi --wlan-replace WiFi \
 		--min-sdk-version $(subst v,,$(ANDROID_PLATFORM)) --target-sdk-version $(subst v,,$(ANDROID_PLATFORM)) \
-		-S $(OVERLAY_RES_DIR) \
-		$(addprefix -S , $(PLATFORM_MIUI_OVERLAY_RES_DIRS)) \
-		-S $(MIUI_OVERLAY_RES_DIR) \
+		$(addprefix -S ,$(wildcard $(OVERLAY_RES_DIRS))) \
 		-S $(TMP_DIR)/framework-res/res -A $(TMP_DIR)/framework-res/assets \
 		-M $(TMP_DIR)/framework-res/AndroidManifest.xml -F $@
 	@echo "9Patch png fix $@..."
@@ -244,13 +242,10 @@ $(TMP_DIR)/framework-miui-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/
 	$(hide) sed -i "/tag:/d" $(TMP_DIR)/framework-miui-res/apktool.yml
 	$(hide) rm -rf $(TMP_DIR)/framework-miui-res/res
 	$(hide) sed -i "s/- 1/- 1\n  - 2\n  - 3\n  - 4\n  - 5/g" $(TMP_DIR)/framework-miui-res/apktool.yml
-	$(hide) mkdir -p $(OVERLAY_MIUI_RES_DIR)
 	$(hide) $(AAPT) p -f -x --auto-add-overlay \
 		--wlan-replace Wi-Fi --wlan-replace WiFi \
 		--min-sdk-version $(subst v,,$(ANDROID_PLATFORM)) --target-sdk-version $(subst v,,$(ANDROID_PLATFORM)) \
-		-S $(OVERLAY_MIUI_RES_DIR) \
-		$(addprefix -S , $(PLATFORM_OVERLAY_MIUI_RES_DIRS)) \
-		-S $(MIUI_KEYGUARD_RES_DIR) \
+        $(addprefix -S ,$(wildcard $(OVERLAY_MIUI_RES_DIRS))) \
 		-S $(MIUI_RES_DIR) -M $(TMP_DIR)/framework-miui-res/AndroidManifest.xml \
 		-I $(APKTOOL_IF_RESULT_FILE)/1.apk -I $(APKTOOL_IF_RESULT_FILE)/5.apk -F $@
 	@echo "<<< build $@ completed!"
