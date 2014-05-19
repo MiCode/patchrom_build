@@ -146,6 +146,8 @@
 /lib/libstagefright_omx.so
 /lib/libstlport.so
 /lib/libmedia.so
+/lib/libselinux.so
+/lib/libsqlite.so
 /lib/libmm-color-convertor.so
 /lib/libmmQSM.so
 /lib/libc.so
