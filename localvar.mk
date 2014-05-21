@@ -6,8 +6,10 @@
 # 	local-modified-apps
 # 	local-modified-jars
 # 	local-miui-removed-apps
+#	local-miui-removed-priv-apps
 # 	local-miui-apps (DEPRECATED)
 # 	local-miui-modified-apps
+#	local-miui-modified-priv-apps
 # 	local-phone-apps
 # 	local-remove-apps
 # 	local-pre-zip
@@ -34,14 +36,14 @@ APPS         := $(strip $(local-modified-apps))
 ALL_MIUIAPPS := $(strip $(private-miui-apps))
 ALL_PRIV_MIUIAPPS := $(strip $(private-miui-priv-apps))
 MIUIAPPS_MOD := $(strip $(local-miui-modified-apps))
-PRIV_MIUIAPPS_MOD := $(strip $(local-priv-miui-modified-apps))
+PRIV_MIUIAPPS_MOD := $(strip $(local-miui-modified-priv-apps))
 MIUIAPPS     := $(strip \
                     $(filter-out $(strip $(local-miui-modified-apps)), \
                                  $(filter-out $(strip $(local-miui-removed-apps)),$(strip $(private-miui-apps)))) \
 			     )
 PRIV_MIUIAPPS:= $(strip \
-                    $(filter-out $(strip $(local-priv-miui-modified-apps)), \
-                                 $(filter-out $(strip $(local-priv-miui-removed-apps)),$(strip $(private-miui-priv-apps)))) \
+                    $(filter-out $(strip $(local-miui-modified-priv-apps)), \
+                                 $(filter-out $(strip $(local-miui-removed-priv-apps)),$(strip $(private-miui-priv-apps)))) \
 			     )
 
 MIUI_JARS := $(strip $(private-miui-jars))
