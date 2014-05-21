@@ -339,6 +339,10 @@ $(foreach app, $(PRIV_MIUIAPPS_MOD), \
 
 $(foreach app, $(APPS) $(MIUIAPPS_MOD), \
 	$(eval $(call SIGN_template,$(TMP_DIR)/$(app).apk,/system/app/$(app).apk)))
+
+$(foreach app, $(PRIV_MIUIAPPS_MOD), \
+	$(eval $(call SIGN_template,$(TMP_DIR)/$(app).apk,/system/priv-app/$(app).apk)))
+
 $(foreach app, $(MIUIAPPS) , \
 	$(eval $(call SIGN_template,$(OUT_APK_PATH)/$(app).apk,/system/app/$(app).apk)))
 
