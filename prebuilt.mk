@@ -5,6 +5,7 @@ add-prebuilt-app: $(ZIP_DIR)/system/xbin/busybox
 	$(hide) mkdir -p $(ZIP_DIR)/data/miui/cust
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/gallery $(ZIP_DIR)/data/miui
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/ota-*.apk $(ZIP_DIR)/data/miui/apps
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/MiuiForum.apk $(ZIP_DIR)/data/miui/apps/MiuiForum.apk
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/custapplist $(ZIP_DIR)/data/miui/apps
 	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn $(ZIP_DIR)/data/miui/cust
 
@@ -76,6 +77,7 @@ release-prebuilt-app:
 	$(hide) mkdir -p $(RELEASE_PATH)/cust/data
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/gallery $(RELEASE_PATH)/data/miui
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/ota-*.apk $(RELEASE_PATH)/data/miui/apps
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/MiuiForum.apk $(RELEASE_PATH)/data/miui/apps/MiuiForum.apk
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/custapplist $(RELEASE_PATH)/data/miui/apps
 	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn $(RELEASE_PATH)/cust/data
 
