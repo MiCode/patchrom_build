@@ -78,12 +78,14 @@ ifeq ($(strip $(USE_ANDROID_OUT)),true)
     else
          OUT_SYS_PATH := $(ANDROID_OUT)/system
          OUT_DATA_PATH := $(ANDROID_OUT)/data
+         OUT_CUST_PATH := $(ANDROID_OUT)/cust
 	 REALLY_CLEAN = $(CLEANJAR) $(CLEANMIUIAPP)
     endif
 else
     USE_ANDROID_OUT := false
     OUT_SYS_PATH := $(PORT_ROOT)/miui/$(DENSITY)/system
     OUT_DATA_PATH := $(PORT_ROOT)/miui/data
+    OUT_CUST_PATH := $(PORT_ROOT)/miui/cust
     REALLY_CLEAN :=
 endif
 PHONE_JARS := $(strip $(local-modified-jars))

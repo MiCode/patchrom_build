@@ -1,8 +1,13 @@
 add-prebuilt-app: $(ZIP_DIR)/system/xbin/busybox
 	@echo To add prebuilt apps
-	$(hide) cp -f $(SYSOUT_DIR)/xbin/shelld $(ZIP_DIR)/system/xbin/
-	$(hide) mkdir -p $(ZIP_DIR)/data/miui
-	$(hide) cp -rf $(DATAOUT_DIR)/miui/preinstall_apps/ $(ZIP_DIR)/data/miui/
+	$(hide) cp -f $(SYSOUT_DIR)/xbin/shelld $(ZIP_DIR)/system/xbin
+	$(hide) mkdir -p $(ZIP_DIR)/data/miui/apps
+	$(hide) mkdir -p $(ZIP_DIR)/data/miui/cust
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/gallery $(ZIP_DIR)/data/miui
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/ota-*.apk $(ZIP_DIR)/data/miui/apps
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/custapplist $(ZIP_DIR)/data/miui/apps
+	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn $(ZIP_DIR)/data/miui/cust
+
 
 $(ZIP_DIR)/system/xbin/busybox:
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/busybox $(ZIP_DIR)/system/xbin/
@@ -67,8 +72,12 @@ release-prebuilt-app:
 	$(hide) cp $(SYSOUT_DIR)/bin/installd $(RELEASE_PATH)/$(DENSITY)/system/bin/
 	$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(RELEASE_PATH)/$(DENSITY)/system/app
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/su $(RELEASE_PATH)/$(DENSITY)/system/xbin/
-	$(hide) mkdir -p $(RELEASE_PATH)/data/miui
-	$(hide) cp -rf $(DATAOUT_DIR)/miui/preinstall_apps/ $(RELEASE_PATH)/data/miui/
+	$(hide) mkdir -p $(RELEASE_PATH)/data/miui/apps
+	$(hide) mkdir -p $(RELEASE_PATH)/cust/data
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/gallery $(RELEASE_PATH)/data/miui
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/ota-*.apk $(RELEASE_PATH)/data/miui/apps
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/custapplist $(RELEASE_PATH)/data/miui/apps
+	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn $(RELEASE_PATH)/cust/data
 
 
 release-prebuilt-libraries:
@@ -112,16 +121,13 @@ release-prebuilt-etc-files:
 
 release-miui-resources:
 	@echo release miui resources
-	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui
-	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/overlay $(RELEASE_PATH)/src/frameworks/miui
-	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res
-	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res/res $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/base/core/res
-	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui/core/res
-	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/core/res/res $(RELEASE_PATH)/src/frameworks/miui/core/res
-	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res
-	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res/res $(RELEASE_PATH)/src/frameworks/miui/$(ANDROID_PLATFORM)/overlay/frameworks/miui/core/res
-	$(hide) mkdir -p $(RELEASE_PATH)/src/frameworks/miui-opt/keyguard
-	$(hide) cp -r $(ANDROID_TOP)/frameworks/miui-opt/keyguard/res $(RELEASE_PATH)/src/frameworks/miui-opt/keyguard
+	$(hide) mkdir -p $(RELEASE_PATH)/src/miui/res-overlay
+	$(hide) cp -r $(ANDROID_TOP)/miui/res-overlay/common $(RELEASE_PATH)/src/miui/res-overlay
+	$(hide) cp -r $(ANDROID_TOP)/miui/res-overlay/platform $(RELEASE_PATH)/src/miui/res-overlay
+	$(hide) mkdir -p $(RELEASE_PATH)/src/miui/frameworks/base/core/res
+	$(hide) cp -r $(ANDROID_TOP)/miui/frameworks/base/core/res/res $(RELEASE_PATH)/src/miui/frameworks/base/core/res
+	$(hide) mkdir -p $(RELEASE_PATH)/src/miui/frameworks/opt/keyguard
+	$(hide) cp -r $(ANDROID_TOP)/miui/frameworks/opt/keyguard/res $(RELEASE_PATH)/src/miui/frameworks/opt/keyguard
 	$(hide) cd $(ANDROID_TOP); tar -cf $(RELEASE_PATH)/src/res.tar packages/apps/*/res
 	$(hide) cd $(RELEASE_PATH)/src;tar -xf res.tar;rm res.tar
 
