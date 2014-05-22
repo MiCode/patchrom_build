@@ -161,6 +161,7 @@ endef
 # $1: the apk name, such as LogsProvider
 # $2: the dir name, might be different from apk name
 # $3: to specify if the smali files should be decoded from MIUI first
+# $4: to specify app dir, for kitkat only
 define APP_template
 source-files-for-$(2) := $$(call all-files-under-dir,$(2))
 $(TMP_DIR)/$(1).apk: $$(source-files-for-$(2)) $(3) | $(TMP_DIR)
@@ -171,41 +172,16 @@ $(TMP_DIR)/$(1).apk: $$(source-files-for-$(2)) $(3) | $(TMP_DIR)
 	$(APKTOOL) b  $(TMP_DIR)/$(2) $$@
 	@echo "9Patch png fix $$@..."
 ifeq ($(3),)
-	$(FIX_9PATCH_PNG) $(1) $(STOCKROM_DIR)/system/app $(TMP_DIR)
+	$(FIX_9PATCH_PNG) $(1) $(STOCKROM_DIR)/system/$(4) $(TMP_DIR)
 else
-	$(FIX_9PATCH_PNG) $(1) $(OUT_APK_PATH) $(TMP_DIR) $(1)/res
+	$(FIX_9PATCH_PNG) $(1) $(OUT_APK_PATH:app=$(4)) $(TMP_DIR) $(1)/res
 endif
 	@echo "fix $$@ completed!"
 	@echo "<<< build $$@ completed!"
 
-$(3): $(OUT_APK_PATH)/$(1).apk
+$(3): $(OUT_APK_PATH:app=$(4))/$(1).apk
 	$(hide) rm -rf $(3)
-	$(APKTOOL) d -t miui -f $(OUT_APK_PATH)/$(1).apk $(3)
-	$(hide) sed -i "/tag:/d" $(3)/apktool.yml
-	$(PATCH_MIUI_APP) $(2) $(3)
-
-endef
-
-define PRIV_APP_template
-source-files-for-$(2) := $$(call all-files-under-dir,$(2))
-$(TMP_DIR)/$(1).apk: $$(source-files-for-$(2)) $(3) | $(TMP_DIR)
-	@echo ">>> build $$@..."
-	$(hide) cp -r $(2) $(TMP_DIR)
-	$(hide) find $(TMP_DIR)/$(2) -name "*.part" -exec rm {} \;
-	$(hide) find $(TMP_DIR)/$(2) -name "*.smali.method" -exec rm {} \;
-	$(APKTOOL) b  $(TMP_DIR)/$(2) $$@
-	@echo "9Patch png fix $$@..."
-ifeq ($(3),)
-	$(FIX_9PATCH_PNG) $(1) $(STOCKROM_DIR)/system/priv-app $(TMP_DIR)
-else
-	$(FIX_9PATCH_PNG) $(1) $(OUT_PRIV_APK_PATH) $(TMP_DIR) $(1)/res
-endif
-	@echo "fix $$@ completed!"
-	@echo "<<< build $$@ completed!"
-
-$(3): $(OUT_PRIV_APK_PATH)/$(1).apk
-	$(hide) rm -rf $(3)
-	$(APKTOOL) d -t miui -f $(OUT_PRIV_APK_PATH)/$(1).apk $(3)
+	$(APKTOOL) d -t miui -f $(OUT_APK_PATH:app=$(4))/$(1).apk $(3)
 	$(hide) sed -i "/tag:/d" $(3)/apktool.yml
 	$(PATCH_MIUI_APP) $(2) $(3)
 
@@ -263,6 +239,26 @@ $(1): $(ZIP_FILE)
 
 endef
 
+# To decide dir of the apk
+# $1 the apk name
+define MOD_DIR_template
+ifeq ($(wildcard $(RELEASE_PATH)/$(DENSITY)/system/priv-app/$(1).apk),)
+	$(call SIGN_template,$(TMP_DIR)/$(1).apk,/system/app/$(1).apk)
+else
+	$(call SIGN_template,$(TMP_DIR)/$(1).apk,/system/priv-app/$(1).apk)
+endif
+endef
+
+# To decide dir of the apk
+# $1 the apk name
+define APP_DIR_template
+ifeq ($(wildcard $(RELEASE_PATH)/$(DENSITY)/system/priv-app/$(1).apk),)
+	$(call APP_template,$(1),$(1),$(TMP_DIR)/$(1),app)
+else
+	$(call APP_template,$(1),$(1),$(TMP_DIR)/$(1),priv-app)
+endif
+endef
+
 #
 # Used to sign one single file, e.g: make .build/LogsProvider.apk.sign
 # for zipfile target, just to copy the unsigned file to correct ZIP-directory.
@@ -291,7 +287,7 @@ endef
 # $2: the dir name
 define BUILD_CLEAN_APP_template
 ifeq ($(USE_ANDROID_OUT),true)
-$(OUT_APK_PATH)/$(1).apk:
+$(OUT_APK_PATH:app=$(2))/$(1).apk:
 	$(MAKE_ATTOP) $(1)
 
 CLEANMIUIAPP += clean-$(1)
@@ -302,18 +298,9 @@ endef
 
 define RELEASE_MIUI_APP_template
 ifeq ($(USE_ANDROID_OUT),true)
-RELEASE_MIUI += $(RELEASE_PATH)/$(DENSITY)/system/app/$(1).apk
-$(RELEASE_PATH)/$(DENSITY)/system/app/$(1).apk: $(OUT_APK_PATH)/$(1).apk
-	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/app
-	$(hide) cp $$< $$@
-endif
-endef
-
-define RELEASE_PRIV_MIUI_APP_template
-ifeq ($(USE_ANDROID_OUT),true)
-RELEASE_MIUI += $(RELEASE_PATH)/$(DENSITY)/system/priv-app/$(1).apk
-$(RELEASE_PATH)/$(DENSITY)/system/priv-app/$(1).apk: $(OUT_PRIV_APK_PATH)/$(1).apk
-	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/priv-app
+RELEASE_MIUI += $(RELEASE_PATH)/$(DENSITY)/system/$(2)/$(1).apk
+$(RELEASE_PATH)/$(DENSITY)/system/$(2)/$(1).apk: $(OUT_APK_PATH:app=$(2))/$(1).apk
+	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/$(2)
 	$(hide) cp $$< $$@
 endif
 endef
@@ -330,34 +317,34 @@ $(foreach jar, $(PHONE_JARS), \
 	$(eval $(call JAR_PHONE_template,$(jar))))
 
 $(foreach app, $(APPS), \
-	$(eval $(call APP_template,$(app),$(app))))
+	$(eval $(call APP_template,$(app),$(app),,app)))
+
+$(foreach app, $(PRIV_APPS), \
+	$(eval $(call APP_template,$(app),$(app),,priv-app)))
+
 $(foreach app, $(MIUIAPPS_MOD), \
-	$(eval $(call APP_template,$(app),$(app),$(TMP_DIR)/$(app))))
+	$(eval $(call APP_DIR_template,$(app))))
 
-$(foreach app, $(PRIV_MIUIAPPS_MOD), \
-	$(eval $(call PRIV_APP_template,$(app),$(app),$(TMP_DIR)/$(app))))
-
-$(foreach app, $(APPS) $(MIUIAPPS_MOD), \
-	$(eval $(call SIGN_template,$(TMP_DIR)/$(app).apk,/system/app/$(app).apk)))
-
-$(foreach app, $(PRIV_MIUIAPPS_MOD), \
-	$(eval $(call SIGN_template,$(TMP_DIR)/$(app).apk,/system/priv-app/$(app).apk)))
+$(foreach app, $(APPS) $(MIUIAPPS_MOD) $(PRIV_APPS), \
+	$(eval $(call MOD_DIR_template,$(app))))
 
 $(foreach app, $(MIUIAPPS) , \
 	$(eval $(call SIGN_template,$(OUT_APK_PATH)/$(app).apk,/system/app/$(app).apk)))
 
 $(foreach app, $(PRIV_MIUIAPPS) , \
-	$(eval $(call SIGN_template,$(OUT_PRIV_APK_PATH)/$(app).apk,/system/priv-app/$(app).apk)))
+	$(eval $(call SIGN_template,$(OUT_APK_PATH:app=priv-app)/$(app).apk,/system/priv-app/$(app).apk)))
 
 $(eval $(call SIGN_template,$(TMP_DIR)/framework-miui-res.apk,/system/framework/framework-miui-res.apk))
 
 $(eval $(call SIGN_template,$(TMP_DIR)/framework-res.apk,/system/framework/framework-res.apk))
 
-$(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD) $(PRIV_MIUIAPPS) $(PRIV_MIUIAPPS_MOD), $(eval $(call BUILD_CLEAN_APP_template,$(app))))
+$(foreach app, $(MIUIAPPS) $(MIUIAPPS_MOD), $(eval $(call BUILD_CLEAN_APP_template,$(app),app)))
 
-$(foreach app, $(ALL_MIUIAPPS), $(eval $(call RELEASE_MIUI_APP_template,$(app))))
+$(foreach app, $(PRIV_MIUIAPPS), $(eval $(call BUILD_CLEAN_APP_template,$(app),priv-app)))
 
-$(foreach app, $(ALL_PRIV_MIUIAPPS), $(eval $(call RELEASE_PRIV_MIUI_APP_template,$(app))))
+$(foreach app, $(ALL_MIUIAPPS), $(eval $(call RELEASE_MIUI_APP_template,$(app),app)))
+
+$(foreach app, $(ALL_PRIV_MIUIAPPS), $(eval $(call RELEASE_MIUI_APP_template,$(app),priv-app)))
 
 $(foreach app, $(APPS), \
 	$(eval $(call APP_WS_template,$(app),app)))
