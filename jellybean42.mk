@@ -43,7 +43,6 @@ private-miui-apps := AntiSpam  \
 					 VpnDialogs \
 					 YellowPage \
 					 AirkanPhoneService \
-					 Transfer \
 					 MiWallpaper \
 					 PaymentService \
 					 VoiceAssist \
