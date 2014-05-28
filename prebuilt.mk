@@ -1,13 +1,16 @@
 add-prebuilt-app: $(ZIP_DIR)/system/xbin/busybox
 	@echo To add prebuilt apps
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/shelld $(ZIP_DIR)/system/xbin
+ifeq ($(USE_ANDROID_OUT),true)
 	$(hide) mkdir -p $(ZIP_DIR)/data/miui/apps
 	$(hide) mkdir -p $(ZIP_DIR)/data/miui/cust
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/gallery $(ZIP_DIR)/data/miui
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/ota-*.apk $(ZIP_DIR)/data/miui/apps
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/custapplist $(ZIP_DIR)/data/miui/apps
 	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn $(ZIP_DIR)/data/miui/cust
-
+else
+	$(hide) cp -rf $(OUT_DATA_PATH) $(ZIP_DIR)
+endif
 
 $(ZIP_DIR)/system/xbin/busybox:
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/busybox $(ZIP_DIR)/system/xbin/
