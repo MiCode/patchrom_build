@@ -17,6 +17,7 @@ private-miui-apps := AntiSpam  \
 					 FileExplorer  \
 					 FusedLocation \
 					 LBESEC_MIUI \
+                     MiLinkService \
 					 MiuiGallery  \
 					 MediaProvider  \
 					 MiuiCompass  \

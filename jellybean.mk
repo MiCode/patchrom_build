@@ -25,6 +25,7 @@ private-miui-apps := AntiSpam  \
 					 GoogleServicesFramework  \
 					 LBESEC_MIUI  \
 					 MediaProvider  \
+                     MiLinkService \
 					 MiuiCompass  \
 					 MiuiHome  \
 					 MiuiSystemUI  \
