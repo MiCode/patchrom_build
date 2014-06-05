@@ -52,7 +52,6 @@ private-miui-apps := AntiSpam  \
 					 XiaomiServiceFramework \
 					 VpnDialogs \
 					 YellowPage \
-					 AirkanPhoneService \
 					 MiWallpaper \
 					 PaymentService \
 					 VoiceAssist \
