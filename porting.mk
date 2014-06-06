@@ -50,10 +50,11 @@ PLATFORM_OVERLAY := $(strip $(shell grep "OVERLAY" $(PORT_ROOT)/android/README |
 
 MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/common/frameworks/base/core/res/res
 MIUI_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/base/core/res/res
+MIUI_KEYGUARD_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/opt/keyguard/res
 PLATFORM_MIUI_OVERLAY_RES_DIRS:=$(addsuffix /frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/miui/res-overlay/platform/, $(subst v16,,$(PLATFORM_OVERLAY))))
 PLATFORM_OVERLAY_MIUI_RES_DIRS:=$(addsuffix /miui/frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/miui/res-overlay/platform/, $(PLATFORM_OVERLAY)))
 OVERLAY_RES_DIRS:=overlay/framework-res/res $(PLATFORM_MIUI_OVERLAY_RES_DIRS) $(MIUI_OVERLAY_RES_DIR)
-OVERLAY_MIUI_RES_DIRS:=overlay/framework-miui-res/res $(PLATFORM_OVERLAY_MIUI_RES_DIRS)
+OVERLAY_MIUI_RES_DIRS:=overlay/framework-miui-res/res $(PLATFORM_OVERLAY_MIUI_RES_DIRS) $(MIUI_KEYGUARD_RES_DIR)
 
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
@@ -241,7 +242,7 @@ endef
 # To decide dir of the apk
 # $1 the apk name
 define MOD_DIR_template
-ifeq ($(wildcard $(RELEASE_PATH)/$(DENSITY)/system/priv-app/$(1).apk),)
+ifeq ($(wildcard $(RELEASE_PATH)/$(DENSITY)/system/priv-app/$(1).apk),$(wildcard $(STOCKROM_DIR)/system/priv-app/$(1).apk))
 	$(call SIGN_template,$(TMP_DIR)/$(1).apk,/system/app/$(1).apk)
 else
 	$(call SIGN_template,$(TMP_DIR)/$(1).apk,/system/priv-app/$(1).apk)
@@ -250,11 +251,12 @@ endef
 
 # To decide dir of the apk
 # $1 the apk name
+# $2: to specify if the smali files should be decoded from MIUI first
 define APP_DIR_template
 ifeq ($(wildcard $(RELEASE_PATH)/$(DENSITY)/system/priv-app/$(1).apk),)
-	$(call APP_template,$(1),$(1),$(TMP_DIR)/$(1),app)
+	$(call APP_template,$(1),$(1),$(2),app)
 else
-	$(call APP_template,$(1),$(1),$(TMP_DIR)/$(1),priv-app)
+	$(call APP_template,$(1),$(1),$(2),priv-app)
 endif
 endef
 
@@ -316,15 +318,12 @@ $(foreach jar, $(PHONE_JARS), \
 	$(eval $(call JAR_PHONE_template,$(jar))))
 
 $(foreach app, $(APPS), \
-	$(eval $(call APP_template,$(app),$(app),,app)))
-
-$(foreach app, $(PRIV_APPS), \
-	$(eval $(call APP_template,$(app),$(app),,priv-app)))
+	$(eval $(call APP_DIR_template,$(app),)))
 
 $(foreach app, $(MIUIAPPS_MOD), \
-	$(eval $(call APP_DIR_template,$(app))))
+	$(eval $(call APP_DIR_template,$(app),$(TMP_DIR)/$(app))))
 
-$(foreach app, $(APPS) $(MIUIAPPS_MOD) $(PRIV_APPS), \
+$(foreach app, $(APPS) $(MIUIAPPS_MOD), \
 	$(eval $(call MOD_DIR_template,$(app))))
 
 $(foreach app, $(MIUIAPPS) , \
@@ -371,6 +370,10 @@ $(ZIP_FILE):
 	$(hide) cd $(STOCKROM_DIR) && $(ZIP) -r ../$(ZIP_FILE) ./
 	$(hide) touch .delete-zip-file-when-clean
 
+# if the zip dir does not exist, would try to unzip stockrom.zip
+$(STOCKROM_DIR): $(ZIP_FILE)
+	$(UNZIP) -n $(ZIP_FILE) -d $@
+
 $(ZIP_DIR): $(ZIP_FILE) | $(TMP_DIR)
 	$(UNZIP) $(ZIP_FILE) -d $@
 ifneq ($(strip $(local-phone-apps)),)
@@ -409,7 +412,7 @@ ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += release-miui-prebuilt
 endif
 	
-target_files: | $(ZIP_DIR)
+target_files: $(STOCKROM_DIR) | $(ZIP_DIR) 
 target_files: $(TMP_DIR)/framework-miui-res.apk $(ZIP_BLDJARS) $(TOZIP_APKS) add-miui-prebuilt $(ACT_PRE_ZIP)
 
 # Target to make zipfile which is all signed by testkey. convenient for developement and debug
