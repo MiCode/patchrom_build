@@ -93,7 +93,7 @@ clean:
 	$(hide) if [ -f ".delete-zip-file-when-clean" ]; then rm $(ZIP_FILE); fi
 	$(hide) rm -f .delete-zip-file-when-clean
 	$(hide) rm -rf $(TMP_DIR)
-	$(hide) rm -f $(OUT_APK_PATH)/*.apk-tozip $(OUT_PRIV_APK_PATH)/*.apk-tozip $(OUT_JAR_PATH)/*-tozip
+	$(hide) rm -f $(OUT_APK_PATH)/*.apk-tozip $(OUT_APK_PATH:app=priv-app)/*.apk-tozip $(OUT_JAR_PATH)/*-tozip
 	$(hide) rm -f releasetools.pyc
 	$(hide) rm -f $(TOOL_DIR)/releasetools/common.pyc $(TOOL_DIR)/releasetools/edify_generator.pyc
 	@echo clean completed!
@@ -137,7 +137,6 @@ verify: $(ERR_REPORT)
 	@echo "OUT_SYS_PATH    = $(OUT_SYS_PATH)"
 	@echo "OUT_JAR_PATH    = $(OUT_JAR_PATH)"
 	@echo "OUT_APK_PATH    = $(OUT_APK_PATH)"
-	@echo "OUT_PRIV_APK_PATH    = $(OUT_PRIV_APK_PATH)"
 	@echo "ACT_PRE_ZIP     = $(ACT_PRE_ZIP)"
 	@echo "ACT_PRE_ZIP     = $(ACT_AFTER_ZIP)"
 	@echo "USE_ANDROID_OUT = $(USE_ANDROID_OUT)"

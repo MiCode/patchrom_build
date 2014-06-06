@@ -4,12 +4,12 @@
 # 	local-zip-file 		MUST be defined
 # 	local-out-zip-file
 # 	local-modified-apps
+# 	local-modified-priv-apps
 # 	local-modified-jars
 # 	local-miui-removed-apps
 #	local-miui-removed-priv-apps
 # 	local-miui-apps (DEPRECATED)
 # 	local-miui-modified-apps
-#	local-miui-modified-priv-apps
 # 	local-phone-apps
 # 	local-remove-apps
 # 	local-pre-zip
@@ -33,16 +33,16 @@ ifeq ($(OUT_ZIP_FILE),)
 endif
 
 APPS         := $(strip $(local-modified-apps))
+PRIV_APPS    := $(strip $(local-modified-priv-apps))
 ALL_MIUIAPPS := $(strip $(private-miui-apps))
 ALL_PRIV_MIUIAPPS := $(strip $(private-miui-priv-apps))
 MIUIAPPS_MOD := $(strip $(local-miui-modified-apps))
-PRIV_MIUIAPPS_MOD := $(strip $(local-miui-modified-priv-apps))
 MIUIAPPS     := $(strip \
                     $(filter-out $(strip $(local-miui-modified-apps)), \
                                  $(filter-out $(strip $(local-miui-removed-apps)),$(strip $(private-miui-apps)))) \
 			     )
 PRIV_MIUIAPPS:= $(strip \
-                    $(filter-out $(strip $(local-miui-modified-priv-apps)), \
+                    $(filter-out $(strip $(local-miui-modified-apps)), \
                                  $(filter-out $(strip $(local-miui-removed-priv-apps)),$(strip $(private-miui-priv-apps)))) \
 			     )
 
@@ -99,7 +99,6 @@ endif
 PHONE_JARS := $(strip $(local-modified-jars))
 OUT_JAR_PATH := $(OUT_SYS_PATH)/framework
 OUT_APK_PATH := $(OUT_SYS_PATH)/app
-OUT_PRIV_APK_PATH := $(OUT_SYS_PATH)/priv-app
 
 #
 # log could be set with 'make -e log=value target' and the value:
