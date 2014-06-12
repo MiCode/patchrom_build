@@ -27,7 +27,7 @@ usage:
 	@echo "	make -e log=quiet|info|verbose - to control the output from make command"
 
 # Target to prepare porting workspace
-workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR) fix-framework-res restore-obsolete-keyguard
+workspace: apktool-if $(JARS_OUTDIR) $(APPS_OUTDIR) fix-framework-res
 	@echo Prepare workspace completed!
 
 # Target to install apktool framework 
@@ -57,10 +57,6 @@ $(APKTOOL_IF_RESULT_FILE)/6.apk:
 fix-framework-res:
 	@echo fix the apktool multiple position substitution bug
 	$(FIX_PLURALS) framework-res
-
-restore-obsolete-keyguard:
-	@echo restore obsolete keyguard
-	$(RESTORE_OBSOLETE_KEYGUARD)
 
 # Target to add miui hook into target framework first time
 firstpatch:
