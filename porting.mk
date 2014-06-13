@@ -244,10 +244,18 @@ endef
 # To decide dir of the apk
 # $1 the apk name
 define MOD_DIR_template
+ifeq ($(USE_ANDROID_OUT),true)
+ifeq ($(wildcard $(ANDROID_OUT)/system/priv-app/$(1).apk),$(wildcard $(STOCKROM_DIR)/system/priv-app/$(1).apk))
+	$(call SIGN_template,$(TMP_DIR)/$(1).apk,/system/app/$(1).apk)
+else
+	$(call SIGN_template,$(TMP_DIR)/$(1).apk,/system/priv-app/$(1).apk)
+endif
+else
 ifeq ($(wildcard $(RELEASE_PATH)/$(DENSITY)/system/priv-app/$(1).apk),$(wildcard $(STOCKROM_DIR)/system/priv-app/$(1).apk))
 	$(call SIGN_template,$(TMP_DIR)/$(1).apk,/system/app/$(1).apk)
 else
 	$(call SIGN_template,$(TMP_DIR)/$(1).apk,/system/priv-app/$(1).apk)
+endif
 endif
 endef
 
@@ -255,10 +263,18 @@ endef
 # $1 the apk name
 # $2: to specify if the smali files should be decoded from MIUI first
 define APP_DIR_template
+ifeq ($(USE_ANDROID_OUT),true)
+ifeq ($(wildcard $(ANDROID_OUT)/system/priv-app/$(1).apk),)
+	$(call APP_template,$(1),$(1),$(2),app)
+else
+	$(call APP_template,$(1),$(1),$(2),priv-app)
+endif
+else
 ifeq ($(wildcard $(RELEASE_PATH)/$(DENSITY)/system/priv-app/$(1).apk),)
 	$(call APP_template,$(1),$(1),$(2),app)
 else
 	$(call APP_template,$(1),$(1),$(2),priv-app)
+endif
 endif
 endef
 
