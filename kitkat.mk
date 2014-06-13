@@ -19,7 +19,6 @@ private-miui-priv-apps := Backup  \
 
 
 private-miui-apps := AntiSpam  \
-                     AirkanPhoneService \
                      BaiduNetworkLocation  \
                      Browser  \
                      BugReport  \
