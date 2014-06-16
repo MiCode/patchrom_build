@@ -364,6 +364,10 @@ $(foreach app, $(ALL_PRIV_MIUIAPPS), $(eval $(call RELEASE_MIUI_APP_template,$(a
 
 $(foreach app, $(APPS), \
 	$(eval $(call APP_WS_template,$(app),app)))
+
+$(foreach app, $(APPS), \
+	$(eval $(call APP_WS_template,$(app),priv-app)))
+
 $(eval $(call APP_WS_template,framework-res,framework))
 
 # for release
