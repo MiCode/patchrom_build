@@ -62,7 +62,7 @@
 /lib/libssl.so
 /lib/liblogwrap.so
 /lib/libthread_db.so
-/lib/libsqlite_jni.so
+/lib/libselinux_orig.so
 /lib/libwilhelm.so
 /lib/libstagefright_soft_vorbisdec.so
 /lib/libttscompat.so

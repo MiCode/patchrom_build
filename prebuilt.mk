@@ -25,6 +25,8 @@ ifeq ($(USE_ANDROID_OUT),true)
     done
 else
 	$(hide) cp -rf $(SYSOUT_DIR)/lib $(ZIP_DIR)/system
+	$(hide) mv $(ZIP_DIR)/system/lib/libselinux.so $(ZIP_DIR)/system/lib/libselinux_orig.so
+	$(hide) mv $(ZIP_DIR)/system/lib/libselinux_mod.so $(ZIP_DIR)/system/lib/libselinux.so
 endif
 
 add-prebuilt-media:
