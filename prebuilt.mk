@@ -124,8 +124,8 @@ release-prebuilt-etc-files:
 release-miui-resources:
 	@echo release miui resources
 	$(hide) mkdir -p $(RELEASE_PATH)/src/miui/res-overlay
-	$(hide) cp -r $(ANDROID_TOP)/miui/res-overlay/common $(RELEASE_PATH)/src/miui/res-overlay
-	$(hide) cp -r $(ANDROID_TOP)/miui/res-overlay/platform $(RELEASE_PATH)/src/miui/res-overlay
+	$(hide) cp -r $(ANDROID_TOP)/miui/res-overlay/v5/common $(RELEASE_PATH)/src/miui/res-overlay
+	$(hide) cp -r $(ANDROID_TOP)/miui/res-overlay/v5/platform $(RELEASE_PATH)/src/miui/res-overlay
 	$(hide) mkdir -p $(RELEASE_PATH)/src/miui/frameworks/base/core/res
 	$(hide) cp -r $(ANDROID_TOP)/miui/frameworks/base/core/res/res $(RELEASE_PATH)/src/miui/frameworks/base/core/res
 	$(hide) mkdir -p $(RELEASE_PATH)/src/miui/frameworks/opt/keyguard
