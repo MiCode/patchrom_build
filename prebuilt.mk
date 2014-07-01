@@ -22,11 +22,11 @@ ifeq ($(USE_ANDROID_OUT),true)
 			mkdir -p $(ZIP_DIR)/system/`dirname $$file`; \
 			cp -f $(SYSOUT_DIR)/$$file $(ZIP_DIR)/system/$$file; \
 		fi \
-    done
+	done
 else
 	$(hide) cp -rf $(SYSOUT_DIR)/lib $(ZIP_DIR)/system
 	$(hide) cp $(STOCKROM_DIR)/system/lib/libselinux.so $(ZIP_DIR)/system/lib/libselinux_orig.so
-	$(hide) mv $(ZIP_DIR)/system/lib/libselinux_mod.so $(ZIP_DIR)/system/lib/libselinux.so
+	$(hide) mv -f $(ZIP_DIR)/system/lib/libselinux_mod.so $(ZIP_DIR)/system/lib/libselinux.so
 endif
 
 add-prebuilt-media:
