@@ -147,7 +147,7 @@
 /lib/libstlport.so
 /lib/libmedia.so
 /lib/libselinux.so
-/lib/libsqlite.so
+/lib/libsqlite_jni.so
 /lib/libmm-color-convertor.so
 /lib/libmmQSM.so
 /lib/libc.so
