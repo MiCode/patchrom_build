@@ -56,7 +56,7 @@ private-miui-apps := AntiSpam  \
 private-preinstall-apps := ota-miui-MiShop \
                      ota-partner-NetworkAssistant \
                      ota-partner-XunfeiSpeechService3 \
-                     MiuiForum
+                     ota-MiuiForum
 
 private-miui-jars := services \
 					 android.policy \
