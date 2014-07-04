@@ -51,7 +51,8 @@ private-miui-apps := AntiSpam  \
 					 LiveWallpapersPicker \
 					 GameCenter \
 					 GameCenterSDKService \
-					 NetworkAssistant2
+					 NetworkAssistant2 \
+					 TrafficControl
 
 private-preinstall-apps := ota-miui-MiShop \
                      ota-partner-NetworkAssistant \
