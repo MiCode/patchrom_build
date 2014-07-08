@@ -54,7 +54,8 @@ private-miui-apps := AntiSpam  \
                      Weather \
                      WeatherProvider \
                      XiaomiServiceFramework \
-                     VoiceAssist
+                     VoiceAssist \
+                     TrafficControl
 
 private-preinstall-apps := ota-miui-MiShop \
                      ota-partner-XunfeiSpeechService3 \
