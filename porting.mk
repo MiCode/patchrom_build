@@ -52,8 +52,8 @@ PLATFORM_OVERLAY := $(strip $(shell grep "OVERLAY" $(PORT_ROOT)/android/README |
 MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/v5/common/frameworks/base/core/res/res
 MIUI_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/base/core/res/res
 MIUI_KEYGUARD_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/opt/keyguard/res
-PLATFORM_MIUI_OVERLAY_RES_DIRS:=$(addsuffix /frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/miui/res-overlay/v5/platform/, $(subst v16,,$(PLATFORM_OVERLAY))))
-PLATFORM_OVERLAY_MIUI_RES_DIRS:=$(addsuffix /miui/frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/miui/res-overlay/v5/platform/, $(PLATFORM_OVERLAY)))
+PLATFORM_MIUI_OVERLAY_RES_DIRS:=$(addsuffix /frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/miui/res-overlay/v5/platform/, $(PLATFORM_OVERLAY)))
+PLATFORM_OVERLAY_MIUI_RES_DIRS:=$(addsuffix /miui/frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/miui/res-overlay/v5/platform/, $(subst v16,,$(PLATFORM_OVERLAY))))
 OVERLAY_RES_DIRS:=overlay/framework-res/res $(PLATFORM_MIUI_OVERLAY_RES_DIRS) $(MIUI_OVERLAY_RES_DIR)
 OVERLAY_MIUI_RES_DIRS:=overlay/framework-miui-res/res $(PLATFORM_OVERLAY_MIUI_RES_DIRS) $(MIUI_KEYGUARD_RES_DIR)
 
