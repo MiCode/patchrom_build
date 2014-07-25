@@ -38,7 +38,6 @@ private-miui-apps := AntiSpam  \
                      LBESEC_MIUI \
                      LiveWallpapersPicker \
                      MiLinkService \
-                     MiWallpaper \
                      MiuiCompass  \
                      MiuiVideo \
                      NetworkAssistant2 \
