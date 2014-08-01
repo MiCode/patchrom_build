@@ -43,6 +43,7 @@ private-miui-apps := AntiSpam  \
                      MiuiVideo \
                      NetworkAssistant2 \
                      Notes  \
+                     O2O  \
                      PackageInstaller  \
                      PaymentService \
                      Provision \
