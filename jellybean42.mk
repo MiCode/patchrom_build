@@ -26,6 +26,7 @@ private-miui-apps := AntiSpam  \
 					 Mms  \
 					 Music  \
 					 Notes  \
+                     O2O \
 					 PackageInstaller  \
 					 Phone  \
 					 Provision \

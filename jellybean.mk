@@ -33,6 +33,7 @@ private-miui-apps := AntiSpam  \
 					 Music  \
 					 NetworkLocation  \
 					 Notes  \
+                     O2O \
 					 PackageInstaller  \
 					 Phone  \
 					 Provision \
