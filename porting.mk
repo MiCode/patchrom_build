@@ -45,13 +45,13 @@ ifeq ($(USE_ANDROID_OUT),true)
 else
     MIUI_SRC_DIR:=$(PORT_ROOT)/miui/src
 endif
-MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/common/frameworks/base/core/res/res
+MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/v5/common/frameworks/base/core/res/res
 MIUI_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/base/core/res/res
 MIUI_KEYGUARD_RES_DIR:=$(MIUI_SRC_DIR)/miui/frameworks/opt/keyguard/res
-PLATFORM_MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/platform/$(ANDROID_PLATFORM)/frameworks/base/core/res/res
+PLATFORM_MIUI_OVERLAY_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/v5/platform/$(ANDROID_PLATFORM)/frameworks/base/core/res/res
 OVERLAY_RES_DIR:=overlay/framework-res/res
 OVERLAY_MIUI_RES_DIR:=overlay/framework-miui-res/res
-PLATFORM_OVERLAY_MIUI_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/platform/$(ANDROID_PLATFORM)/miui/frameworks/base/core/res/res
+PLATFORM_OVERLAY_MIUI_RES_DIR:=$(MIUI_SRC_DIR)/miui/res-overlay/v5/platform/$(ANDROID_PLATFORM)/miui/frameworks/base/core/res/res
 
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))

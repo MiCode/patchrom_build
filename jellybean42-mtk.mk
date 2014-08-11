@@ -16,6 +16,7 @@ private-miui-apps := AntiSpam  \
 					 Email  \
 					 FileExplorer  \
 					 LBESEC_MIUI \
+                     MiLinkService \
 					 MiuiGallery  \
 					 MediaProvider  \
 					 MiuiCompass  \
@@ -24,9 +25,10 @@ private-miui-apps := AntiSpam  \
 					 Mms  \
 					 Music  \
 					 Notes  \
+                     O2O  \
 					 PackageInstaller  \
 					 Phone  \
-					 Provision \
+					 Provision  \
 					 QuickSearchBox  \
 					 Settings  \
 					 SettingsProvider  \
@@ -41,7 +43,6 @@ private-miui-apps := AntiSpam  \
 					 XiaomiServiceFramework \
 					 VpnDialogs \
 					 YellowPage \
-					 AirkanPhoneService \
 					 MiWallpaper \
 					 PaymentService \
 					 VoiceAssist \
@@ -49,7 +50,8 @@ private-miui-apps := AntiSpam  \
 					 KingSoftCleaner \
 					 GameCenter \
 					 GameCenterSDKService \
-					 NetworkAssistant2
+					 NetworkAssistant2 \
+                     TrafficControl
 
 private-preinstall-apps := ota-miui-MiShop \
                      ota-partner-NetworkAssistant \

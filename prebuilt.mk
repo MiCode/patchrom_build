@@ -1,16 +1,12 @@
 add-prebuilt-app: $(ZIP_DIR)/system/xbin/busybox
 	@echo To add prebuilt apps
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/shelld $(ZIP_DIR)/system/xbin
-ifeq ($(USE_ANDROID_OUT),true)
 	$(hide) mkdir -p $(ZIP_DIR)/data/miui/apps
 	$(hide) mkdir -p $(ZIP_DIR)/data/miui/cust
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/gallery $(ZIP_DIR)/data/miui
-	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/ota-*.apk $(ZIP_DIR)/data/miui/apps
+	$(hide) find $(OUT_DATA_PATH)/miui/apps -name "ota-*.apk" -exec cp -rf {} $(ZIP_DIR)/data/miui/apps \;
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/custapplist $(ZIP_DIR)/data/miui/apps
 	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn $(ZIP_DIR)/data/miui/cust
-else
-	$(hide) cp -rf $(OUT_DATA_PATH) $(ZIP_DIR)
-endif
 
 $(ZIP_DIR)/system/xbin/busybox:
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/busybox $(ZIP_DIR)/system/xbin/
@@ -56,7 +52,6 @@ endif
 
 add-lbesec-miui:
 	@echo To add LBESEC_MIUI
-	$(hide) cp -f $(SYSOUT_DIR)/lib/liblbesec.so $(ZIP_DIR)/system/lib/
 	$(hide) cp -f $(SYSOUT_DIR)/bin/installd $(ZIP_DIR)/system/bin
 	$(hide) cp -f $(SYSOUT_DIR)/app/LBESEC_MIUI.apk $(ZIP_DIR)/system/app
 	$(hide) cp -f $(SYSOUT_DIR)/xbin/su $(ZIP_DIR)/system/xbin/
@@ -78,7 +73,7 @@ release-prebuilt-app:
 	$(hide) mkdir -p $(RELEASE_PATH)/data/miui/apps
 	$(hide) mkdir -p $(RELEASE_PATH)/cust/data
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/gallery $(RELEASE_PATH)/data/miui
-	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/ota-*.apk $(RELEASE_PATH)/data/miui/apps
+	$(hide) find $(OUT_DATA_PATH)/miui/apps -name "ota-*.apk" -exec cp -rf {} $(RELEASE_PATH)/data/miui/apps \;
 	$(hide) cp -rf $(OUT_DATA_PATH)/miui/apps/custapplist $(RELEASE_PATH)/data/miui/apps
 	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn $(RELEASE_PATH)/cust/data
 
@@ -124,9 +119,9 @@ release-prebuilt-etc-files:
 
 release-miui-resources:
 	@echo release miui resources
-	$(hide) mkdir -p $(RELEASE_PATH)/src/miui/res-overlay
-	$(hide) cp -r $(ANDROID_TOP)/miui/res-overlay/common $(RELEASE_PATH)/src/miui/res-overlay
-	$(hide) cp -r $(ANDROID_TOP)/miui/res-overlay/platform $(RELEASE_PATH)/src/miui/res-overlay
+	$(hide) mkdir -p $(RELEASE_PATH)/src/miui/res-overlay/v5
+	$(hide) cp -r $(ANDROID_TOP)/miui/res-overlay/v5/common $(RELEASE_PATH)/src/miui/res-overlay/v5
+	$(hide) cp -r $(ANDROID_TOP)/miui/res-overlay/v5/platform $(RELEASE_PATH)/src/miui/res-overlay/v5
 	$(hide) mkdir -p $(RELEASE_PATH)/src/miui/frameworks/base/core/res
 	$(hide) cp -r $(ANDROID_TOP)/miui/frameworks/base/core/res/res $(RELEASE_PATH)/src/miui/frameworks/base/core/res
 	$(hide) mkdir -p $(RELEASE_PATH)/src/miui/frameworks/opt/keyguard
