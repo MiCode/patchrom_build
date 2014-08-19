@@ -1,5 +1,6 @@
 private-miui-apps := AntiSpam  \
 					 Backup  \
+                     BarcodeScanner \
 					 BaiduNetworkLocation  \
 					 Browser  \
 					 BugReport  \
