@@ -1,0 +1,11 @@
+ro.miui.ui.version.code=5
+ro.miui.ui.version.name=V8
+ro.config.ringtone=Ring_Synth_04.ogg
+ro.config.notification_sound=pixiedust.ogg
+ro.config.alarm_alert=Alarm_Classic.ogg
+ro.config.sms_received_sound=FadeIn.ogg
+ro.config.sms_delivered_sound=MessageComplete.ogg
+keyguard.no_require_sim=true
+
+# Need to disable strict mode if stockrom is not user version
+persist.sys.strictmode.disable=true
