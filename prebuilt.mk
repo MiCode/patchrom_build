@@ -7,6 +7,7 @@ add-prebuilt-binaries:
 	$(hide) cp -f $(SYSOUT_DIR)/bin/app_process_miui $(ZIP_DIR)/system/bin/app_process
 	$(hide) cp -f $(STOCKROM_DIR)/system/bin/debuggerd $(ZIP_DIR)/system/bin/debuggerd_vendor
 	$(hide) cp -f $(SYSOUT_DIR)/bin/debuggerd_miui $(ZIP_DIR)/system/bin/debuggerd
+	$(hide) cp -f $(STOCKROM_DIR)/system/bin/dexopt $(ZIP_DIR)/system/bin/dexopt_vendor
 	$(hide) cp -f $(SYSOUT_DIR)/bin/dexopt_miui $(ZIP_DIR)/system/bin/dexopt
 
 

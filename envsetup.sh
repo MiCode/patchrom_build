@@ -64,7 +64,6 @@ else
        return
    fi
 fi
-
 export PATH=$PORT_ROOT/tools:$PATH
 
 if [ -n "$PORT_ROOT" ]; then
