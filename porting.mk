@@ -49,9 +49,10 @@ endif
 
 PLATFORM_OVERLAY := $(strip $(shell grep "OVERLAY" $(PORT_ROOT)/android/README | cut -d'=' -f2))
 
+DEVICE_OVERLAY_RES:=overlay/framework-res/res
 OVERLAY_RES:=$(MIUI_SRC_DIR)/config-overlay/v6/common/frameworks/base/core/res/res $(addsuffix /frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/config-overlay/v6/platform/, $(PLATFORM_OVERLAY)))
 I18N_RES:=$(MIUI_SRC_DIR)/I18N_res/v6/common/frameworks/base/core/res/res $(addsuffix /frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/I18N_res/v6/platform/, $(PLATFORM_OVERLAY)))
-MIUI_OVERLAY_RES:=$(OVERLAY_RES) $(I18N_RES)
+MIUI_OVERLAY_RES:=$(DEVICE_OVERLAY_RES) $(OVERLAY_RES) $(I18N_RES)
 
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
