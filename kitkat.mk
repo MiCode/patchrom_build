@@ -4,7 +4,6 @@ private-miui-priv-apps := AuthManager \
                           Browser \
                           Calendar  \
                           CalendarProvider \
-                          CloudAppBackup \
                           Contacts \
                           ContactsProvider \
                           DownloadProvider \
@@ -42,6 +41,7 @@ private-miui-apps := AntiSpam  \
                      KingSoftCleaner \
                      LiveWallpapersPicker \
                      MiAssistant  \
+                     MiFinance \
                      MiLinkService \
                      Mipay  \
                      miui \

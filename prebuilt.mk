@@ -140,6 +140,7 @@ release-miui-resources:
 	@echo Release miui resources
 	$(hide) cd $(ANDROID_TOP)/miui; tar -cf $(RELEASE_PATH)/res.tar config-overlay/v6/common config-overlay/v6/platform I18N_res/v6/common I18N_res/v6/platform
 	$(hide) cd $(RELEASE_PATH); tar -xf res.tar;rm res.tar
+	$(hide) find $(RELEASE_PATH) -name "packages" | xargs rm -rf
 
 add-miui-prebuilt: add-prebuilt-binaries add-prebuilt-libraries add-prebuilt-jars add-prebuilt-media add-prebuilt-fonts add-prebuilt-etc-files add-preinstall-files
 	@echo Add miui prebuilt completed!
