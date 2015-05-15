@@ -4,6 +4,7 @@ private-miui-priv-apps := AuthManager \
                           Browser \
                           Calendar  \
                           CalendarProvider \
+                          CleanMaster \
                           Contacts \
                           ContactsProvider \
                           DownloadProvider \
