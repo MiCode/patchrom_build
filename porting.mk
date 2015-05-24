@@ -270,11 +270,31 @@ endef
 # $1: the apk file need to be signed
 # $2: the path/filename in the phone
 define SIGN_template
-SIGNAPKS += $(1).sign
-$(notdir $(1)).sign $(1).sign: $(1)
+SIGNAPKS += $(1).platform.sign
+$(notdir $(1)).platform.sign $(1).platform.sign: $(1)
 	@echo sign apk $(1) and push to phone as $(2)...
-	#java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/platform.x509.pem $(PORT_ROOT)/build/security/platform.pk8 $(1) $(1).signed
+	java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/platform.x509.pem $(PORT_ROOT)/build/security/platform.pk8 $(1) $(1).signed
+	$(ADB) remount
+	$(ADB) push $(1).signed $(2)
+
+SIGNAPKS += $(1).testkey.sign
+$(notdir $(1)).testkey.sign $(1).testkey.sign: $(1)
+	@echo sign apk $(1) and push to phone as $(2)...
 	java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/testkey.x509.pem $(PORT_ROOT)/build/security/testkey.pk8 $(1) $(1).signed
+	$(ADB) remount
+	$(ADB) push $(1).signed $(2)
+
+SIGNAPKS += $(1).media.sign
+$(notdir $(1)).media.sign $(1).media.sign: $(1)
+	@echo sign apk $(1) and push to phone as $(2)...
+	java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/media.x509.pem $(PORT_ROOT)/build/security/media.pk8 $(1) $(1).signed
+	$(ADB) remount
+	$(ADB) push $(1).signed $(2)
+
+SIGNAPKS += $(1).shared.sign
+$(notdir $(1)).shared.sign $(1).shared.sign: $(1)
+	@echo sign apk $(1) and push to phone as $(2)...
+	java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/shared.x509.pem $(PORT_ROOT)/build/security/shared.pk8 $(1) $(1).signed
 	$(ADB) remount
 	$(ADB) push $(1).signed $(2)
 

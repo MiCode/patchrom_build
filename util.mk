@@ -14,7 +14,7 @@ usage:
 	@echo "	make verify                - to check if any error in the makefile"
 	@echo "	make verify-ota            - to generate an ota for ota verification"
 	@echo "	make out/xxxx.jar-phone    - to make out a single jar file and push to phone"
-	@echo "	make xxxx.apk.sign         - to generate a xxxx.apk and sign/push to phone"
+	@echo "	make xxxx.apk.xxxx.sign         - to generate a xxxx.apk and sign/push to phone"
 	@echo "	make clean-xxxx/make xxxx  - just as make under android-build-top"
 	@echo "	make sign                  - Sign all generated apks by this makefile and push to phone"
 	@echo ">>> local ota targets:"
