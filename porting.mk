@@ -44,15 +44,21 @@ ROM_BUILD_NUMBER  := $(shell date +%Y%m%d.%H%M%S)
 ifeq ($(USE_ANDROID_OUT),true)
     MIUI_SRC_DIR:=$(ANDROID_TOP)/miui
 else
-    MIUI_SRC_DIR:=$(PORT_ROOT)/miui
+    MIUI_SRC_DIR:=$(PORT_ROOT)/miui/src
 endif
 
 PLATFORM_OVERLAY := $(strip $(shell grep "OVERLAY" $(PORT_ROOT)/android/README | cut -d'=' -f2))
 
 DEVICE_OVERLAY_RES:=overlay/framework-res/res
 OVERLAY_RES:=$(MIUI_SRC_DIR)/config-overlay/v6/common/frameworks/base/core/res/res $(addsuffix /frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/config-overlay/v6/platform/, $(PLATFORM_OVERLAY)))
-I18N_RES:=$(MIUI_SRC_DIR)/I18N_res/v6/common/frameworks/base/core/res/res $(addsuffix /frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/I18N_res/v6/platform/, $(PLATFORM_OVERLAY)))
+I18N_RES:=$(addsuffix /frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/I18N_res/v6/platform/, $(PLATFORM_OVERLAY))) $(MIUI_SRC_DIR)/I18N_res/v6/common/frameworks/base/core/res/res
 MIUI_OVERLAY_RES:=$(DEVICE_OVERLAY_RES) $(OVERLAY_RES) $(I18N_RES)
+
+MIUI_RES := overlay/framework-ext-res/res \
+	$(addsuffix /miui/frameworks/base/core/res/res, $(addprefix $(MIUI_SRC_DIR)/I18N_res/v6/platform/, $(PLATFORM_OVERLAY))) \
+	$(MIUI_SRC_DIR)/I18N_res/v6/common/miui/frameworks/base/core/res/res \
+	$(MIUI_SRC_DIR)/frameworks/base/core/res/res \
+	$(MIUI_SRC_DIR)/frameworks/opt/ToggleManager/res
 
 JARS        := $(MIUI_JARS) $(PHONE_JARS)
 BLDAPKS     := $(addprefix $(TMP_DIR)/,$(addsuffix .apk,$(APPS)))
@@ -211,7 +217,14 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
 	@echo "<<< build $@ completed!"
 
 $(TMP_DIR)/framework-ext-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/framework-ext-res.apk
-	$(hide) cp $(OUT_JAR_PATH)/framework-ext-res.apk $@
+	@echo ">>> build $@..."
+	#$(APKTOOL) d -f -t miui $(OUT_JAR_PATH)/framework-ext-res.apk -o $(TMP_DIR)/framework-ext-res
+	$(hide) $(AAPT) p -f -x --auto-add-overlay --rename-manifest-package com.miui --wlan-replace Wi-Fi --wlan-replace WiFi \
+		--min-sdk-version $(subst v,,$(ANDROID_PLATFORM)) --target-sdk-version $(subst v,,$(ANDROID_PLATFORM)) \
+		$(addprefix -S ,$(wildcard $(MIUI_RES))) -M $(MIUI_SRC_DIR)/frameworks/base/core/res/AndroidManifest.xml \
+		-I $(APKTOOL_IF_RESULT_FILE)/1.apk -I $(APKTOOL_IF_RESULT_FILE)/16.apk -F $@
+	$(APKTOOL) if $@
+	@echo "<<< build $@ completed!"
 
 #
 # To prepare the workspace to modify the APKs from zip file

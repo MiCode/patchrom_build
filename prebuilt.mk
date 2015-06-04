@@ -138,9 +138,11 @@ release-preinstall-files:
 
 release-miui-resources:
 	@echo Release miui resources
-	$(hide) cd $(ANDROID_TOP)/miui; tar -cf $(RELEASE_PATH)/res.tar config-overlay/v6/common config-overlay/v6/platform I18N_res/v6/common I18N_res/v6/platform
-	$(hide) cd $(RELEASE_PATH); tar -xf res.tar;rm res.tar
-	$(hide) find $(RELEASE_PATH) -name "packages" | xargs rm -rf
+	$(hide) mkdir -p $(RELEASE_PATH)/src;
+	$(hide) cd $(ANDROID_TOP)/miui; tar -cf $(RELEASE_PATH)/src/res.tar config-overlay/v6/common config-overlay/v6/platform I18N_res/v6/common I18N_res/v6/platform frameworks/base/core/res/res frameworks/opt/ToggleManager/res
+	$(hide) cd $(RELEASE_PATH)/src; tar -xf res.tar;rm res.tar
+	$(hide) find $(RELEASE_PATH)/src -name "packages" | xargs rm -rf
+	$(hide) cp $(ANDROID_TOP)/miui/frameworks/base/core/res/AndroidManifest.xml $(RELEASE_PATH)/src/frameworks/base/core/res/AndroidManifest.xml
 
 add-miui-prebuilt: add-prebuilt-binaries add-prebuilt-libraries add-prebuilt-jars add-prebuilt-media add-prebuilt-fonts add-prebuilt-etc-files add-preinstall-files
 	@echo Add miui prebuilt completed!

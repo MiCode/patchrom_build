@@ -35,12 +35,8 @@ apktool-if: $(TMP_DIR)/apktool-if
 
 #TODO all apktool if result file is at $HOME/apktool/framework/
 APKTOOL_IF_RESULT_FILE := $(HOME)/apktool/framework
-$(TMP_DIR)/apktool-if: $(ZIP_FILE) $(APKTOOL_IF_RESULT_FILE)/9.apk | $(TMP_DIR)
+$(TMP_DIR)/apktool-if: $(ZIP_FILE) | $(TMP_DIR)
 	@echo ">>> Install framework resources for apktool..."
-	$(hide) for res_file in `find $(PORT_BUILD)/res/ -name "*.apk"`;do\
-		$(APKTOOL) if $$res_file; \
-	done
-	@echo "install miui res"
 	$(APKTOOL) if $(SYSOUT_DIR)/framework/framework-ext-res.apk
 	$(APKTOOL) if $(SYSOUT_DIR)/app/miui.apk
 	$(APKTOOL) if $(SYSOUT_DIR)/app/MiuiFramework.apk
@@ -53,8 +49,6 @@ $(TMP_DIR)/apktool-if: $(ZIP_FILE) $(APKTOOL_IF_RESULT_FILE)/9.apk | $(TMP_DIR)
 	$(hide) rm -r $(TMP_DIR)/system/framework/*.apk
 	@echo "<<< install framework resources completed!"
 	@touch $@
-
-$(APKTOOL_IF_RESULT_FILE)/9.apk:
 
 fix-framework-res:
 	@echo fix the apktool multiple position substitution bug
