@@ -48,7 +48,7 @@ private-miui-apps := AntiSpam  \
                      miui \
                      MiWallpaper \
                      MiuiCompass  \
-                     MiuiFramework \
+                     miuisystem \
                      MiuiSuperMarket \
                      MiuiVideo \
                      NetworkAssistant2 \
