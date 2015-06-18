@@ -205,7 +205,7 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
 	$(hide) cp -r framework-res $(TMP_DIR)
 	#for call ./customize_framework-res.sh
 	$(hide) $(ADDMIUIRES) $(TMP_DIR)/framework-res/res $(TMP_DIR)/framework-res/res
-	$(hide) $(AAPT) p -f -x --wlan-replace Wi-Fi --wlan-replace WiFi \
+	$(hide) $(AAPT) p -f -x --auto-add-overlay --wlan-replace Wi-Fi --wlan-replace WiFi \
 		--min-sdk-version $(subst v,,$(ANDROID_PLATFORM)) --target-sdk-version $(subst v,,$(ANDROID_PLATFORM)) \
 		$(addprefix -S ,$(wildcard $(MIUI_OVERLAY_RES))) \
 		-S $(TMP_DIR)/framework-res/res -A $(TMP_DIR)/framework-res/assets \
