@@ -25,7 +25,8 @@ private-miui-priv-apps := AuthManager \
                           WeatherProvider \
                           YellowPage
 
-private-miui-apps := AntiSpam  \
+private-miui-apps := AnalyticsCore \
+                     AntiSpam  \
                      ApplicationsProvider  \
                      BaiduNetworkLocation  \
                      BugReport  \
@@ -42,7 +43,6 @@ private-miui-apps := AntiSpam  \
                      KingSoftCleaner \
                      LiveWallpapersPicker \
                      MiAssistant  \
-                     MiFinance \
                      MiLinkService \
                      Mipay  \
                      miui \
@@ -64,7 +64,10 @@ private-miui-apps := AntiSpam  \
                      Updater \
                      VoiceAssist \
                      XiaomiAccount \
-                     XiaomiServiceFramework
+                     XiaomiServiceFramework \
+                     XiaomiVip \
+                     XMPass \
+                     SystemAdSolution
 
 private-preinstall-apps := ota-miui-XiaomiSmartHome \
                      ota-partner-Weibo \
