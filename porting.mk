@@ -106,7 +106,7 @@ $(TMP_DIR)/$(1).jar: $(2)_miui $$(source-files-for-$(1))
 	$(OVERLAYSMALI) $(2) $(PORT_ROOT)/android/overlay
 	$(ADDMIUI) $(2)_miui $(2)
 	$(APKTOOL) b $(2) -o $$@
-	$(PREPARE_PRELOADED_CLASSES) $(ZIP_FILE) $(2) $(OUT_JAR_PATH)
+	$(PREPARE_PRELOADED_CLASSES) $(ZIP_FILE) $(2) $(subst /$(DENSITY)/,/,$(OUT_JAR_PATH))
 	$(hide) if [ -f $(1).jar.out/preloaded-classes ]; then \
 		jar -uf $$@ -C $(1).jar.out preloaded-classes; \
 	elif [ -f $(2)/p/reloaded-classes ];then \
@@ -114,7 +114,7 @@ $(TMP_DIR)/$(1).jar: $(2)_miui $$(source-files-for-$(1))
 	fi
 	@echo "<<< build $$@ completed!"
 
-$(2)_miui: $(OUT_JAR_PATH)/$(1).jar
+$(2)_miui: $(subst /$(DENSITY)/,/,$(OUT_JAR_PATH))/$(1).jar
 	$(APKTOOL) d -f $$< -o $$@
 
 ifeq ($(USE_ANDROID_OUT),true)
@@ -125,9 +125,9 @@ CLEANJAR += clean-$(1)
 clean-$(1):
 	$(MAKE_ATTOP) clean-$(1)
 
-RELEASE_MIUI += $(RELEASE_PATH)/$(DENSITY)/system/framework/$(1).jar
-$(RELEASE_PATH)/$(DENSITY)/system/framework/$(1).jar: $(OUT_JAR_PATH)/$(1).jar
-	$(hide) mkdir -p $(RELEASE_PATH)/$(DENSITY)/system/framework
+RELEASE_MIUI += $(RELEASE_PATH)/system/framework/$(1).jar
+$(RELEASE_PATH)/system/framework/$(1).jar: $(OUT_JAR_PATH)/$(1).jar
+	$(hide) mkdir -p $(RELEASE_PATH)/system/framework
 	$(hide) cp $$< $$@
 endif
 
@@ -372,9 +372,11 @@ $(eval $(call APP_WS_template,framework-res,framework))
 ifeq ($(USE_ANDROID_OUT),true)
 RELEASE_MIUI += $(RELEASE_PATH)/$(DENSITY)/system/framework/framework-ext-res.apk
 $(RELEASE_PATH)/$(DENSITY)/system/framework/framework-ext-res.apk:
+	mkdir -p $$(dirname $@)
 	cp $(OUT_JAR_PATH)/framework-ext-res.apk $@
 RELEASE_MIUI += $(RELEASE_PATH)/$(DENSITY)/system/framework/framework-res.apk
 $(RELEASE_PATH)/$(DENSITY)/system/framework/framework-res.apk:
+	mkdir -p $$(dirname $@)
 	cp $(OUT_JAR_PATH)/framework-res.apk $@
 endif
 

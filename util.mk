@@ -64,7 +64,7 @@ patchmiui:
 	@echo Patchmiui completed!
 
 # Target to release MIUI jar and apks
-release: $(RELEASE_MIUI) release-miui-resources
+release: $(RELEASE_MIUI) release-miui-resources release-apkcert
 
 
 # Target to sign apks in the connected phone
@@ -203,7 +203,3 @@ ota-base-restore: $(use_previous_target_file)
 	adb push /tmp/SYSTEM/app/ system/app
 	rm -rf /tmp/SYSTEM/framework
 	rm -rf /tmp/SYSTEM/app
-
-miui-apps-included:
-	@echo $(addsuffix .apk,$(private-miui-apps) $(private-miui-priv-apps) $(private-preinstall-apps) framework-ext-res)
-

@@ -69,9 +69,6 @@ private-miui-apps := AnalyticsCore \
                      XMPass \
                      SystemAdSolution
 
-private-preinstall-apps := ota-miui-XiaomiSmartHome \
-                     ota-partner-Weibo \
-
 
 private-miui-jars := services \
                      android.policy \
