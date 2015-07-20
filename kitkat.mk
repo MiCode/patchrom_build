@@ -60,7 +60,6 @@ private-miui-apps := AnalyticsCore \
                      SoundRecorder  \
                      TelephonyProvider  \
                      ThemeManager  \
-                     TrafficControl \
                      Updater \
                      VoiceAssist \
                      XiaomiAccount \

@@ -39,12 +39,13 @@ add-prebuilt-fonts:
 
 add-preinstall-files:
 	@echo To add preintall files
-	$(hide) mkdir -p $(ZIP_DIR)/data/miui
-	$(hide) cp -rf $(OUT_DATA_PATH)/miui/* $(ZIP_DIR)/data/miui
-	$(hide) find $(OUT_DATA_PATH)/miui/app -name "cta-*_CTA.apk" -exec rm -rf {} \;
+	$(hide) mkdir -p $(ZIP_DIR)/data/miui/app/customized
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/gallery $(ZIP_DIR)/data/miui
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/mms $(ZIP_DIR)/data/miui
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/yellowpage $(ZIP_DIR)/data/miui
+	$(hide) find $(OUT_DATA_PATH)/miui/app -name "ota-*.apk" -exec cp -rf {} $(ZIP_DIR)/data/miui/app/customized \;
 	$(hide) mkdir -p $(ZIP_DIR)/data/miui/cust/cn
-	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn/* $(ZIP_DIR)/data/miui/cust/cn
-
+	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn/* $(ZIP_DIR)/data/miui/cust/cn/
 
 
 release-prebuilt-files:
@@ -66,13 +67,13 @@ release-prebuilt-fonts:
 
 release-preinstall-files:
 	@echo Release preintall files
-	$(hide) mkdir -p $(RELEASE_PATH)/data/miui
-	$(hide) cp -rf $(OUT_DATA_PATH)/miui/* $(RELEASE_PATH)/data/miui
-	$(hide) find $(OUT_DATA_PATH)/miui/app -name "cta-*_CTA.apk" -exec rm -rf {} \;
+	$(hide) mkdir -p $(RELEASE_PATH)/data/miui/app/customized
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/gallery $(RELEASE_PATH)/data/miui
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/mms $(RELEASE_PATH)/data/miui
+	$(hide) cp -rf $(OUT_DATA_PATH)/miui/yellowpage $(RELEASE_PATH)/data/miui
+	$(hide) find $(OUT_DATA_PATH)/miui/app -name "ota-*.apk" -exec cp -rf {} $(RELEASE_PATH)/data/miui/app/customized/ \;
 	$(hide) mkdir -p $(RELEASE_PATH)/cust/data/cn
-	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn/* $(RELEASE_PATH)/cust/data/cn
-	$(hide) rm -rf $(RELEASE_PATH)/data/miui/apps
-	$(hide) rm -rf $(RELEASE_PATH)/data/miui/app/noncustomized/*
+	$(hide) cp -rf $(OUT_CUST_PATH)/data/cn/* $(RELEASE_PATH)/cust/data/cn/
 
 
 release-miui-resources:
