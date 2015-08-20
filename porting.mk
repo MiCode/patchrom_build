@@ -19,7 +19,6 @@ APKTOOL     := $(TOOL_DIR)/apktool $(APK_VERBOSE)
 AAPT        := $(TOOL_DIR)/aapt
 SIGN        := $(TOOL_DIR)/sign.sh $(VERBOSE)
 ADDMIUI     := $(TOOL_DIR)/add_miui_smail.sh $(VERBOSE)
-OVERLAYSMALI := $(TOOL_DIR)/overlay_smali.sh $(VERBOSE)
 PREPARE_PRELOADED_CLASSES := $(TOOL_DIR)/prepare_preloaded_classes.sh $(VERBOSE)
 ADDMIUIRES  := $(TOOL_DIR)/add_miui_res.sh $(VERBOSE)
 PATCH_MIUI_APP  := $(TOOL_DIR)/patch_miui_app.sh $(VERBOSE)
@@ -103,7 +102,6 @@ $(TMP_DIR)/$(1).jar: $(2)_miui $$(source-files-for-$(1))
 	@echo ">>> build $$@..."
 	$(hide) rm -rf $(2)
 	$(hide) cp -r $(1).jar.out/ $(2)
-	$(OVERLAYSMALI) $(2) $(PORT_ROOT)/android/overlay
 	$(ADDMIUI) $(2)_miui $(2)
 	$(APKTOOL) b $(2) -o $$@
 	$(PREPARE_PRELOADED_CLASSES) $(ZIP_FILE) $(2) $(subst /$(DENSITY)/,/,$(OUT_JAR_PATH))
