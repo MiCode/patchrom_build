@@ -85,7 +85,7 @@ ifeq ($(strip $(USE_ANDROID_OUT)),true)
     else
          OUT_SYS_PATH := $(ANDROID_OUT)/system
          OUT_DATA_PATH := $(ANDROID_OUT)/data
-         OUT_CUST_PATH := $(ANDROID_OUT)/cust
+         OUT_CUST_PATH := $(ANDROID_OUT)/cust_variants_intermedia
 	 REALLY_CLEAN = $(CLEANJAR) $(CLEANMIUIAPP)
     endif
 else

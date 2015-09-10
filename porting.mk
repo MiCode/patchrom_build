@@ -8,7 +8,8 @@ TMP_DIR     := out
 ZIP_DIR     := $(TMP_DIR)/ZIP
 OUT_ZIP     := $(TMP_DIR)/$(OUT_ZIP_FILE)
 TOOL_DIR    := $(PORT_ROOT)/tools
-PROP_FILE   := $(ZIP_DIR)/system/build.prop
+BUILD_PROP  := $(ZIP_DIR)/system/build.prop
+MIUI_PROP   := $(PORT_BUILD)/miui.prop
 SKIA_FILE	:= $(ZIP_DIR)/system/lib/libskia.so
 SYSOUT_DIR  := $(OUT_SYS_PATH)
 DATAOUT_DIR  := $(OUT_DATA_PATH)
@@ -23,7 +24,7 @@ PREPARE_PRELOADED_CLASSES := $(TOOL_DIR)/prepare_preloaded_classes.sh $(VERBOSE)
 ADDMIUIRES  := $(TOOL_DIR)/add_miui_res.sh $(VERBOSE)
 PATCH_MIUI_APP  := $(TOOL_DIR)/patch_miui_app.sh $(VERBOSE)
 FIX_9PATCH_PNG  := $(TOOL_DIR)/fix_9patch_png.sh $(VERBOSE)
-SETPROP     := $(TOOL_DIR)/set_build_prop.sh
+SETPROP     := $(TOOL_DIR)/post_process_props.py
 REWRITE		:= $(TOOL_DIR)/rewrite.py
 UNZIP       := unzip $(VERBOSE)
 ZIP         := zip $(VERBOSE)
@@ -418,10 +419,23 @@ remove-rund-apks:
 	$(hide) rm -f $(addprefix $(ZIP_DIR)/system/app/, $(addsuffix .apk, $(RUNDAPKS)))
 	@echo "<<< remove done!"
 
-pre-zip-misc: set-build-prop
+pre-zip-misc: set-build-prop add-device-feature
 
+set-build-prop: OVERLAY_PROP := $(TMP_DIR)/overlay.prop
 set-build-prop:
-	$(SETPROP) $(PROP_FILE) $(PORT_PRODUCT) $(BUILD_NUMBER)
+	@echo "Overlay build prop"
+	$(hide) cp $(MIUI_PROP) $(OVERLAY_PROP)
+	$(hide) echo "ro.build.version.incremental=$(BUILD_NUMBER)" >> $(OVERLAY_PROP)
+	$(hide) echo "ro.product.mod_device=$(PORT_PRODUCT)" >> $(OVERLAY_PROP)
+	$(SETPROP) $(BUILD_PROP) $(OVERLAY_PROP)
+
+add-device-feature: FEATURE_DIR := $(ZIP_DIR)/system/etc/device_feature
+add-device-feature:
+	$(hide) mkdir -p $(FEATURE_DIR); \
+	device_name=$$(grep "ro.product.device=" $(BUILD_PROP) | cut -d '=' -f2); \
+	echo "Add device feature: $$device_name.xml"; \
+	cp -rf $(PORT_BUILD)/device_feature.xml $(FEATURE_DIR)/$$device_name.xml
+
 
 rewrite-lib:
 	$(hide) if [ $(REWRITE_SKIA_LIB) = "true" ]; then \
