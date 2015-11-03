@@ -66,7 +66,8 @@ private-miui-apps := AnalyticsCore \
                      XiaomiServiceFramework \
                      XiaomiVip \
                      XMPass \
-                     SystemAdSolution
+                     SystemAdSolution \
+                     HTMLViewer
 
 
 private-miui-jars := services \
