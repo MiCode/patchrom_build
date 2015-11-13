@@ -17,6 +17,33 @@
 # 	local-density
 # See nexus5/makefile as an example
 #
+
+
+# specify the density for apps, HDPI OR XHDPI, default is XHDPI
+DENSITY := $(strip $(local-density))
+ifeq ($(DENSITY),)
+	DENSITY := XHDPI
+endif
+
+ifeq ($(strip $(USE_ANDROID_OUT)),true)
+    ifeq ($(ANDROID_OUT),)
+         ERR_REPORT += error-android-env
+    else
+         OUT_SYS_PATH := $(ANDROID_OUT)/system
+         OUT_DATA_PATH := $(ANDROID_OUT)/data
+         OUT_CUST_PATH := $(ANDROID_OUT)/cust_variants_intermedia
+	 REALLY_CLEAN = $(CLEANJAR) $(CLEANMIUIAPP)
+    endif
+else
+    USE_ANDROID_OUT := false
+    OUT_SYS_PATH := $(PORT_ROOT)/miui/$(DENSITY)/system
+    OUT_DATA_PATH := $(PORT_ROOT)/miui/data
+    OUT_CUST_PATH := $(PORT_ROOT)/miui/cust
+    REALLY_CLEAN :=
+endif
+OUT_JAR_PATH := $(OUT_SYS_PATH)/framework
+OUT_APK_PATH := $(OUT_SYS_PATH)/app
+
 include $(PORT_ROOT)/build/$(PATCHROM_BRANCH).mk
 
 ERR_REPORT   :=
@@ -46,12 +73,7 @@ PRIV_MIUIAPPS:= $(strip \
 			     )
 
 MIUI_JARS := $(strip $(private-miui-jars))
-
-# specify the density for apps, HDPI OR XHDPI, default is XHDPI
-DENSITY := $(strip $(local-density))
-ifeq ($(DENSITY),)
-    DENSITY := XHDPI
-endif
+PHONE_JARS := $(strip $(local-modified-jars))
 
 
 ACT_PRE_ZIP  := $(strip $(local-pre-zip))
@@ -78,26 +100,6 @@ endif
 ACT_PRE_ZIP  += $(VERIFY_OTA)
 
 ACT_AFTER_ZIP := $(strip $(local-after-zip))
-
-ifeq ($(strip $(USE_ANDROID_OUT)),true)
-    ifeq ($(ANDROID_OUT),)
-         ERR_REPORT += error-android-env
-    else
-         OUT_SYS_PATH := $(ANDROID_OUT)/system
-         OUT_DATA_PATH := $(ANDROID_OUT)/data
-         OUT_CUST_PATH := $(ANDROID_OUT)/cust_variants_intermedia
-	 REALLY_CLEAN = $(CLEANJAR) $(CLEANMIUIAPP)
-    endif
-else
-    USE_ANDROID_OUT := false
-    OUT_SYS_PATH := $(PORT_ROOT)/miui/$(DENSITY)/system
-    OUT_DATA_PATH := $(PORT_ROOT)/miui/data
-    OUT_CUST_PATH := $(PORT_ROOT)/miui/cust
-    REALLY_CLEAN :=
-endif
-PHONE_JARS := $(strip $(local-modified-jars))
-OUT_JAR_PATH := $(OUT_SYS_PATH)/framework
-OUT_APK_PATH := $(OUT_SYS_PATH)/app
 
 #
 # log could be set with 'make -e log=value target' and the value:
