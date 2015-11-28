@@ -429,12 +429,12 @@ set-build-prop:
 	$(hide) echo "ro.product.mod_device=$(PORT_PRODUCT)" >> $(OVERLAY_PROP)
 	$(SETPROP) $(BUILD_PROP) $(OVERLAY_PROP)
 
-add-device-feature: FEATURE_DIR := $(ZIP_DIR)/system/etc/device_feature
+add-device-feature: FEATURE_DIR := $(ZIP_DIR)/system/etc/device_features
 add-device-feature:
 	$(hide) mkdir -p $(FEATURE_DIR); \
 	device_name=$$(grep "ro.product.device=" $(BUILD_PROP) | cut -d '=' -f2); \
 	echo "Add device feature: $$device_name.xml"; \
-	cp -rf $(PORT_BUILD)/device_feature.xml $(FEATURE_DIR)/$$device_name.xml
+	cp -rf $(PORT_BUILD)/device_features.xml $(FEATURE_DIR)/$$device_name.xml
 
 
 rewrite-lib:
