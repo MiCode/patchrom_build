@@ -464,7 +464,7 @@ $(TMP_DIR)/sign-zipfile-dir:
 fullota: BUILD_NUMBER := 02.$(ROM_BUILD_NUMBER)
 fullota: target_files
 	@echo ">>> To build out target file: fullota.zip ..."
-	$(BUILD_TARGET_FILES) $(INCLUDE_THIRDPART_APP) fullota.zip
+	$(BUILD_TARGET_FILES) $(INCLUDE_THIRDPART_APP) $(CERTIFICATE_DIR) fullota.zip
 	@echo "<<< build target file completed!"
 
 #< TARGET FOR ZIPFILE END

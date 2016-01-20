@@ -15,6 +15,7 @@
 # 	local-pre-zip
 # 	local-after-zip
 # 	local-density
+# 	local-certificate-dir
 # See nexus5/makefile as an example
 #
 
@@ -150,4 +151,10 @@ ifeq ($(strip $(include_thirdpart_app)),true)
 	INCLUDE_THIRDPART_APP := true
 else
 	INCLUDE_THIRDPART_APP := false
+endif
+
+ifeq ($(wildcard $(strip $(local-certificate-dir))),)
+CERTIFICATE_DIR := $(PORT_ROOT)/build/security
+else
+CERTIFICATE_DIR := $(strip $(local-certificate-dir))
 endif
