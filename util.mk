@@ -203,3 +203,10 @@ ota-base-restore: $(use_previous_target_file)
 	adb push /tmp/SYSTEM/app/ system/app
 	rm -rf /tmp/SYSTEM/framework
 	rm -rf /tmp/SYSTEM/app
+
+released_keys:
+	mkdir -p security
+	-$(TOOL_DIR)/make_key security/platform '/C=CN/ST=Beijing/L=Beijing/O=Patchrom/OU=Patchrom/CN=$(USER)/emailAddress=$(USER)@android.com'
+	-$(TOOL_DIR)/make_key security/shared '/C=CN/ST=Beijing/L=Beijing/O=Patchrom/OU=Patchrom/CN=$(USER)/emailAddress=$(USER)@android.com'
+	-$(TOOL_DIR)/make_key security/media '/C=CN/ST=Beijing/L=Beijing/O=Patchrom/OU=Patchrom/CN=$(USER)/emailAddress=$(USER)@android.com'
+	-$(TOOL_DIR)/make_key security/testkey '/C=CN/ST=Beijing/L=Beijing/O=Patchrom/OU=Patchrom/CN=$(USER)/emailAddress=$(USER)@android.com'
