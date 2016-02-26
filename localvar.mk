@@ -70,7 +70,7 @@ MIUIAPPS     := $(strip \
 			     )
 PRIV_MIUIAPPS:= $(strip \
                     $(filter-out $(strip $(local-miui-modified-apps)), \
-                                 $(filter-out $(strip $(local-miui-removed-apps)),$(strip $(private-miui-priv-apps)))) \
+                                 $(filter-out $(strip $(local-miui-removed-priv-apps)),$(strip $(private-miui-priv-apps)))) \
 			     )
 
 MIUI_JARS := $(strip $(private-miui-jars))
