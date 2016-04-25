@@ -218,7 +218,7 @@ $(TMP_DIR)/framework-res.apk: $(TMP_DIR)/apktool-if $(framework-res-source-files
 $(TMP_DIR)/framework-ext-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/framework-ext-res.apk
 	@echo ">>> build $@..."
 	#$(APKTOOL) d -f -t miui $(OUT_JAR_PATH)/framework-ext-res.apk -o $(TMP_DIR)/framework-ext-res
-	$(hide) $(AAPT) p -f -x --auto-add-overlay --rename-manifest-package com.miui --wlan-replace Wi-Fi --wlan-replace WiFi \
+	$(hide) $(AAPT) p -f -x --auto-add-overlay --rename-manifest-package com.miui.rom --wlan-replace Wi-Fi --wlan-replace WiFi \
 		--min-sdk-version $(subst v,,$(ANDROID_PLATFORM)) --target-sdk-version $(subst v,,$(ANDROID_PLATFORM)) \
 		$(addprefix -S ,$(wildcard $(MIUI_RES))) -M $(MIUI_SRC_DIR)/frameworks/base/core/res/AndroidManifest.xml \
 		-I $(APKTOOL_IF_RESULT_FILE)/1.apk -I $(APKTOOL_IF_RESULT_FILE)/16.apk -F $@
