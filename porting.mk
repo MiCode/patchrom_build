@@ -1,5 +1,6 @@
 include $(PORT_BUILD)/config.mk
 include $(PORT_BUILD)/definitions.mk
+include $(PORT_BUILD)/apps.mk
 include $(PORT_BUILD)/release.mk
 include $(PORT_BUILD)/prebuilt.mk
 
@@ -130,41 +131,6 @@ $(TARGET_OUT_DIR)/$(1).jar: $$(source-files-for-$(1)) | $(TARGET_OUT_DIR)
 
 endef
 
-#
-# To apktool build one apk from the decoded dirctory under .build
-# $1: the apk name, such as LogsProvider
-# $2: the dir name, might be different from apk name
-# $3: to specify if the smali files should be decoded from MIUI first
-# $4: to specify app dir, for kitkat only
-define APP_template
-source-files-for-$(2) := $$(call all-files-under-dir,$(2))
-$(TARGET_OUT_DIR)/$(1).apk: $$(source-files-for-$(2)) $(3) | $(TARGET_OUT_DIR)
-	@echo ">>> build $$@..."
-ifneq ($(wildcard $(2)),)
-	$(hide) cp -r $(2) $(TARGET_OUT_DIR)
-	$(hide) find $(TARGET_OUT_DIR)/$(2) -name "*.part" -exec rm {} \;
-	$(hide) find $(TARGET_OUT_DIR)/$(2) -name "*.smali.method" -exec rm {} \;
-endif
-	$(APKTOOL) b -p $(TARGET_OUT_DIR)/apktool -a $(AAPT) $(TARGET_OUT_DIR)/$(2) -o $$@
-	#@echo "9Patch png fix $$@..."
-#ifeq ($(3),)
-#	$(FIX_9PATCH_PNG) $(1) $(STOCKROM_DIR)/system/$(4) $(TARGET_OUT_DIR)
-#else
-#	$(FIX_9PATCH_PNG) $(1) $(OUT_APK_PATH:app=$(4)) $(TARGET_OUT_DIR) $(1)/res
-#endif
-	@echo "fix $$@ completed!"
-	@echo "<<< build $$@ completed!"
-
-$(3): $(OUT_APK_PATH:app=$(4))/$(1)/$(1).apk $(TARGET_OUT_DIR)/apktool
-	$(hide) rm -rf $(3)
-	$(APKTOOL) d -p $(TARGET_OUT_DIR)/apktool -t miui -f $$< -o $(3)
-	$(hide) sed -i "/tag:/d" $(3)/apktool.yml
-	$(hide) sed -i "s/isFrameworkApk: true/isFrameworkApk: false/g" $(3)/apktool.yml
-	$(hide) sed -i "s/package=\"com.miui.core\"/package=\"miui\"/g" $(3)/AndroidManifest.xml
-	$(PATCH_MIUI_APP) $(2) $(3)
-
-endef
-
 # Target to build framework-res.apk
 # copy the framework-res, add the miui overlay then build
 #TODO need to add changed files for all related, and re-install framework-res.apk make sense?
@@ -203,66 +169,6 @@ $(1): $(ZIP_FILE)
 	$(hide) rm -f $(TARGET_OUT_DIR)/system/$(2)/$(1).apk
 endef
 
-# To decide dir of the apk
-# $1 the apk name
-define MOD_DIR_template
-ifeq ($(USE_ANDROID_OUT),true)
-ifeq ($(wildcard $(ANDROID_OUT)/system/priv-app/$(1).apk),$(wildcard $(STOCKROM_DIR)/system/priv-app/$(1).apk))
-	$(call SIGN_template,$(TARGET_OUT_DIR)/$(1).apk,/system/app/$(1).apk)
-else
-	$(call SIGN_template,$(TARGET_OUT_DIR)/$(1).apk,/system/priv-app/$(1).apk)
-endif
-else
-ifeq ($(wildcard $(RELEASE_DIR)/$(DENSITY)/system/priv-app/$(1).apk),$(wildcard $(STOCKROM_DIR)/system/priv-app/$(1).apk))
-	$(call SIGN_template,$(TARGET_OUT_DIR)/$(1).apk,/system/app/$(1).apk)
-else
-	$(call SIGN_template,$(TARGET_OUT_DIR)/$(1).apk,/system/priv-app/$(1).apk)
-endif
-endif
-endef
-
-# To decide dir of the apk
-# $1 the apk name
-# $2: to specify if the smali files should be decoded from MIUI first
-define APP_DIR_template
-ifeq ($(USE_ANDROID_OUT),true)
-ifeq ($(wildcard $(ANDROID_OUT)/system/priv-app/$(1).apk),)
-	$(call APP_template,$(1),$(1),$(2),app)
-else
-	$(call APP_template,$(1),$(1),$(2),priv-app)
-endif
-else
-ifeq ($(wildcard $(RELEASE_DIR)/$(DENSITY)/system/priv-app/$(1).apk),)
-	$(call APP_template,$(1),$(1),$(2),app)
-else
-	$(call APP_template,$(1),$(1),$(2),priv-app)
-endif
-endif
-endef
-
-#
-# Used to sign one single file, e.g: make .build/LogsProvider.apk.sign
-# for zipfile target, just to copy the unsigned file to correct ZIP-directory.
-# also create a seperate target for command line, such as : make LogsProvider.apk.sign
-# $1: the apk file need to be signed
-# $2: the path/filename in the phone
-define SIGN_template
-SIGNAPKS += $(1).sign
-$(notdir $(1)).sign $(1).sign: $(1)
-	@echo sign apk $(1) and push to phone as $(2)...
-	#java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/platform.x509.pem $(PORT_ROOT)/build/security/platform.pk8 $(1) $(1).signed
-	java -jar $(TOOL_DIR)/signapk.jar $(PORT_ROOT)/build/security/testkey.x509.pem $(PORT_ROOT)/build/security/testkey.pk8 $(1) $(1).signed
-	$(ADB) remount
-	$(ADB) push $(1).signed $(2)
-
-mark-tozip-for-$(1) := $(TARGET_OUT_DIR)/$$(shell basename $(1))-tozip
-TOZIP_APKS += $$(mark-tozip-for-$(1))
-$$(mark-tozip-for-$(1)) : $(1)
-	$(hide) mkdir -p $(shell dirname $(ZIP_DIR)$(2))
-	$(hide) cp $(1) $(ZIP_DIR)$(2)
-	@touch $$@
-endef
-
 zipone: zipfile $(ACT_AFTER_ZIP)
 
 otapackage: metadata target_files
@@ -273,15 +179,6 @@ $(foreach jar, $(MIUI_JARS), \
 	$(eval $(call JAR_template,$(jar),$(TARGET_OUT_DIR)/$(jar))))
 $(foreach jar, $(PHONE_JARS), \
 	$(eval $(call JAR_PHONE_template,$(jar))))
-
-#$(foreach app, $(APPS), \
-	$(eval $(call APP_DIR_template,$(app),)))
-
-#$(foreach app, $(MIUI_APPS) , \
-	$(eval $(call APP_DIR_template,$(app),$(TARGET_OUT_DIR)/$(app))))
-
-#$(foreach app, $(APPS) $(MIUI_APPS_MOD), \
-	$(eval $(call MOD_DIR_template,$(app))))
 
 $(call copy-apks-to-target, $(MIUI_APPS), $(PREBUILT_APP_APK_DIR), $(TARGET_APP_DIR))
 $(call copy-apks-to-target, $(MIUI_PRIV_APPS), $(PREBUILT_PRIV_APP_APK_DIR), $(TARGET_PRIV_APP_DIR))
@@ -403,8 +300,7 @@ patch-bootimg: $(PATCH_BOOTIMG_SH) $(UNPACKBOOTIMG) $(MKBOOTFS) $(MKBOOTIMG) $(T
 
 target_files: $(STOCKROM_DIR) | $(ZIP_DIR) 
 target_files: add-miui-prebuilt
-target_files: $(foreach app_name, $(MIUI_APPS),$(TARGET_APP_DIR)/$(app_name)/$(app_name).apk)
-target_files: $(foreach app_name, $(MIUI_PRIV_APPS),$(TARGET_PRIV_APP_DIR)/$(app_name)/$(app_name).apk)
+target_files: $(TARGET_APPS)
 target_files: $(TARGET_FRAMEWORK_DIR)/framework-res.apk $(TARGET_FRAMEWORK_DIR)/framework-ext-res/framework-ext-res.apk
 target_files: $(ZIP_BLDJARS) $(ACT_PRE_ZIP)
 

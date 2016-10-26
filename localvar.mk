@@ -53,9 +53,9 @@ ifeq ($(OUT_ZIP_FILE),)
     OUT_ZIP_FILE:= update.zip
 endif
 
-APPS         := $(strip $(local-modified-apps))
-MIUI_MOD_APPS := $(strip $(local-miui-modified-apps))
-MIUI_APPS_BLACKLIST := $(MIUI_MOD_APPS) $(strip $(local-miui-removed-apps))
+MOD_APPS         := $(strip $(local-modified-apps))
+MOD_MIUI_APPS := $(strip $(local-miui-modified-apps))
+MIUI_APPS_BLACKLIST := $(MOD_MIUI_APPS) $(strip $(local-miui-removed-apps))
 
 PHONE_JARS := $(strip $(local-modified-jars))
 
