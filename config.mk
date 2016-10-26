@@ -35,6 +35,9 @@ RELEASE_BOOT_DIR := $(RELEASE_DIR)/boot
 
 # Src dirs
 MIUI_SRC_DIR := $(ANDROID_TOP)/miui
+
+# Miui apk cert txt
+MIUI_APK_CERT_TXT := $(shell find $(ANDROID_OUT)/obj/PACKAGING/apkcerts_intermediates/ -name "*.txt" | head -n 1)
 else
 # Prebuilt dirs
 PREBUILT_SYS_DIR := $(PORT_ROOT)/miui/system
@@ -45,6 +48,9 @@ PREBUILT_BOOT_DIR := $(PORT_ROOT)/miui/boot
 
 # Src dirs
 MIUI_SRC_DIR := $(PORT_ROOT)/miui/src
+
+# Miui apk cert txt
+MIUI_APK_CERT_TXT := $(PORT_ROOT)/miui/metadata/apkcert.txt
 endif
 
 # Prebuilt dirs
@@ -88,6 +94,9 @@ MKBOOTIMG                  := $(TOOLS_DIR)/$(HOST_OS)-x86/mkbootimg
 APKTOOL                    := $(TOOLS_DIR)/apktool $(APK_VERBOSE)
 PATCH_BOOTIMG_SH           := $(TOOLS_DIR)/patch_bootimg.sh
 UNIQ_FIRST_PY              := $(TOOLS_DIR)/uniq_first.py
+GET_APK_CERT               := $(TOOLS_DIR)/get_apk_cert.py
+PATCH_MIUI_APP             := $(TOOLS_DIR)/patch_miui_app.sh $(VERBOSE)
+FIX_9PATCH_PNG             := $(TOOLS_DIR)/fix_9patch_png.sh $(VERBOSE)
 
 # Config files
 BUILD_PROP  := $(TARGET_SYS_DIR)/build.prop
@@ -98,8 +107,6 @@ KEYS_CONF   := $(TOOLS_DIR)/keys.conf
 APKTOOL_INCLUDE_RES_DIR := $(TARGET_OUT_DIR)/apktool
 APKTOOL_INCLUDE_VENDOR_RES := $(APKTOOL_INCLUDE_RES_DIR)/1.apk
 APKTOOL_INCLUDE_MIUI_RES := $(APKTOOL_INCLUDE_RES_DIR)/1-miui.apk
-
-include $(PORT_BUILD)/miui_apps.mk
 
 MIUI_JARS := framework services telephony-common wifi-service
 MIUI_EXT_RES_APKS := $(PREBUILT_APP_APK_DIR)/miui/miui.apk \
