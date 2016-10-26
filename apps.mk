@@ -48,6 +48,8 @@ $(TARGET_OUT_DIR)/$(1).apk: $$(source-files-for-$(1)) $(TARGET_OUT_DIR)/$(1)
 	@echo ">>> build $$@..."
 ifneq ($(wildcard $(1)),)
 	$(hide) cp -r $(1) $(TARGET_OUT_DIR)
+	$(hide) find $(TARGET_OUT_DIR)/$(1) -name "*.part" -exec rm {} \;
+	$(hide) find $(TARGET_OUT_DIR)/$(1) -name "*.smali.method" -exec rm {} \;
 endif
 	$(APKTOOL) b -p $(TARGET_OUT_DIR)/apktool -a $(AAPT) $(TARGET_OUT_DIR)/$(1) -o $$@
 	@echo "9Patch png fix $$@..."
