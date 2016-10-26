@@ -30,14 +30,14 @@ TARGET_APPS := $(foreach app_name, $(MIUI_APPS),$(TARGET_APP_DIR)/$(app_name)/$(
 # $1: the apk name, such as LogsProvider
 define miui_app_mod_template
 ifeq ($(wildcard $(PREBUILT_APP_APK_DIR)/$(1)/$(1).apk),)
-prebuilt-apk-path := $(PREBUILT_PRIV_APP_APK_DIR)/$(1)/$(1).apk
+prebuilt-apk-path-$(1) := $(PREBUILT_PRIV_APP_APK_DIR)/$(1)/$(1).apk
 else
-prebuilt-apk-path := $(PREBUILT_APP_APK_DIR)/$(1)/$(1).apk
+prebuilt-apk-path-$(1) := $(PREBUILT_APP_APK_DIR)/$(1)/$(1).apk
 endif
 source-files-for-$(1) := $$(call all-files-under-dir,$(1))
-apkcert := $$(shell $(GET_APK_CERT) $(1).apk $(MIUI_APK_CERT_TXT))
+apkcert-$(1) := $$(shell $(GET_APK_CERT) $(1).apk $(MIUI_APK_CERT_TXT))
 
-$(TARGET_OUT_DIR)/$(1): $$(prebuilt-apk-path) $(APKTOOL_INCLUDE_MIUI_RES) $(APKTOOL_INCLUDE_VENDOR_RES)
+$(TARGET_OUT_DIR)/$(1): $$(prebuilt-apk-path-$(1)) $(APKTOOL_INCLUDE_MIUI_RES) $(APKTOOL_INCLUDE_VENDOR_RES)
 	$(APKTOOL) d -p $(TARGET_OUT_DIR)/apktool -t miui -f $$< -o $(TARGET_OUT_DIR)/$(1)
 	$(hide) sed -i "/tag:/d" $$@/apktool.yml
 	$(hide) sed -i "s/isFrameworkApk: true/isFrameworkApk: false/g" $$@/apktool.yml
@@ -53,9 +53,9 @@ ifneq ($(wildcard $(1)),)
 endif
 	$(APKTOOL) b -p $(TARGET_OUT_DIR)/apktool -a $(AAPT) $(TARGET_OUT_DIR)/$(1) -o $$@
 	@echo "9Patch png fix $$@..."
-	$(FIX_9PATCH_PNG) $(1) $$(dir $$(prebuilt-apk-path)) $(TARGET_OUT_DIR) $(1)/res
-	@echo "sign $$(apkcert) key for $$@..."
-	$(hide) java -jar $(TOOLS_DIR)/signapk.jar $(CERTIFICATE_DIR)/$$(apkcert).x509.pem $(CERTIFICATE_DIR)/$$(apkcert).pk8 $$@ $$@.signed
+	$(FIX_9PATCH_PNG) $(1) $$(dir $$(prebuilt-apk-path-$(1))) $(TARGET_OUT_DIR) $(1)/res
+	@echo "sign $$(apkcert-$(1)) key for $$@..."
+	$(hide) java -jar $(TOOLS_DIR)/signapk.jar $(CERTIFICATE_DIR)/$$(apkcert-$(1)).x509.pem $(CERTIFICATE_DIR)/$$(apkcert-$(1)).pk8 $$@ $$@.signed
 	$(hide) mv $$@.signed $$@
 	@echo "<<< build $$@ completed!"
 
