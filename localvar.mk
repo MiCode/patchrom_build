@@ -55,7 +55,7 @@ endif
 
 MOD_APPS         := $(strip $(local-modified-apps))
 MOD_MIUI_APPS := $(strip $(local-miui-modified-apps))
-MIUI_APPS_BLACKLIST := $(MOD_MIUI_APPS) $(strip $(local-miui-removed-apps))
+MIUI_APP_BLACKLIST := $(MOD_MIUI_APPS) $(strip $(local-miui-removed-apps))
 
 PHONE_JARS := $(strip $(local-modified-jars))
 
