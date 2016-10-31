@@ -8,6 +8,7 @@ include $(PORT_BUILD)/prebuilt.mk
 # The global variable could be used in local makefile, and the name
 # would not be changed in future
 SHELL       := /bin/bash
+TMP_DIR     := out
 TOOL_DIR    := $(PORT_ROOT)/tools
 STOCKROM_DIR := $(basename $(ZIP_FILE))
 ZIP_DIR  := $(TARGET_OUT_DIR)/ZIP
@@ -140,6 +141,7 @@ framework-res-overlay-files:= $(call all-files-under-dir,$(OVERLAY_RES))
 $(TARGET_OUT_DIR)/framework-res.apk: $(STOCKROM_DIR)/system/framework/framework-res.apk $(framework-res-overlay-files)
 	@echo ">>> build $@..."
 	$(APKTOOL) d -f $(STOCKROM_DIR)/system/framework/framework-res.apk -o $(TARGET_OUT_DIR)/framework-res
+	$(hide) $(ADDMIUIRES) $(TMP_DIR)/framework-res/res $(TMP_DIR)/framework-res/res
 	$(AAPT) p -f -x --auto-add-overlay --wlan-replace Wi-Fi --wlan-replace WiFi \
 		--min-sdk-version $(ANDROID_PLATFORM) --target-sdk-version $(ANDROID_PLATFORM) \
 		$(addprefix -S ,$(wildcard $(OVERLAY_RES))) \
