@@ -31,8 +31,10 @@ TARGET_APPS := $(foreach app_name, $(MIUI_APPS),$(TARGET_APP_DIR)/$(app_name)/$(
 define miui_app_mod_template
 ifeq ($(wildcard $(PREBUILT_APP_APK_DIR)/$(1)/$(1).apk),)
 prebuilt-apk-path-$(1) := $(PREBUILT_PRIV_APP_APK_DIR)/$(1)/$(1).apk
+target-apk-path-$(1) := $(TARGET_PRIV_APP_DIR)/$(1)/$(1).apk
 else
 prebuilt-apk-path-$(1) := $(PREBUILT_APP_APK_DIR)/$(1)/$(1).apk
+target-apk-path-$(1) := $(TARGET_APP_DIR)/$(1)/$(1).apk
 endif
 source-files-for-$(1) := $$(call all-files-under-dir,$(1))
 apkcert-$(1) := $$(shell $(GET_APK_CERT) $(1).apk $(MIUI_APK_CERT_TXT))
@@ -59,7 +61,9 @@ endif
 	$(hide) mv $$@.signed $$@
 	@echo "<<< build $$@ completed!"
 
-TARGET_APPS += $(TARGET_OUT_DIR)/$(1).apk
+$(call copy-one-file,$(TARGET_OUT_DIR)/$(1).apk,$$(target-apk-path-$(1)))
+
+TARGET_APPS += $$(target-apk-path-$(1))
 endef
 
 $(foreach app, $(MOD_MIUI_APPS) , \
