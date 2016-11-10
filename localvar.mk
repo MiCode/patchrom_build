@@ -9,7 +9,7 @@
 # 	local-miui-removed-apps
 # 	local-miui-modified-apps
 # 	local-phone-apps
-# 	local-remove-apps
+# 	local-phone-priv-apps
 # 	local-pre-zip
 # 	local-after-zip
 # 	local-density
@@ -55,9 +55,13 @@ endif
 
 MOD_APPS         := $(strip $(local-modified-apps))
 MOD_MIUI_APPS := $(strip $(local-miui-modified-apps))
-MIUI_APP_BLACKLIST := $(MOD_MIUI_APPS) $(strip $(local-miui-removed-apps))
+MIUI_APP_BLACKLIST := $(MOD_MIUI_APPS) $(strip $(local-miui-removed-apps)) \
+		$(strip $(local-phone-apps)) $(strip $(local-phone-priv-apps))
 
 PHONE_JARS := $(strip $(local-modified-jars))
+
+VENDOR_APPS  := $(strip $(local-phone-apps))
+VENDOR_PRIV_APPS  := $(strip $(local-phone-priv-apps))
 
 
 ACT_PRE_ZIP  := $(strip $(local-pre-zip))
@@ -67,18 +71,6 @@ ifeq ($(strip $(local-rewrite-skia-lib)),false)
 	REWRITE_SKIA_LIB := false
 else
 	REWRITE_SKIA_LIB := true
-endif
-
-# if local-phone-apps is set, local-remove-apps would not be used,
-# and the apps could be removed at target $(ZIP_DIR)
-ifeq ($(strip $(local-phone-apps)),)
-	RUNDAPKS := $(strip $(local-remove-apps))
-	ifneq ($(RUNDAPKS),)
-		ACT_PRE_ZIP += remove-rund-apks
-	endif
-else
-	local-remove-apps :=
-	RUNDAPKS :=
 endif
 
 ACT_PRE_ZIP  += $(VERIFY_OTA)

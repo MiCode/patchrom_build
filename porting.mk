@@ -181,8 +181,6 @@ $(foreach jar, $(MIUI_JARS), \
 $(foreach jar, $(PHONE_JARS), \
 	$(eval $(call JAR_PHONE_template,$(jar))))
 
-$(call copy-apks-to-target, $(MIUI_APPS), $(PREBUILT_APP_APK_DIR), $(TARGET_APP_DIR))
-$(call copy-apks-to-target, $(MIUI_PRIV_APPS), $(PREBUILT_PRIV_APP_APK_DIR), $(TARGET_PRIV_APP_DIR))
 $(eval $(call copy-one-file,$(TARGET_OUT_DIR)/framework-ext-res.apk,$(TARGET_FRAMEWORK_DIR)/framework-ext-res/framework-ext-res.apk))
 $(eval $(call copy-one-file,$(TARGET_OUT_DIR)/framework-res.apk,$(TARGET_FRAMEWORK_DIR)/framework-res.apk))
 
@@ -248,12 +246,6 @@ $(APKTOOL_INCLUDE_MIUI_RES): $(PREBUILT_RES_DIR)/framework-res.apk $(MIUI_EXT_RE
 				echo install $$res_file ; \
 				$(APKTOOL) if -p $(TARGET_OUT_DIR)/apktool $$res_file; \
 			done
-
-remove-rund-apks:
-	@echo ">>> remove all unnecessary apks from original ZIP file..."
-	$(hide) rm -rf $(addprefix $(ZIP_DIR)/system/app/, $(RUNDAPKS))
-	$(hide) rm -rf $(addprefix $(ZIP_DIR)/system/priv-app/, $(RUNDAPKS))
-	@echo "<<< remove done!"
 
 pre-zip-misc: set-build-prop add-device-feature
 pre-zip-misc: merge-preloaded-classes insertkeys-mac_permissions

@@ -14,14 +14,17 @@ ALL_MIUI_PRIV_APPS :=
 $(foreach app, $(subst .apk,,$(shell find $(PREBUILT_PRIV_APP_APK_DIR) -name "*.apk" -exec basename {} \;)), \
 	    $(eval ALL_MIUI_PRIV_APPS += $(app)))
 
-MIUI_PRIV_APPS := $(filter-out $(MIUI_APP_BLACKLIST),$(ALL_MIUI_PRIV_APPS))
+MIUI_PRIV_APPS := $(filter-out $(MIUI_APP_BLACKLIST) $(VENDOR_APPS),$(ALL_MIUI_PRIV_APPS))
 
 
 ALL_MIUI_APPS :=
 $(foreach app, $(subst .apk,,$(shell find $(PREBUILT_APP_APK_DIR) -name "*.apk" -exec basename {} \;)), \
 	        $(eval ALL_MIUI_APPS += $(app)))
 
-MIUI_APPS := $(filter-out $(MIUI_APP_BLACKLIST),$(ALL_MIUI_APPS))
+MIUI_APPS := $(filter-out $(MIUI_APP_BLACKLIST) $(VENDOR_PRIV_APPS),$(ALL_MIUI_APPS))
+
+$(call copy-apks-to-target, $(MIUI_APPS), $(PREBUILT_APP_APK_DIR), $(TARGET_APP_DIR))
+$(call copy-apks-to-target, $(MIUI_PRIV_APPS), $(PREBUILT_PRIV_APP_APK_DIR), $(TARGET_PRIV_APP_DIR))
 
 TARGET_APPS := $(foreach app_name, $(MIUI_APPS),$(TARGET_APP_DIR)/$(app_name)/$(app_name).apk) \
 	$(foreach app_name, $(MIUI_PRIV_APPS),$(TARGET_PRIV_APP_DIR)/$(app_name)/$(app_name).apk) \
