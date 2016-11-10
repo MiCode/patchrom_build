@@ -88,7 +88,7 @@ $(TARGET_OUT_DIR)/$(1).jar: $(2)_miui $$(source-files-for-$(1))
 	@echo ">>> build $$@..."
 	$(hide) rm -rf $(2)
 	$(hide) cp -r $(1).jar.out/ $(2)
-	$(ADDMIUI) $(PORT_ROOT)/android/$(1).jar.out $(2)_miui $(2)
+	$(ADDMIUI) $(PORT_ROOT)/android/base-framework/$(1).jar.out $(2)_miui $(2)
 	$(APKTOOL) b $(2) -o $$@
 	@echo "<<< build $$@ completed!"
 

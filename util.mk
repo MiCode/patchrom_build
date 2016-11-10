@@ -6,8 +6,8 @@ usage:
 	@echo "	make clean      - clear everything for output of this makefile"
 	@echo "	make reallyclean- clear everything of related."
 	@echo "	make workspace  - prepare the initial workspace for porting"
-	@echo "	make firstpatch - add the miui hook into target framework smali code first time for a device"
-	@echo "	make patchmiui  - incrementaly add the miui hook into target framework smali code"
+	@echo "	make firstpatch - add the miui primary patch into target framework smali code"
+	@echo "	make secondpatch - add the miui secondary patch into target framework smali code"
 	@echo "	make fullota    - generate full ota package, all apks are signed using apkcerts.txt"
 	@echo ">>> Other helper targets:"
 	@echo "	make apktool-if            - install the framework for apktool"
@@ -30,14 +30,15 @@ usage:
 workspace: $(APKTOOL_INCLUDE_VENDOR_RES) $(JARS_OUTDIR) $(APPS_OUTDIR)
 	@echo Prepare workspace completed!
 
-# Target to add miui hook into target framework first time
+# Target to add miui primary patch into target framework
 firstpatch:
-	$(PATCH_MIUI_FRAMEWORK) $(PORT_ROOT)/android/base-framework $(PORT_ROOT)/android `pwd`
+	$(PATCH_MIUI_FRAMEWORK) $(PORT_ROOT)/android/base-framework $(PORT_ROOT)/android/primary-patch `pwd`
 
-# Target to incrementaly add miui hook into target framework
-patchmiui:
-	$(PATCH_MIUI_FRAMEWORK) $(PORT_ROOT)/android/last-framework $(PORT_ROOT)/android `pwd`
-	@echo Patchmiui completed!
+
+# Target to add miui secondary patch into target framework
+secondpatch:
+	$(PATCH_MIUI_FRAMEWORK) $(PORT_ROOT)/android/base-framework $(PORT_ROOT)/android/secondary-patch `pwd`
+
 
 # Target to sign apks in the connected phone
 sign: $(SIGNAPKS)
