@@ -293,8 +293,8 @@ patch-bootimg: $(PATCH_BOOTIMG_SH) $(UNPACKBOOTIMG) $(MKBOOTFS) $(MKBOOTIMG) $(T
 
 target_files: $(STOCKROM_DIR) | $(ZIP_DIR) 
 target_files: add-miui-prebuilt
-target_files: $(TARGET_APPS)
 target_files: $(TARGET_FRAMEWORK_DIR)/framework-res.apk $(TARGET_FRAMEWORK_DIR)/framework-ext-res/framework-ext-res.apk
+target_files: $(TARGET_APPS)
 target_files: $(ZIP_BLDJARS) $(ACT_PRE_ZIP)
 
 # Target to make zipfile which is all signed by testkey. convenient for developement and debug
