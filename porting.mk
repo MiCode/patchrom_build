@@ -140,6 +140,7 @@ framework-res-overlay-files:= $(call all-files-under-dir,$(OVERLAY_RES))
 $(TARGET_OUT_DIR)/framework-res.apk: $(STOCKROM_DIR)/system/framework/framework-res.apk $(framework-res-overlay-files)
 	@echo ">>> build $@..."
 	$(APKTOOL) d -f $(STOCKROM_DIR)/system/framework/framework-res.apk -o $(TARGET_OUT_DIR)/framework-res
+	$(hide) $(ADDMIUIRES) $(TARGET_OUT_DIR)/framework-res/res $(TARGET_OUT_DIR)/framework-res/res
 	$(AAPT) p -f -x --auto-add-overlay --wlan-replace Wi-Fi --wlan-replace WiFi \
 		--min-sdk-version $(ANDROID_PLATFORM) --target-sdk-version $(ANDROID_PLATFORM) \
 		$(addprefix -S ,$(wildcard $(OVERLAY_RES))) \
