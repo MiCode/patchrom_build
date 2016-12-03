@@ -71,3 +71,31 @@ endef
 
 $(foreach app, $(MOD_MIUI_APPS) , \
 	$(eval $(call miui_app_mod_template,$(app))))
+
+# Define a rule to modify miui app.  For use via $(eval).
+# $1: the apk name, such as LogsProvider
+define app_mod_template
+ifeq ($(wildcard $(STOCKROM_APP_APK_DIR)/$(1)/$(1).apk),)
+target-apk-path-$(1) := $(TARGET_PRIV_APP_DIR)/$(1)/$(1).apk
+else
+target-apk-path-$(1) := $(TARGET_APP_DIR)/$(1)/$(1).apk
+endif
+source-files-for-$(1) := $$(call all-files-under-dir,$(1))
+apkcert-$(1) := $$(shell $(GET_APK_CERT) $(1).apk $(MIUI_APK_CERT_TXT))
+
+$(TARGET_OUT_DIR)/$(1): $$(source-files-for-$(1)) $(APKTOOL_INCLUDE_MIUI_RES) $(APKTOOL_INCLUDE_VENDOR_RES)
+$(TARGET_OUT_DIR)/$(1).apk: $(TARGET_OUT_DIR)/$(1)
+	@echo ">>> build $$@..."
+	$(APKTOOL) b -p $(TARGET_OUT_DIR)/apktool -a $(AAPT) $(1) -o $$@
+	@echo "sign $$(apkcert-$(1)) key for $$@..."
+	$(hide) java -jar $(TOOLS_DIR)/signapk.jar $(CERTIFICATE_DIR)/$$(apkcert-$(1)).x509.pem $(CERTIFICATE_DIR)/$$(apkcert-$(1)).pk8 $$@ $$@.signed
+	$(hide) mv $$@.signed $$@
+	@echo "<<< build $$@ completed!"
+
+$(call copy-one-file,$(TARGET_OUT_DIR)/$(1).apk,$$(target-apk-path-$(1)))
+
+TARGET_APPS += $$(target-apk-path-$(1))
+endef
+
+$(foreach app, $(MOD_APPS) , \
+	$(eval $(call app_mod_template,$(app))))
