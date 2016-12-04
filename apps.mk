@@ -33,9 +33,11 @@ TARGET_APPS := $(foreach app_name, $(MIUI_APPS),$(TARGET_APP_DIR)/$(app_name)/$(
 # $1: the apk name, such as LogsProvider
 define miui_app_mod_template
 ifeq ($(wildcard $(PREBUILT_APP_APK_DIR)/$(1)/$(1).apk),)
+out-apk-path-$(1) := $(TARGET_PRIV_APP_DIR)/$(1)
 prebuilt-apk-path-$(1) := $(PREBUILT_PRIV_APP_APK_DIR)/$(1)/$(1).apk
 target-apk-path-$(1) := $(TARGET_PRIV_APP_DIR)/$(1)/$(1).apk
 else
+out-apk-path-$(1) := $(TARGET_APP_DIR)/$(1)
 prebuilt-apk-path-$(1) := $(PREBUILT_APP_APK_DIR)/$(1)/$(1).apk
 target-apk-path-$(1) := $(TARGET_APP_DIR)/$(1)/$(1).apk
 endif
@@ -63,6 +65,8 @@ endif
 	$(hide) java -jar $(TOOLS_DIR)/signapk.jar $(CERTIFICATE_DIR)/$$(apkcert-$(1)).x509.pem $(CERTIFICATE_DIR)/$$(apkcert-$(1)).pk8 $$@ $$@.signed
 	$(hide) mv $$@.signed $$@
 	@echo "<<< build $$@ completed!"
+	$(hide) mkdir -p $$(out-apk-path-$(1))
+	$(hide) cp -rf $(TARGET_OUT_DIR)/$(1).apk $$(out-apk-path-$(1))/$(1).apk
 
 $(call copy-one-file,$(TARGET_OUT_DIR)/$(1).apk,$$(target-apk-path-$(1)))
 
