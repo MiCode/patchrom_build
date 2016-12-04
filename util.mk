@@ -35,13 +35,14 @@ apktool-if: $(TMP_DIR)/apktool-if
 
 #TODO all apktool if result file is at $HOME/apktool/framework/
 APKTOOL_IF_RESULT_FILE := $(HOME)/apktool/framework
-$(TMP_DIR)/apktool-if: $(ZIP_FILE) | $(TMP_DIR)
+$(TMP_DIR)/apktool-if: $(TMP_DIR)
 	@echo ">>> Install framework resources for apktool..."
 	$(APKTOOL) if $(SYSOUT_DIR)/framework/framework-ext-res.apk
 	$(APKTOOL) if $(SYSOUT_DIR)/app/miui.apk
 	$(APKTOOL) if $(SYSOUT_DIR)/app/miuisystem.apk
 	$(APKTOOL) if $(SYSOUT_DIR)/framework/framework-res.apk -t miui
-	$(UNZIP) $(ZIP_FILE) "system/framework/*.apk" -d $(TMP_DIR)
+	mkdir -p $(TMP_DIR)/system/framework
+	cp $(STOCKROM_DIR)/system/framework/*.apk $(TMP_DIR)/system/framework
 	$(hide) for res_file in `find $(TMP_DIR)/system/framework/ -name "*.apk"`; do\
 		echo install $$res_file ; \
 		$(APKTOOL) if $$res_file; \
@@ -73,8 +74,6 @@ sign: $(SIGNAPKS)
 
 # Target to clean the .build
 clean:
-	$(hide) if [ -f ".delete-zip-file-when-clean" ]; then rm $(ZIP_FILE); fi
-	$(hide) rm -f .delete-zip-file-when-clean
 	$(hide) rm -rf $(TMP_DIR)
 	$(hide) rm -f $(OUT_APK_PATH)/*.apk-tozip $(OUT_APK_PATH:app=priv-app)/*.apk-tozip $(OUT_JAR_PATH)/*-tozip
 	$(hide) rm -f releasetools.pyc
@@ -105,7 +104,7 @@ verify: $(ERR_REPORT)
 	@echo "----------------------"
 	@echo ">>>>> LOCAL VARIABLE:"
 	@echo "local-use-android-out = $(local-use-android-out)"
-	@echo "local-zip-file        = $(local-zip-file)"
+	@echo "local-stockrom-dir    = $(local-stockrom-dir)"
 	@echo "local-out-zip-file    = $(local-out-zip-file)"
 	@echo "local-modified-apps   = $(local-modified-apps)"
 	@echo "local-miui-apps       = $(local-miui-apps)"
@@ -150,8 +149,8 @@ zip2sd: $(OUT_ZIP)
 	adb shell rm -f /sdcard/$(OUT_ZIP_FILE)
 	adb push $(OUT_ZIP) /sdcard/$(OUT_ZIP_FILE)
 
-error-no-zipfile:
-	$(error local-zip-file must be defined to specify the ZIP file)
+error-no-stockrom-dir:
+	$(error local-stockrom-dir must be defined to specify the stockrom directory)
 
 error-android-env:
 	$(error local-use-android-out set as true, should run lunch for android first)

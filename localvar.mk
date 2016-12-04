@@ -1,7 +1,7 @@
 #
 # Currenly the following local variables are used for
 # each product to define the behavior for porting
-# 	local-zip-file 		MUST be defined
+# 	local-stockrom-dir 		MUST be defined
 # 	local-out-zip-file
 # 	local-modified-apps
 # 	local-modified-priv-apps
@@ -50,9 +50,9 @@ include $(PORT_ROOT)/build/$(PATCHROM_BRANCH).mk
 ERR_REPORT   :=
 VERIFY_OTA   :=
 
-ZIP_FILE     := $(strip $(local-zip-file))
-ifeq ($(ZIP_FILE),)
-    ERR_REPORT += error-no-zipfile
+STOCKROM_DIR     := $(strip $(local-stockrom-dir))
+ifeq ($(STOCKROM_DIR),)
+    ERR_REPORT += error-no-stockrom-dir
 endif
 
 OUT_ZIP_FILE := $(strip $(local-out-zip-file))

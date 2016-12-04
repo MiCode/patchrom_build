@@ -13,7 +13,6 @@ MIUI_PROP   := $(PORT_BUILD)/miui.prop
 SKIA_FILE	:= $(ZIP_DIR)/system/lib/libskia.so
 SYSOUT_DIR  := $(OUT_SYS_PATH)
 DATAOUT_DIR  := $(OUT_DATA_PATH)
-STOCKROM_DIR := $(basename $(ZIP_FILE))
 
 # Tool alias used in the makefile
 APKTOOL     := $(TOOL_DIR)/apktool $(APK_VERBOSE)
@@ -105,7 +104,7 @@ $(TMP_DIR)/$(1).jar: $(2)_miui $$(source-files-for-$(1))
 	$(hide) cp -r $(1).jar.out/ $(2)
 	$(ADDMIUI) $(2)_miui $(2)
 	$(APKTOOL) b $(2) -o $$@
-	$(PREPARE_PRELOADED_CLASSES) $(ZIP_FILE) $(2) $(subst /$(DENSITY)/,/,$(OUT_JAR_PATH))
+	$(PREPARE_PRELOADED_CLASSES) $(2) $(subst /$(DENSITY)/,/,$(OUT_JAR_PATH))
 	$(hide) if [ -f $(1).jar.out/preloaded-classes ]; then \
 		jar -uf $$@ -C $(1).jar.out preloaded-classes; \
 	elif [ -f $(2)/p/reloaded-classes ];then \
@@ -131,8 +130,9 @@ $(RELEASE_PATH)/system/framework/$(1).jar: $(OUT_JAR_PATH)/$(1).jar
 endif
 
 # targets for initial workspace
-$(1).jar.out:  $(ZIP_FILE)
-	$(UNZIP) $(ZIP_FILE) system/framework/$(1).jar -d $(TMP_DIR)
+$(1).jar.out:
+	mkdir -p $(TMP_DIR)/system/framework
+	cp -rf $(STOCKROM_DIR)/system/framework/$(1).jar $(TMP_DIR)/system/framework
 	$(APKTOOL) d -f $(TMP_DIR)/system/framework/$(1).jar -o $$@
 	$(hide) rm $(TMP_DIR)/system/framework/$(1).jar
 
@@ -230,8 +230,9 @@ $(TMP_DIR)/framework-ext-res.apk: $(TMP_DIR)/framework-res.apk $(OUT_JAR_PATH)/f
 # $1 the apk name, also the dir name to save the smali files
 # $2 the apk location under system, such as app or framework
 define APP_WS_template
-$(1): $(ZIP_FILE)
-	if $(UNZIP) $(ZIP_FILE) system/$(2)/$(1).apk -d $(TMP_DIR) 2>/dev/null; then \
+$(1):
+	mkdir -p $(TMP_DIR)/system/$(2)
+	if cp -rf $(STOCKROM_DIR)/system/$(2)/$(1).apk $(TMP_DIR)/system/$(2) 2>/dev/null; then \
 	$(APKTOOL) d -f $(TMP_DIR)/system/$(2)/$(1).apk -o $$@ ; else \
 	echo system/$(2)/$(1).apk does not exist, ignored!;  fi
 	$(hide) rm -f $(TMP_DIR)/system/$(2)/$(1).apk
@@ -385,18 +386,9 @@ endif
 $(TMP_DIR):
 	$(hide) mkdir -p $(TMP_DIR)
 
-# if the zip file does not exist, would try to generate the zip
-# file from the stockrom dirctory if exist
-$(ZIP_FILE):
-	$(hide) cd $(STOCKROM_DIR) && $(ZIP) -r ../$(ZIP_FILE) ./
-	$(hide) touch .delete-zip-file-when-clean
-
-# if the zip dir does not exist, would try to unzip stockrom.zip
-$(STOCKROM_DIR): $(ZIP_FILE)
-	$(UNZIP) -n $(ZIP_FILE) -d $@
-
-$(ZIP_DIR): $(ZIP_FILE) | $(TMP_DIR)
-	$(UNZIP) $(ZIP_FILE) -d $@
+$(ZIP_DIR): $(TMP_DIR)
+	mkdir -p $@
+	cp -rf $(STOCKROM_DIR)/* $@
 ifneq ($(strip $(local-phone-apps)),)
 	$(hide) mv $(ZIP_DIR)/system/app $(ZIP_DIR)/system/app.original
 	$(hide) mkdir $(ZIP_DIR)/system/app
