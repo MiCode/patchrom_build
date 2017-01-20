@@ -264,7 +264,7 @@ add-device-feature:
 	$(hide) mkdir -p $(FEATURE_DIR); \
 	device_name=$$(grep "ro.product.device=" $(BUILD_PROP) | cut -d '=' -f2); \
 	echo "Add device feature: $$device_name.xml"; \
-	cp -rf $(PORT_BUILD)/device_features.xml $(FEATURE_DIR)/$$device_name.xml; \
+	cp -rf $(PORT_BUILD)/device_features.xml $(FEATURE_DIR)/"$$device_name".xml; \
 
 insertkeys-mac_permissions: MAC_PERMS_FILE := system/etc/security/mac_permissions.xml
 insertkeys-mac_permissions: | $(ZIP_DIR)
