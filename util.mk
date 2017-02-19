@@ -12,7 +12,6 @@ usage:
 	@echo ">>> Other helper targets:"
 	@echo "	make apktool-if            - install the framework for apktool"
 	@echo "	make verify                - to check if any error in the makefile"
-	@echo "	make verify-ota            - to generate an ota for ota verification"
 	@echo "	make out/xxxx.jar-phone    - to make out a single jar file and push to phone"
 	@echo "	make xxxx.apk.sign         - to generate a xxxx.apk and sign/push to phone"
 	@echo "	make clean-xxxx/make xxxx  - just as make under android-build-top"
@@ -134,11 +133,6 @@ last_target_files.zip:
 	cp $(TARGET_OUT_DIR)/target_files.zip last_target_files.zip
 	cp $(TARGET_OUT_DIR)/fullota.zip last_fullota.zip
 	make clean
-
-verify-ota: last_target_files.zip fullota
-	$(TOOL_DIR)/releasetools/ota_from_target_files -k ../build/security/testkey -i last_target_files.zip $(TARGET_OUT_DIR)/target_files.zip $(TARGET_OUT_DIR)/ota_update.zip
-	@mv last_target_files.zip $(TARGET_OUT_DIR)
-	@mv last_fullota.zip $(TARGET_OUT_DIR)
 
 # target for local ota package for local debug
 # 1. the previous target_file.zip is built from zipfile-ota-base and
